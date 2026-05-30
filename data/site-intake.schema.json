@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SuperSonicSites/supersonic-core/data/site-intake.schema.json",
+  "title": "Supersonic Site Intake",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "client",
+    "goals",
+    "audience",
+    "brand",
+    "design",
+    "pages",
+    "seo",
+    "contentModel",
+    "integrations",
+    "environments",
+    "security",
+    "launch",
+    "openQuestions"
+  ],
+  "properties": {
+    "client": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "businessType", "locationOrServiceArea", "primaryOffer"],
+      "properties": {
+        "name": { "type": "string" },
+        "businessType": { "type": "string" },
+        "locationOrServiceArea": { "type": "string" },
+        "primaryOffer": { "type": "string" }
+      }
+    },
+    "goals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryConversion", "secondaryConversions"],
+      "properties": {
+        "primaryConversion": { "type": "string" },
+        "secondaryConversions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "audience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryAudience", "problems", "decisionTriggers"],
+      "properties": {
+        "primaryAudience": { "type": "string" },
+        "problems": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "decisionTriggers": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice", "writingStyle", "phrasesToAvoid"],
+      "properties": {
+        "voice": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "writingStyle": { "type": "string" },
+        "phrasesToAvoid": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction", "colors", "fonts", "referenceSites", "avoid"],
+      "properties": {
+        "direction": { "type": "string" },
+        "colors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "fonts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "referenceSites": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "avoid": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "slug", "purpose", "primaryCta", "launchRequired"],
+        "properties": {
+          "title": { "type": "string" },
+          "slug": { "type": "string" },
+          "purpose": { "type": "string" },
+          "primaryCta": { "type": "string" },
+          "launchRequired": { "type": "boolean" }
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryTopics", "locations", "schemaOpportunities"],
+      "properties": {
+        "primaryTopics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "locations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "schemaOpportunities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "contentModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nativePagesPostsEnough", "structuredContentTypes"],
+      "properties": {
+        "nativePagesPostsEnough": { "type": "boolean" },
+        "structuredContentTypes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["forms", "booking", "crm", "analytics", "other"],
+      "properties": {
+        "forms": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "booking": { "type": "string" },
+        "crm": { "type": "string" },
+        "analytics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "other": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "environments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stagingUrl", "productionUrl", "rollback"],
+      "properties": {
+        "stagingUrl": { "type": "string" },
+        "productionUrl": { "type": "string" },
+        "rollback": { "type": "string" }
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adminUsers", "roleNotes", "sensitiveWorkflows"],
+      "properties": {
+        "adminUsers": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "roleNotes": { "type": "string" },
+        "sensitiveWorkflows": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "launch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["successCriteria", "mustHave", "canWait"],
+      "properties": {
+        "successCriteria": { "type": "string" },
+        "mustHave": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "canWait": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "openQuestions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+

@@ -1,4 +1,4 @@
----
+﻿---
 name: new-site-init
 description: Use when starting or initializing a new single-site WordPress website build from supersonic-core, including requests like "Initialize a new website", "Start a new website from supersonic-core", "Set up a new client site", "Begin a new WordPress build", "Create the project docs for this site", or "Run the init workflow". Guides repo inspection, client interview, project doc generation, phased planning, and approval before coding.
 ---
@@ -15,10 +15,16 @@ This workflow reflects the Supersonic operating model:
 
 - Repo is the source of truth for AI memory, docs, code, tools, and skills.
 - Hostinger staging is the WordPress runtime, preview, screenshot QA, integration testing, and QA environment.
-- Production is protected.
+- Production is protected and handled manually by the site owner.
 - Updraft is the full-site rollback layer.
 - Git is the code and history layer.
 - V1 does not assume DDEV, Docker, LocalWP, wp-env, or another local WordPress runtime.
+
+Codex only needs staging REST access for V1 work:
+
+- `WP_STAGING_URL`
+- `WP_REST_USER`
+- `WP_REST_APP_PASSWORD`
 
 ## When To Use
 
@@ -48,7 +54,12 @@ Inspect the repo and read:
 9. `SECURITY.md`
 10. `QA_CHECKLIST.md`
 11. `DEPLOY_CHECKLIST.md`
-12. `.agents/skills/`
+12. `docs/wordpress-compatibility.md`
+13. `docs/gutenberg-authoring-standard.md`
+14. `docs/design-tokens-standard.md`
+15. `data/site-intake.schema.json`
+16. `data/site-intake.example.json`
+17. `.agents/skills/`
 
 If any required file or folder is missing, list it before interviewing the user.
 
@@ -66,7 +77,7 @@ Also check `git status --short` before editing docs. Preserve unrelated user cha
 8. Produce a phased build plan adapted to the repo's current state.
 9. Stop and ask for approval before any coding or build work begins.
 
-Do not ask for secrets, passwords, API keys, WordPress application passwords, SSH keys, database credentials, or private backup files.
+Do not ask for production credentials, SSH credentials, database credentials, hosting account access, private backup files, or unrelated secrets.
 
 ## First-Round Interview Questions
 
@@ -83,7 +94,7 @@ For questions with reasonable defaults, suggest the default and ask the user to 
 7. SEO priorities: What services, locations, keywords, or search intents matter most?
 8. Content model: Is native pages/posts enough, or will the site need structured content such as services, testimonials, projects, team, FAQs, or locations?
 9. Forms / integrations: What forms, booking tools, CRMs, email tools, analytics, or tracking need to exist on staging or production?
-10. Staging / production / backups: What are the staging URL, production URL, and Updraft backup expectations?
+10. Staging / production / backups: What are the staging URL, production URL for documentation, and Updraft backup expectations?
 11. Security considerations: Who needs admin access, are there role restrictions, and are there sensitive workflows such as forms, payments, memberships, or private content?
 12. Launch priorities: What must be true for the first launch to be considered successful?
 
@@ -93,9 +104,11 @@ After the first round, ask follow-up questions only for blockers or high-risk am
 
 After the user answers, create or update:
 
+- `data/site-intake.json`
 - `SITE.md`
 - `BRAND.md`
 - `DESIGN_SYSTEM.md`
+- `docs/design-tokens-standard.md`
 - `PAGE_MAP.md`
 - `CONTENT_MODEL.md`
 - `SEO_STRATEGY.md`
@@ -105,6 +118,7 @@ After the user answers, create or update:
 
 Rules:
 
+- Treat `data/site-intake.json` as committed project memory in cloned site repos.
 - Make each file practical for future AI agents.
 - Preserve existing useful decisions.
 - Replace generic placeholders with project-specific answers.
@@ -112,6 +126,7 @@ Rules:
 - If an answer is unknown, add a clear `Open Questions` section.
 - Keep theme and plugin responsibilities separated.
 - Keep Hostinger staging, production protection, Updraft rollback, and Git source-of-truth rules visible.
+- Make clear that production deployment is handled manually by the site owner.
 - Do not add local dev setup instructions in V1 unless the user explicitly approves that direction later.
 - Do not document third-party plugins as approved unless the user explicitly approves them.
 
@@ -197,4 +212,6 @@ Every later completed build task must report:
 - checks run
 - known issues
 - next recommended step
+
+
 

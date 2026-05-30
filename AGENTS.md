@@ -10,13 +10,56 @@ It is not a multi-client platform and it is not a full local WordPress runtime. 
 
 1. Repo is the source of truth.
 2. Hostinger staging is the real WordPress build, preview, integration testing, screenshot review, and QA environment.
-3. Production is protected and requires explicit approval before deploy.
+3. Production is protected and handled manually by the site owner.
 4. Daily Updraft backups are the full-site rollback layer for the WordPress database, uploads, settings, plugins, themes, and full-site recovery.
 5. Do not edit Hostinger files randomly without syncing changes back to Git.
 6. Do not run live REST writes without explicit approval.
-7. Do not deploy to production without explicit approval.
+7. Do not deploy to production. Prepare reviewed assets and checklists only.
 8. Every visual change must be reviewed with desktop, tablet, and mobile screenshots for the specific section or pattern changed.
 9. Build and review one pattern or system piece at a time.
+
+## Environment Access
+
+Codex only needs these local environment values:
+
+- `WP_STAGING_URL`
+- `WP_REST_USER`
+- `WP_REST_APP_PASSWORD`
+
+Do not request production credentials, SSH credentials, database credentials, backup files, or hosting account access.
+
+## WordPress Compatibility
+
+Current latest stable core target: WordPress 7.0.
+
+Before creating or packaging theme/plugin work:
+
+- verify the current latest stable WordPress core version from official WordPress sources
+- keep theme/plugin headers aligned with the target core version
+- keep `theme.json` schema aligned with the target core version
+- prefer native block theme and Gutenberg APIs supported by the target core version
+- avoid Custom HTML blocks for editable design work
+- document compatibility assumptions in `docs/wordpress-compatibility.md`
+
+Do not use beta, nightly, trunk, or Gutenberg plugin-only features unless explicitly approved.
+
+## Gutenberg Authoring
+
+Read `docs/gutenberg-authoring-standard.md` before building templates, template parts, patterns, or blocks.
+
+Read `docs/design-tokens-standard.md` before making visual or layout changes.
+
+Hard rules:
+
+- all visual output must remain editable in the WordPress block editor
+- use native blocks first
+- use patterns before custom blocks
+- use theme design tokens for spacing, typography, colors, radius, and layout
+- every section pattern must choose one semantic section spacing token
+- keep the pattern inserter limited to Supersonic-approved theme patterns
+- do not use `core/html` or Custom HTML blocks for design work
+- do not use arbitrary font sizes, spacing values, colors, radii, or shadows without approval
+- do not create custom blocks without approval
 
 ## Files To Read First
 
@@ -33,6 +76,9 @@ Before starting meaningful work, read:
 9. `SECURITY.md`
 10. `QA_CHECKLIST.md`
 11. `DEPLOY_CHECKLIST.md`
+12. `docs/wordpress-compatibility.md`
+13. `docs/gutenberg-authoring-standard.md`
+14. `docs/design-tokens-standard.md`
 
 When working inside the theme, also read `wp-content/themes/supersonic-site-theme/AGENTS.md`.
 
@@ -93,7 +139,7 @@ Require explicit approval before:
 - changing global design tokens
 - changing theme-wide layout rules
 - running live REST writes
-- deploying to production
+- preparing production deployment instructions
 - changing redirects
 - deleting content
 - changing user roles or permissions
@@ -140,4 +186,3 @@ Do not build a full local WordPress development setup unless the user later deci
 Do not add third-party plugins unless approved.
 
 Do not build V2 framework features before the first useful starter flow is stable.
-

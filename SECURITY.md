@@ -6,7 +6,7 @@ Security is part of the framework from day one.
 
 - Repo is the source of truth.
 - Hostinger staging is the build and QA environment.
-- Production is protected.
+- Production is protected and handled manually by the site owner.
 - Daily Updraft backups are the full-site rollback layer.
 
 ## Critical Rules
@@ -15,15 +15,21 @@ Security is part of the framework from day one.
 - No public API keys committed.
 - No unauthenticated write actions.
 - No live REST writes without approval.
-- No production deploys without approval.
+- No production deploys by Codex.
 - No random Hostinger file edits without syncing changes back to Git.
 - REST endpoints must use permission checks.
 - Admin users and roles must be reviewed before launch.
-- Backups must exist before production deploys.
+- Backups must exist before the site owner deploys production.
 
 ## Secrets Handling
 
 Use `.env.example` to document required environment variables.
+
+Codex only needs staging REST access:
+
+- `WP_STAGING_URL`
+- `WP_REST_USER`
+- `WP_REST_APP_PASSWORD`
 
 Never commit:
 
@@ -34,6 +40,8 @@ Never commit:
 - SSH keys
 - database credentials
 - backup files
+
+Do not ask for production credentials, SSH credentials, database credentials, hosting credentials, or Updraft backup files.
 
 ## Plugin Policy
 
@@ -71,7 +79,11 @@ Every custom plugin feature must follow these rules:
 
 ## Production Protection
 
-Production deploys require approval and should happen only after:
+Production deploys are handled manually by the site owner.
+
+Codex may prepare checklists and reviewed assets, but must not deploy to production.
+
+Before the site owner deploys production, confirm:
 
 - staging review is complete
 - screenshots are approved
@@ -92,4 +104,3 @@ Daily Updraft backups are the rollback layer for:
 - full-site recovery
 
 Before major production changes, confirm a recent backup exists.
-

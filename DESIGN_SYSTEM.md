@@ -4,6 +4,8 @@ This file defines the human-readable design rules for the site framework.
 
 The matching implementation belongs in `wp-content/themes/supersonic-site-theme/theme.json` when the theme is initialized.
 
+The detailed token reference lives in `docs/design-tokens-standard.md`.
+
 ## Design Principles
 
 - Build mobile-first.
@@ -15,29 +17,66 @@ The matching implementation belongs in `wp-content/themes/supersonic-site-theme/
 
 ## Layout Widths
 
-- Default content width: 1200px
+- Default content max width: 1440px
 - Narrow text width: 760px
-- Wide media width: 1440px
+- Wide media max width: 1440px
+- Default horizontal gutter: 5%
+- Constrained layouts should use `margin-left: auto` and `margin-right: auto`
+- Intentional full-width image/media sections may extend to the viewport edge when the pattern requires it
 
 ## Section Padding
 
-- Desktop vertical padding: 80px
-- Tablet vertical padding: 56px
-- Mobile vertical padding: 40px
+- `section-none`: no top/bottom padding
+- `section-small`: compact vertical padding
+- `section-medium`: default section padding, up to about 64px
+- `section-large`: major section padding, up to about 128px
+
+Every section pattern must choose one of these spacing presets.
 
 ## Horizontal Padding
 
-- Desktop: 40px
-- Tablet: 32px
-- Mobile: 20px
+- Default: 5%
+- Full-width exceptions: only when the section or media treatment intentionally needs edge-to-edge rendering
 
 ## Typography
 
-- Body text: 16px to 18px
 - Small text: 14px
-- Body line height: 1.5 to 1.7
-- Heading line height: 1.05 to 1.2
+- Body text: 16px to 18px
+- Large/lead text: 18px to 22px
+- Heading 3: 24px to 32px
+- Heading 2: 32px to 48px
+- Heading 1: 40px to 64px
+- Display: 48px to 80px, used rarely
+- Body line height: 1.6
+- Heading line height: 1.05 to 1.15
 - Letter spacing: 0 unless a brand rule explicitly requires otherwise
+- Use fluid typography presets from `theme.json`
+- Do not use arbitrary font sizes without approval
+
+## Colors
+
+Use semantic color roles:
+
+- `base`
+- `contrast`
+- `contrast-subtle`
+- `surface`
+- `muted`
+- `border`
+- `accent`
+- `accent-contrast`
+
+Do not add one-off colors in patterns. Add new palette colors only when a project need is documented and approved.
+
+## Radius And Shadows
+
+- Default radius: 8px
+- Small radius: 4px
+- Large radius: 16px
+- Pill radius: 999px
+- Full-width media may use no radius
+- Prefer borders and spacing over shadows
+- Core WordPress shadow presets are disabled by default
 
 ## Buttons
 
@@ -82,17 +121,29 @@ Each pattern must:
 
 - use native blocks where possible
 - use design tokens
+- choose one semantic section spacing token
 - work on mobile, tablet, and desktop
 - avoid overflow
 - preserve readable text
 - use accessible buttons and links
 
+## Pattern Library Policy
+
+The editor pattern library should stay intentionally small.
+
+- Core WordPress patterns are disabled.
+- Remote WordPress.org pattern directory loading is disabled.
+- Native blocks remain available.
+- Approved Supersonic theme patterns live in the theme `/patterns` folder.
+- Add one pattern at a time only after desktop, tablet, and mobile screenshot review.
+- Do not rely on random bundled patterns from WordPress core, remote directories, or third-party plugins for production layouts.
+
 ## Design Do-Nots
 
 - Do not create arbitrary one-off CSS for spacing.
+- Do not create arbitrary one-off font sizes, colors, radii, or shadows.
 - Do not use custom blocks when a native block pattern is enough.
 - Do not hide important content behind sliders.
 - Do not rely on busy image backgrounds for critical copy.
 - Do not add decorative effects that hurt readability.
 - Do not change global design tokens without approval.
-

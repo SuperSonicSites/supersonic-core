@@ -1,0 +1,21 @@
+{
+  "name": "supersonic-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-driven single-site WordPress framework source of truth.",
+  "type": "module",
+  "scripts": {
+    "package": "node tools/package-wordpress-assets.mjs",
+    "validate": "node tools/validate-framework.mjs",
+    "rest:check": "node tools/staging-rest.mjs check",
+    "rest:dry-run": "node tools/staging-rest.mjs dry-run",
+    "screenshot": "node tools/capture-screenshots.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.52.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+

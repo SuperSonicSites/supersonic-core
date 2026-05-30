@@ -1,0 +1,72 @@
+{
+  "$schema": "./site-intake.schema.json",
+  "client": {
+    "name": "Example Company",
+    "businessType": "Service business",
+    "locationOrServiceArea": "Example City and surrounding area",
+    "primaryOffer": "Primary service or offer"
+  },
+  "goals": {
+    "primaryConversion": "Request a quote",
+    "secondaryConversions": ["Call the business", "View services"]
+  },
+  "audience": {
+    "primaryAudience": "Prospective customers who need the primary offer",
+    "problems": ["Problem the visitor wants solved"],
+    "decisionTriggers": ["Proof of quality", "Clear pricing or process"]
+  },
+  "brand": {
+    "voice": ["clear", "helpful", "confident"],
+    "writingStyle": "Plain language with concrete benefits.",
+    "phrasesToAvoid": ["best-in-class", "revolutionary"]
+  },
+  "design": {
+    "direction": "Clean, structured, and easy to scan.",
+    "colors": [],
+    "fonts": [],
+    "referenceSites": [],
+    "avoid": ["busy image backgrounds", "sliders for critical content"]
+  },
+  "pages": [
+    {
+      "title": "Home",
+      "slug": "/",
+      "purpose": "Introduce the offer and route visitors.",
+      "primaryCta": "Request a quote",
+      "launchRequired": true
+    }
+  ],
+  "seo": {
+    "primaryTopics": ["primary service"],
+    "locations": ["service area"],
+    "schemaOpportunities": ["Organization", "Service"]
+  },
+  "contentModel": {
+    "nativePagesPostsEnough": true,
+    "structuredContentTypes": []
+  },
+  "integrations": {
+    "forms": ["contact form"],
+    "booking": "",
+    "crm": "",
+    "analytics": [],
+    "other": []
+  },
+  "environments": {
+    "stagingUrl": "https://staging.example.com",
+    "productionUrl": "https://www.example.com",
+    "rollback": "Daily Updraft backups"
+  },
+  "security": {
+    "adminUsers": ["site owner"],
+    "roleNotes": "Use least-privilege roles.",
+    "sensitiveWorkflows": []
+  },
+  "launch": {
+    "successCriteria": "The launch-critical pages are live, reviewed, and conversion-ready.",
+    "mustHave": ["Home page", "Contact flow", "Mobile QA"],
+    "canWait": ["Advanced content types"]
+  },
+  "openQuestions": []
+}
+

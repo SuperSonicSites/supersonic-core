@@ -16,5 +16,7 @@ function supersonic_site_theme_setup() {
 	add_theme_support('wp-block-styles');
 	add_theme_support('responsive-embeds');
 	add_theme_support('editor-styles');
+	remove_theme_support('core-block-patterns');
 }
 
+add_filter('should_load_remote_block_patterns', '__return_false');

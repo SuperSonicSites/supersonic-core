@@ -1,0 +1,66 @@
+{
+  "$schema": "./site-intake.schema.json",
+  "client": {
+    "name": "TBD",
+    "businessType": "TBD",
+    "locationOrServiceArea": "TBD",
+    "primaryOffer": "TBD"
+  },
+  "goals": {
+    "primaryConversion": "TBD",
+    "secondaryConversions": []
+  },
+  "audience": {
+    "primaryAudience": "TBD",
+    "problems": [],
+    "decisionTriggers": []
+  },
+  "brand": {
+    "voice": [],
+    "writingStyle": "TBD",
+    "phrasesToAvoid": []
+  },
+  "design": {
+    "direction": "TBD",
+    "colors": [],
+    "fonts": [],
+    "referenceSites": [],
+    "avoid": []
+  },
+  "pages": [],
+  "seo": {
+    "primaryTopics": [],
+    "locations": [],
+    "schemaOpportunities": []
+  },
+  "contentModel": {
+    "nativePagesPostsEnough": true,
+    "structuredContentTypes": []
+  },
+  "integrations": {
+    "forms": [],
+    "booking": "",
+    "crm": "",
+    "analytics": [],
+    "other": []
+  },
+  "environments": {
+    "stagingUrl": "TBD",
+    "productionUrl": "TBD",
+    "rollback": "Daily Updraft backups"
+  },
+  "security": {
+    "adminUsers": [],
+    "roleNotes": "Use least-privilege roles.",
+    "sensitiveWorkflows": []
+  },
+  "launch": {
+    "successCriteria": "TBD",
+    "mustHave": [],
+    "canWait": []
+  },
+  "openQuestions": [
+    "Run the new-site-init workflow to replace these placeholders."
+  ]
+}
+

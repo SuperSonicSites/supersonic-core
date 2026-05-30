@@ -12,6 +12,19 @@ The goal is to provide a controlled framework for building one high-quality Word
 - focused skills
 - screenshot-based QA
 - safe staging and production rules
+- latest stable WordPress compatibility checks
+- a small editable Gutenberg design token system
+- a controlled approved-pattern-only editing workflow
+
+## Compatibility Target
+
+This framework currently targets WordPress 7.0.
+
+WordPress.org recommends PHP 8.3 or greater and MySQL 8.0 or MariaDB 10.6 or greater for the current release. See `docs/wordpress-compatibility.md` for the repo compatibility rules.
+
+Visual output must remain editable in the WordPress block editor. See `docs/gutenberg-authoring-standard.md` for the native-blocks-first authoring rules.
+
+Default visual decisions are governed by `docs/design-tokens-standard.md` and implemented in `wp-content/themes/supersonic-site-theme/theme.json`.
 
 ## Operating Model
 
@@ -54,7 +67,7 @@ Every visual change must be reviewed with desktop, tablet, and mobile screenshot
 
 Do not run live REST writes without approval.
 
-Do not deploy to production without approval.
+Do not deploy to production. Production deployment is handled manually by the site owner.
 
 Do not edit Hostinger files randomly without syncing changes back to Git.
 
@@ -71,7 +84,16 @@ wp-content/themes/               custom lean block theme skeleton
 wp-content/plugins/              small site-core plugin skeleton
 ```
 
+## Tooling
+
+```text
+npm run package       Build WordPress upload zips from source
+npm run validate      Run static framework checks
+npm run rest:check    Check staging REST availability
+npm run rest:dry-run  Validate a planned staging REST write without sending it
+npm run screenshot    Capture desktop/tablet/mobile screenshots when Playwright is installed
+```
+
 ## Recommended First Build Step
 
 After Phase 1 is approved, create the minimal theme and plugin files without building full templates, patterns, or plugin features.
-
