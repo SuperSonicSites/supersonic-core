@@ -25,6 +25,15 @@ Rules:
 - Text-heavy inner groups should use a 760px content width.
 - Full-width media is allowed only when the section intentionally needs edge-to-edge rendering.
 
+### Horizontal Spacing Is Owned By The Theme
+
+Patterns own vertical section rhythm only. They must never add horizontal inset on top of the base 5% gutter.
+
+- A section pattern must not set explicit left/right padding. The 5% gutter comes from the theme root padding automatically.
+- A full-width (`align:full`) section group must not set its own `contentSize`. It inherits the 1440px default width and rides the gutter.
+- Narrowing to `760px` is only for an **inner** text group nested inside the section, never the section group itself.
+- This rule is enforced by `npm run validate`; a pattern that adds horizontal padding or narrows a full-width section fails the check.
+
 ## Section Spacing Tokens
 
 Every section pattern must choose one vertical rhythm setting.
@@ -63,6 +72,27 @@ Rules:
 - Use primitive spacing for internal gaps, card padding, button groups, and small layout adjustments.
 - Use semantic section spacing for top-level section padding.
 - Custom spacing values are disabled in the editor by default.
+
+## Motion Tokens
+
+Animation durations are tokenized so motion stays consistent across components.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `transition.fast` | `150ms` | Hover/focus color and small UI feedback |
+| `transition.base` | `250ms` | Default reveal, underline, dropdown, overlay |
+| `transition.slow` | `400ms` | Larger or deliberate transitions |
+
+Rules:
+
+- Use motion tokens instead of one-off durations.
+- All non-trivial motion must be disabled under `prefers-reduced-motion: reduce`.
+
+## Component Tokens
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `header.minHeight` | `4.5rem` | Minimum height of the sticky site header |
 
 ## Typography Tokens
 
@@ -122,13 +152,30 @@ Rules:
 
 ## Shadows
 
-Core WordPress shadow presets are disabled.
+Core WordPress shadow presets are disabled, but Supersonic provides a small approved shadow set.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `soft` | `0 8px 24px rgb(17 17 17 / 0.08)` | Subtle dropdowns, light image lift, low-emphasis cards |
+| `medium` | `0 16px 40px rgb(17 17 17 / 0.12)` | Featured images or cards that need stronger separation |
 
 Rules:
 
 - Prefer borders and spacing over shadows.
-- Add a shadow preset only when a project has a clear visual reason.
-- Do not use one-off shadow values in patterns.
+- Use approved shadow presets when an element needs depth.
+- Do not use one-off shadow values in CSS or patterns.
+- Add a new shadow preset only when a project has a clear visual reason.
+
+## Page Heading Rule
+
+The default `page.html` template is layout-neutral and does not force a title above every page.
+
+Rules:
+
+- Every built page must still have exactly one clear H1.
+- The H1 is supplied by the AI-built page layout, usually through the first hero or intro pattern.
+- Do not rely on the default template to add the H1 for production pages.
+- QA must fail any page layout that omits an H1 or creates multiple H1s.
 
 ## Pattern Authoring Checklist
 

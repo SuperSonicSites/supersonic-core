@@ -74,11 +74,30 @@
         "medium": "8px",
         "large": "16px",
         "pill": "999px"
+      },
+      "transition": {
+        "fast": "150ms",
+        "base": "250ms",
+        "slow": "400ms"
+      },
+      "header": {
+        "minHeight": "4.5rem"
       }
     },
     "shadow": {
       "defaultPresets": false,
-      "presets": []
+      "presets": [
+        {
+          "name": "Soft",
+          "shadow": "0 8px 24px rgb(17 17 17 / 0.08)",
+          "slug": "soft"
+        },
+        {
+          "name": "Medium",
+          "shadow": "0 16px 40px rgb(17 17 17 / 0.12)",
+          "slug": "medium"
+        }
+      ]
     },
     "spacing": {
       "blockGap": true,
@@ -316,6 +335,22 @@
       }
     },
     "blocks": {
+      "core/navigation": {
+        "typography": {
+          "fontSize": "var:preset|font-size|small",
+          "fontWeight": "600"
+        },
+        "color": {
+          "text": "var:preset|color|contrast"
+        }
+      },
+      "core/site-title": {
+        "typography": {
+          "fontSize": "var:preset|font-size|large",
+          "fontWeight": "800",
+          "lineHeight": "1"
+        }
+      },
       "core/paragraph": {
         "typography": {
           "lineHeight": "1.6"
@@ -333,6 +368,13 @@
       }
     }
   },
+  "customTemplates": [
+    {
+      "name": "text-page",
+      "title": "Text Page (with title)",
+      "postTypes": ["page"]
+    }
+  ],
   "templateParts": [
     {
       "area": "header",

@@ -3,9 +3,17 @@ Theme Name: Supersonic Site Theme
 Theme URI: https://github.com/SuperSonicSites/supersonic-core
 Author: SuperSonic Sites
 Description: Lean block theme skeleton for AI-driven WordPress website production.
-Version: 0.1.3
+Version: 0.1.6
 Requires at least: 7.0
 Tested up to: 7.0
 Requires PHP: 8.0
 Text Domain: supersonic-site-theme
 */
+
+.supersonic-site-footer .wp-block-site-title,
+.supersonic-site-footer .wp-block-site-title a {
+	font-size: var(--wp--preset--font-size--body);
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+	word-break: normal;
+}

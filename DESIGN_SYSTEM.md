@@ -77,6 +77,17 @@ Do not add one-off colors in patterns. Add new palette colors only when a projec
 - Full-width media may use no radius
 - Prefer borders and spacing over shadows
 - Core WordPress shadow presets are disabled by default
+- Approved Supersonic shadow presets are available for images, cards, dropdowns, and featured elements
+- Do not use arbitrary shadow values
+
+## Page Heading Rule
+
+The default page template does not force a page title above every page.
+
+- Every AI-built page layout must include one clear editable H1.
+- The H1 should usually live in the first hero or intro pattern.
+- Do not create page layouts without an H1.
+- Do not create page layouts with multiple H1s.
 
 ## Buttons
 
@@ -88,6 +99,19 @@ Rules:
 - Use action-oriented labels.
 - Avoid tiny tap targets.
 - Do not use multiple competing primary buttons in the same section.
+
+## Navigation
+
+The site header and navigation are a first-class system primitive, not a pattern.
+
+- The header is a pattern (`header-simple`); the `header` template part is a thin mount that references it via `wp:pattern`. The navbar itself is a native `core/navigation` block inside that pattern.
+- Header layouts are modular and swappable: each is a sibling pattern bound to the header area, sharing one CSS/motion layer.
+- Structure, color, and typography come from `theme.json`; interaction states and animation live in `assets/css/navigation.css`.
+- The header is full-width, sticky, and rides the same 5% gutter as page content — it never adds its own horizontal inset.
+- Desktop links use an animated accent underline and an active-state indicator.
+- On mobile, navigation collapses to a hamburger that opens the customizable WordPress 7.0 overlay, animated with a fade/slide and staggered menu items.
+- All navigation motion uses the shared transition tokens and is disabled under `prefers-reduced-motion`.
+- Mega-menu support is a planned theme-owned custom block built on the Interactivity API; it is a separate approved increment and is not part of the base navbar.
 
 ## Grids
 
@@ -106,16 +130,17 @@ Rules:
 
 ## Patterns
 
-Common V1 pattern types:
+0.1.5 pattern categories:
 
-- hero
-- intro section
-- feature grid
-- CTA band
-- FAQ section
-- testimonial section
-- service card grid
-- image/text section
+- Supersonic Headers
+- Supersonic Footers
+- Supersonic Heroes
+- Supersonic Intros
+- Supersonic Media
+- Supersonic Cards
+- Supersonic Trust
+- Supersonic Conversion
+- Supersonic Info
 
 Each pattern must:
 
@@ -126,6 +151,8 @@ Each pattern must:
 - avoid overflow
 - preserve readable text
 - use accessible buttons and links
+
+FAQ sections that need schema should use the approved Rank Math FAQ block. The theme must not add duplicate FAQ JSON-LD.
 
 ## Pattern Library Policy
 

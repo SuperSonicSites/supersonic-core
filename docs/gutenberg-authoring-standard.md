@@ -34,6 +34,15 @@ Patterns should be composed of native block markup such as:
 
 Pattern files may contain block comment markup like `<!-- wp:group -->`. That is normal Gutenberg block markup and is not the same as a Custom HTML block.
 
+## Modularity: Compose From Patterns
+
+Reusable UI is built as registered patterns, not as bespoke markup embedded in a template or template part. Modularity is a default, not an exception.
+
+- A reusable component (header/navbar, footer, hero, section, CTA, etc.) is authored as a pattern file in the theme `/patterns` folder and is the single source of truth for that component.
+- Templates and template parts should compose those patterns by reference using `<!-- wp:pattern {"slug":"theme/pattern-slug"} /-->`, rather than duplicating the component's markup.
+- Do not copy a component's block markup into both a template part and a pattern. The pattern is canonical; the part is a thin mount that references it.
+- Selectable layout variants (for example multiple header styles) are sibling patterns bound to the relevant area (`Block Types: core/template-part/header`) so a site can swap one for another without editing markup.
+
 ## Pattern Library Policy
 
 The framework keeps the pattern library intentionally controlled.
@@ -45,6 +54,30 @@ The framework keeps the pattern library intentionally controlled.
 - Build, upload, screenshot-review, and approve one pattern at a time.
 - Do not use unreviewed core, remote, or third-party patterns as production layouts.
 
+Approved V1 categories:
+
+- `supersonic-headers`
+- `supersonic-footers`
+- `supersonic-heroes`
+- `supersonic-intros`
+- `supersonic-media`
+- `supersonic-cards`
+- `supersonic-trust`
+- `supersonic-conversion`
+- `supersonic-info`
+
+## Approved External Blocks
+
+The only approved non-core block in V1 is `rank-math/faq-block`, and only for FAQ sections that need Rank Math-owned FAQ schema.
+
+Rules for this exception:
+
+- the Rank Math SEO plugin and Schema module must be active on staging before FAQ QA
+- the theme must not generate duplicate FAQ JSON-LD
+- the visible FAQ content must match the schema content
+- do not combine the Rank Math FAQ block with another FAQ schema source on the same page
+- any other external block requires explicit approval first
+
 ## Design Token Rules
 
 Patterns must use the design tokens defined in `docs/design-tokens-standard.md` and implemented in `theme.json`.
@@ -52,11 +85,23 @@ Patterns must use the design tokens defined in `docs/design-tokens-standard.md` 
 For each section pattern:
 
 - choose one semantic section spacing token: `section-none`, `section-small`, `section-medium`, or `section-large`
+- apply section spacing on the vertical axis only (top/bottom); never add left/right padding
+- never set `contentSize` on a full-width section group; inherit the theme default and ride the 5% gutter (760px is for inner text groups only)
 - use the default 5% site gutter unless the pattern intentionally needs full-width media
 - use typography presets instead of arbitrary font sizes
 - use semantic color tokens instead of arbitrary colors
 - use radius tokens instead of one-off border radius values
-- avoid shadows unless a project-specific shadow preset has been approved
+- use approved shadow presets when shadows are needed
+- avoid arbitrary one-off shadow values
+
+## Page Heading Rule
+
+The default page template stays layout-neutral so it does not force the same title treatment onto every website.
+
+- Every AI-built page layout must include exactly one editable H1.
+- The H1 should normally live in the first hero or intro pattern.
+- Do not depend on `page.html` to add the page H1.
+- QA must reject pages with no H1 or multiple H1s.
 
 ## Forbidden In V1
 
