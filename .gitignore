@@ -1,0 +1,44 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.crt
+
+# Dependencies and build output
+node_modules/
+vendor/
+dist/
+build/
+.cache/
+coverage/
+
+# WordPress/site backups and exports
+*.sql
+*.sql.gz
+*.zip
+*.tar
+*.tar.gz
+*.wpress
+*.bak
+backup*/
+updraft/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Generated media and local artifacts
+screenshots/tmp/
+tools/tmp/
+
