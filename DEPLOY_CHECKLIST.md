@@ -1,6 +1,6 @@
 # Deploy Checklist
 
-Production is protected and handled manually by the site owner. Codex must not deploy to production.
+Production is protected and handled manually by the site owner. Claude must not deploy to production.
 
 ## Environments
 
@@ -21,6 +21,13 @@ Confirm:
 - visual changes have section-level desktop, tablet, and mobile screenshots
 - relevant QA checks are complete
 - security-sensitive changes have been reviewed
+- theme/pattern visual changes follow `docs/workflows/theme-pattern-certification.md`
+- full page layouts include exactly one editable H1
+- header/footer changes keep template parts as thin pattern mounts
+- navigation CSS remains scoped to the header component
+- shadows use approved theme presets only
+- temporary QA pages are trashed/deleted or intentionally kept as drafts
+- no QA pages are included in production deployment
 
 ## Before Owner Production Deploy
 
@@ -38,12 +45,13 @@ Before the site owner deploys production, confirm:
 - SSL is valid
 - analytics and tracking are checked, if applicable
 - no live REST write is pending review
+- no staging-only QA page is being promoted to production
 - package zips were regenerated from source with `npm run package`
 - `npm run validate` passed before handoff
 
 ## Production Deploy Rules
 
-- Codex does not deploy to production.
+- Claude does not deploy to production.
 - The site owner handles the final production push.
 - Do not deploy a large unreviewed batch.
 - Deploy small approved changes.

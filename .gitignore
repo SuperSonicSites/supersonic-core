@@ -42,3 +42,6 @@ yarn-error.log*
 screenshots/tmp/
 tools/tmp/
 
+# Claude Code local overrides (personal, not shared)
+.claude/settings.local.json
+

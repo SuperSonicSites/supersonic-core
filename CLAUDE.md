@@ -20,7 +20,7 @@ It is not a multi-client platform and it is not a full local WordPress runtime. 
 
 ## Environment Access
 
-Codex only needs these local environment values:
+Claude only needs these local environment values:
 
 - `WP_STAGING_URL`
 - `WP_REST_USER`
@@ -49,6 +49,8 @@ Read `docs/gutenberg-authoring-standard.md` before building templates, template 
 
 Read `docs/design-tokens-standard.md` before making visual or layout changes.
 
+Read `docs/workflows/theme-pattern-certification.md` before packaging, uploading, or certifying a visual theme/pattern change.
+
 Hard rules:
 
 - all visual output must remain editable in the WordPress block editor
@@ -57,6 +59,7 @@ Hard rules:
 - use theme design tokens for spacing, typography, colors, radius, and layout
 - every section pattern must choose one semantic section spacing token
 - keep the pattern inserter limited to Supersonic-approved theme patterns
+- every AI-built page layout must include exactly one editable H1; do not rely on the default page template to add it
 - do not use `core/html` or Custom HTML blocks for design work
 - do not use arbitrary font sizes, spacing values, colors, radii, or shadows without approval
 - do not create custom blocks without approval
@@ -65,7 +68,7 @@ Hard rules:
 
 Before starting meaningful work, read:
 
-1. `AGENTS.md`
+1. `CLAUDE.md`
 2. `README.md`
 3. `SITE.md`
 4. `BRAND.md`
@@ -79,10 +82,11 @@ Before starting meaningful work, read:
 12. `docs/wordpress-compatibility.md`
 13. `docs/gutenberg-authoring-standard.md`
 14. `docs/design-tokens-standard.md`
+15. `docs/workflows/theme-pattern-certification.md`
 
-When working inside the theme, also read `wp-content/themes/supersonic-site-theme/AGENTS.md`.
+When working inside the theme, also read `wp-content/themes/supersonic-site-theme/CLAUDE.md`.
 
-When working inside the plugin, also read `wp-content/plugins/supersonic-site-core/AGENTS.md`.
+When working inside the plugin, also read `wp-content/plugins/supersonic-site-core/CLAUDE.md`.
 
 ## Architecture Rules
 
@@ -130,6 +134,31 @@ Preferred build order:
 
 Do not create custom blocks unless native blocks and patterns cannot solve the need cleanly.
 
+## Modularity First
+
+Reusable UI components are patterns, not bespoke markup baked into templates.
+
+- Author reusable components (header/navbar, footer, sections, CTAs) as pattern files in the theme `/patterns` folder; that file is the single source of truth.
+- Templates and template parts compose components by reference with `<!-- wp:pattern {"slug":"theme/pattern-slug"} /-->`; never duplicate a component's markup into both a part and a pattern.
+- Offer layout variants as sibling patterns bound to the relevant template-part area so sites can swap them without editing markup.
+- See `docs/gutenberg-authoring-standard.md` for the full rule.
+
+## Page Layout Responsibility
+
+Default page templates stay layout-neutral and do not force the same H1 treatment onto every site.
+
+- Every AI-built page layout must include exactly one editable H1.
+- The H1 usually belongs in the first hero or intro pattern.
+- QA fails full page layouts with no H1 or multiple H1s.
+- Use `text-page.html` only when a classic title-first content page is intentionally needed.
+
+## Navigation And Shadow Rules
+
+- Header navigation interaction CSS must stay scoped to `.supersonic-site-header`.
+- Footer and in-content navigation must not inherit header-specific animation, underline, or dropdown styling.
+- Shadows are allowed only through approved theme shadow presets.
+- Do not add arbitrary `box-shadow` values in CSS or block markup.
+
 ## Human Approval Gates
 
 Require explicit approval before:
@@ -138,6 +167,8 @@ Require explicit approval before:
 - creating custom blocks
 - changing global design tokens
 - changing theme-wide layout rules
+- changing page-heading responsibility rules
+- adding or changing shadow presets
 - running live REST writes
 - preparing production deployment instructions
 - changing redirects
@@ -153,12 +184,26 @@ Use small controlled tasks:
 1. Plan the single piece of work.
 2. Build only that piece.
 3. Deploy or sync to Hostinger staging when needed.
-4. Capture desktop, tablet, and mobile screenshots for that section or pattern.
-5. Review against design, accessibility, SEO, and security rules as relevant.
-6. Fix only the identified issues.
-7. Re-review.
-8. Commit after approval.
-9. Move to the next piece.
+4. Create or use a temporary staging QA page for the pattern/block when visual isolation helps review.
+5. Capture desktop, tablet, and mobile screenshots for that section or pattern.
+6. Review against design, accessibility, SEO, and security rules as relevant.
+7. Fix only the identified issues.
+8. Re-review.
+9. Clean up the temporary QA page after approval, with explicit approval for REST cleanup.
+10. Commit after approval.
+11. Move to the next piece.
+
+## Temporary QA Pages
+
+Use temporary staging-only QA pages for new visual patterns, template parts, and approved custom blocks.
+
+- QA pages are staging-only and must never deploy to production.
+- Title format: `QA - Pattern - [Pattern Name]`.
+- Slug format: `qa-pattern-[pattern-slug]`.
+- Create only after explicit approval.
+- Run a dry-run before any REST creation or cleanup.
+- Keep the QA page focused on the single component under review.
+- Delete/trash the QA page after approval unless the user wants to keep it as a draft.
 
 ## Definition Of Done
 

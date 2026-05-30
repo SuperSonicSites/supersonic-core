@@ -1,3 +1,8 @@
+---
+name: visual-qa
+description: Use when reviewing a Supersonic pattern or section visually on Hostinger staging, including requests like "visual QA", "screenshot review", "responsive check", "review this section at mobile/tablet/desktop", or "check spacing and overflow". Verifies token-based spacing, typography, and color, approved shadows, no horizontal overflow, no console errors, and layout intent across breakpoints.
+---
+
 # Visual QA Skill
 
 Use this skill when reviewing screenshots for a visual change.

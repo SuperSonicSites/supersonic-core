@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run validate)",
+      "Bash(npm run validate:*)",
+      "Bash(npm run package)",
+      "Bash(npm run package:*)",
+      "Bash(npm run screenshot:*)",
+      "Bash(npm run rest:check)",
+      "Bash(npm run rest:certify)",
+      "Bash(npm run rest:qa-page:dry-run:*)",
+      "Bash(npm run rest:qa-page:trash-dry-run:*)",
+      "Bash(npm run rest:dry-run:*)",
+      "Bash(node tools/validate-framework.mjs)",
+      "Bash(node tools/validate-framework.mjs:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git restore:*)",
+      "Bash(git mv:*)",
+      "Bash(git branch:*)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(node tools/staging-rest.mjs:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(.env)"
+    ]
+  }
+}

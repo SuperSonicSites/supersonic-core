@@ -1,4 +1,4 @@
-﻿---
+---
 name: new-site-init
 description: Use when starting or initializing a new single-site WordPress website build from supersonic-core, including requests like "Initialize a new website", "Start a new website from supersonic-core", "Set up a new client site", "Begin a new WordPress build", "Create the project docs for this site", or "Run the init workflow". Guides repo inspection, client interview, project doc generation, phased planning, and approval before coding.
 ---
@@ -20,7 +20,7 @@ This workflow reflects the Supersonic operating model:
 - Git is the code and history layer.
 - V1 does not assume DDEV, Docker, LocalWP, wp-env, or another local WordPress runtime.
 
-Codex only needs staging REST access for V1 work:
+Claude only needs staging REST access for V1 work:
 
 - `WP_STAGING_URL`
 - `WP_REST_USER`
@@ -43,7 +43,7 @@ Do not use this skill to build templates, patterns, plugin functionality, or dep
 
 Inspect the repo and read:
 
-1. `AGENTS.md`
+1. `CLAUDE.md`
 2. `README.md`
 3. `SITE.md`
 4. `BRAND.md`
@@ -59,7 +59,7 @@ Inspect the repo and read:
 14. `docs/design-tokens-standard.md`
 15. `data/site-intake.schema.json`
 16. `data/site-intake.example.json`
-17. `.agents/skills/`
+17. `.claude/skills/`
 
 If any required file or folder is missing, list it before interviewing the user.
 

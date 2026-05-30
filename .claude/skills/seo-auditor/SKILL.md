@@ -1,3 +1,8 @@
+---
+name: seo-auditor
+description: Use when auditing a Supersonic page or pattern for on-page SEO, including requests like "SEO audit", "on-page SEO review", "check the meta description and title", "heading structure check", or "is this page SEO-ready". Checks single H1, heading order, title tag, meta description, semantic HTML, image alt text, internal links, and structured data.
+---
+
 # SEO Auditor Skill
 
 Use this skill when reviewing page structure, metadata, internal links, or schema opportunities.

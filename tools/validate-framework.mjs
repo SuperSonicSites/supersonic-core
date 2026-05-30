@@ -1,4 +1,4 @@
-import { readFile, stat } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -26,6 +26,23 @@ async function exists(relativePath) {
   } catch {
     return false;
   }
+}
+
+async function collectFiles(relativePath, extensions) {
+  const absolutePath = path.join(root, relativePath);
+  const entries = await readdir(absolutePath, { withFileTypes: true }).catch(() => []);
+  const files = [];
+
+  for (const entry of entries) {
+    const childRelativePath = path.join(relativePath, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await collectFiles(childRelativePath, extensions));
+    } else if (extensions.some((extension) => entry.name.endsWith(extension))) {
+      files.push(childRelativePath.replace(/\\/g, '/'));
+    }
+  }
+
+  return files;
 }
 
 function listZipEntries(buffer) {
@@ -69,9 +86,11 @@ async function validateDesignTokens() {
     const spacingSlugs = new Set(parsed.settings?.spacing?.spacingSizes?.map((size) => size.slug) ?? []);
     const fontSlugs = new Set(parsed.settings?.typography?.fontSizes?.map((size) => size.slug) ?? []);
     const colorSlugs = new Set(parsed.settings?.color?.palette?.map((color) => color.slug) ?? []);
+    const shadowSlugs = new Set(parsed.settings?.shadow?.presets?.map((shadow) => shadow.slug) ?? []);
     const requiredSpacing = ['gutter', 'section-none', 'section-small', 'section-medium', 'section-large'];
     const requiredFonts = ['small', 'body', 'large', 'heading-3', 'heading-2', 'heading-1', 'display'];
     const requiredColors = ['base', 'contrast', 'contrast-subtle', 'surface', 'muted', 'border', 'accent', 'accent-contrast'];
+    const requiredShadows = ['soft', 'medium'];
 
     if (parsed.settings?.layout?.contentSize === '1440px' && parsed.settings?.layout?.wideSize === '1440px') {
       pass('theme layout defaults to 1440px content and wide width');
@@ -112,6 +131,14 @@ async function validateDesignTokens() {
       }
     }
 
+    for (const slug of requiredShadows) {
+      if (shadowSlugs.has(slug)) {
+        pass(`shadow token exists: ${slug}`);
+      } else {
+        fail(`missing shadow token: ${slug}`);
+      }
+    }
+
     if (parsed.settings?.typography?.customFontSize === false) {
       pass('custom font sizes are disabled');
     } else {
@@ -140,6 +167,20 @@ async function validateDesignTokens() {
   }
 }
 
+async function validateCssGuardrails() {
+  const cssFiles = await collectFiles('wp-content/themes/supersonic-site-theme/assets/css', ['.css']);
+  const arbitraryShadow = /box-shadow\s*:\s*(?!\s*(?:var\(--wp--preset--shadow--|none\b))[^;]+;/;
+
+  for (const file of cssFiles) {
+    const content = await readText(file);
+    if (arbitraryShadow.test(content)) {
+      fail(`${file} uses an arbitrary box-shadow value instead of an approved shadow preset`);
+    } else {
+      pass(`${file} uses approved shadow values`);
+    }
+  }
+}
+
 async function validateJsonFile(relativePath) {
   try {
     JSON.parse(await readText(relativePath));
@@ -151,7 +192,16 @@ async function validateJsonFile(relativePath) {
 
 async function validatePackageScripts() {
   const packageJson = JSON.parse(await readText('package.json'));
-  const requiredScripts = ['package', 'validate', 'rest:check', 'rest:dry-run', 'screenshot'];
+  const requiredScripts = [
+    'package',
+    'validate',
+    'rest:check',
+    'rest:certify',
+    'rest:qa-page:dry-run',
+    'rest:qa-page:trash-dry-run',
+    'rest:dry-run',
+    'screenshot'
+  ];
 
   for (const script of requiredScripts) {
     if (packageJson.scripts?.[script]) {
@@ -195,9 +245,11 @@ async function validateSourceGuardrails() {
     'wp-content/themes/supersonic-site-theme/functions.php',
     'wp-content/themes/supersonic-site-theme/templates/index.html',
     'wp-content/themes/supersonic-site-theme/templates/page.html',
+    'wp-content/themes/supersonic-site-theme/templates/text-page.html',
     'wp-content/themes/supersonic-site-theme/parts/header.html',
     'wp-content/themes/supersonic-site-theme/parts/footer.html',
-    'wp-content/plugins/supersonic-site-core/plugin.php'
+    'wp-content/plugins/supersonic-site-core/plugin.php',
+    ...await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html'])
   ];
 
   const source = (await Promise.all(files.map(async (file) => `${file}\n${await readText(file)}`))).join('\n');
@@ -208,6 +260,41 @@ async function validateSourceGuardrails() {
     } else {
       pass(`No unapproved ${label}`);
     }
+  }
+}
+
+async function validateBlockAllowList() {
+  const allowedExternalBlocks = new Set(['rank-math/faq-block']);
+  const files = [
+    'wp-content/themes/supersonic-site-theme/functions.php',
+    'wp-content/themes/supersonic-site-theme/templates/index.html',
+    'wp-content/themes/supersonic-site-theme/templates/page.html',
+    'wp-content/themes/supersonic-site-theme/templates/text-page.html',
+    'wp-content/themes/supersonic-site-theme/parts/header.html',
+    'wp-content/themes/supersonic-site-theme/parts/footer.html',
+    ...await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html'])
+  ];
+  const blockComment = /<!--\s*wp:([\w/-]+)/g;
+  let foundViolation = false;
+
+  for (const file of files) {
+    const content = await readText(file);
+    let match;
+
+    while ((match = blockComment.exec(content)) !== null) {
+      const blockName = match[1];
+      const isCoreAlias = !blockName.includes('/') || blockName.startsWith('core/');
+      const isApprovedExternal = allowedExternalBlocks.has(blockName);
+
+      if (!isCoreAlias && !isApprovedExternal) {
+        foundViolation = true;
+        fail(`${file} uses unapproved external block: ${blockName}`);
+      }
+    }
+  }
+
+  if (!foundViolation) {
+    pass('No unapproved external blocks are used');
   }
 }
 
@@ -227,7 +314,56 @@ async function validatePatternLibraryPolicy() {
   }
 }
 
+async function validatePatternHorizontalSpacing() {
+  // Patterns own vertical section rhythm only. Horizontal spacing is owned by the
+  // theme: every section rides the 5% root gutter and the default content width.
+  // A pattern must never add horizontal inset on top of that base, via either
+  // hardcoded left/right padding or a section-level contentSize override.
+  const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+  const blockComment = /<!--\s*wp:[\w/-]+\s+(\{[\s\S]*?\})\s*\/?-->/g;
+
+  for (const file of patternFiles) {
+    const content = await readText(file);
+    const violations = [];
+    let match;
+
+    while ((match = blockComment.exec(content)) !== null) {
+      let attrs;
+      try {
+        attrs = JSON.parse(match[1]);
+      } catch {
+        continue;
+      }
+
+      if (attrs.align === 'full' && attrs.layout?.contentSize) {
+        violations.push('full-width group sets its own contentSize (narrows below the theme default width)');
+      }
+
+      const padding = attrs.style?.spacing?.padding;
+      if (
+        attrs.align === 'full' &&
+        padding &&
+        (padding.left !== undefined || padding.right !== undefined)
+      ) {
+        violations.push('full-width section sets explicit left/right padding instead of relying on the 5% gutter');
+      }
+    }
+
+    if (violations.length) {
+      for (const violation of violations) {
+        fail(`${file}: ${violation}`);
+      }
+    } else {
+      pass(`${file} adds no horizontal padding beyond the base 5% gutter`);
+    }
+  }
+}
+
 async function validatePackages() {
+  const themePatternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+  const packagedThemePatterns = themePatternFiles.map((file) =>
+    file.replace('wp-content/themes/supersonic-site-theme/', 'supersonic-site-theme/')
+  );
   const packageSpecs = [
     {
       file: 'packages/supersonic-site-theme.zip',
@@ -236,10 +372,13 @@ async function validatePackages() {
         'supersonic-site-theme/style.css',
         'supersonic-site-theme/theme.json',
         'supersonic-site-theme/functions.php',
+        'supersonic-site-theme/assets/css/navigation.css',
         'supersonic-site-theme/templates/index.html',
         'supersonic-site-theme/templates/page.html',
+        'supersonic-site-theme/templates/text-page.html',
         'supersonic-site-theme/parts/header.html',
-        'supersonic-site-theme/parts/footer.html'
+        'supersonic-site-theme/parts/footer.html',
+        ...packagedThemePatterns
       ]
     },
     {
@@ -257,7 +396,7 @@ async function validatePackages() {
 
     const entries = listZipEntries(await readFile(path.join(root, spec.file)));
     const hasBackslashes = entries.some((entry) => entry.includes('\\'));
-    const hasRepoOnlyFiles = entries.some((entry) => entry.endsWith('AGENTS.md') || entry.endsWith('.gitkeep') || entry.includes('/.'));
+    const hasRepoOnlyFiles = entries.some((entry) => entry.endsWith('CLAUDE.md') || entry.endsWith('.gitkeep') || entry.includes('/.'));
 
     if (entries.includes(spec.root)) {
       pass(`${spec.file} contains top-level ${spec.root}`);
@@ -295,7 +434,10 @@ await validateJsonFile('data/site-intake.json');
 await validatePackageScripts();
 await validateHeaders();
 await validateSourceGuardrails();
+await validateBlockAllowList();
+await validateCssGuardrails();
 await validatePatternLibraryPolicy();
+await validatePatternHorizontalSpacing();
 await validatePackages();
 
 for (const check of checks) {

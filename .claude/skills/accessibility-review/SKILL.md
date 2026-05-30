@@ -1,3 +1,8 @@
+---
+name: accessibility-review
+description: Use when reviewing a Supersonic pattern, section, or page for accessibility, including requests like "accessibility review", "a11y check", "WCAG audit", "check color contrast", "keyboard navigation review", or "screen-reader check". Checks WCAG AA contrast, heading order, single H1, alt text, keyboard operability, focus states, reduced motion, and form labels across desktop, tablet, and mobile.
+---
+
 # Accessibility Review Skill
 
 Use this skill when reviewing accessibility for a page, pattern, template, or interactive element.

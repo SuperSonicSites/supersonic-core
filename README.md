@@ -26,6 +26,8 @@ Visual output must remain editable in the WordPress block editor. See `docs/gute
 
 Default visual decisions are governed by `docs/design-tokens-standard.md` and implemented in `wp-content/themes/supersonic-site-theme/theme.json`.
 
+Theme and pattern changes are certified with `docs/workflows/theme-pattern-certification.md`.
+
 ## Operating Model
 
 This repo is not intended to run a full local WordPress environment in V1.
@@ -74,7 +76,7 @@ Do not edit Hostinger files randomly without syncing changes back to Git.
 ## Folder Overview
 
 ```text
-.agents/skills/                  AI skill instructions
+.claude/skills/                  AI skill instructions
 data/                            structured source data and planned imports
 docs/                            architecture and workflow notes
 screenshots/before/              visual review baselines
@@ -90,10 +92,13 @@ wp-content/plugins/              small site-core plugin skeleton
 npm run package       Build WordPress upload zips from source
 npm run validate      Run static framework checks
 npm run rest:check    Check staging REST availability
+npm run rest:certify  Read-only staging certification summary
+npm run rest:qa-page:dry-run        Preview a temporary staging QA page creation
+npm run rest:qa-page:trash-dry-run  Preview temporary QA page cleanup
 npm run rest:dry-run  Validate a planned staging REST write without sending it
 npm run screenshot    Capture desktop/tablet/mobile screenshots when Playwright is installed
 ```
 
 ## Recommended First Build Step
 
-After Phase 1 is approved, create the minimal theme and plugin files without building full templates, patterns, or plugin features.
+After the V1 baseline is certified, build and certify one approved Supersonic pattern or system piece at a time.

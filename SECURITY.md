@@ -15,7 +15,7 @@ Security is part of the framework from day one.
 - No public API keys committed.
 - No unauthenticated write actions.
 - No live REST writes without approval.
-- No production deploys by Codex.
+- No production deploys by Claude.
 - No random Hostinger file edits without syncing changes back to Git.
 - REST endpoints must use permission checks.
 - Admin users and roles must be reviewed before launch.
@@ -25,7 +25,7 @@ Security is part of the framework from day one.
 
 Use `.env.example` to document required environment variables.
 
-Codex only needs staging REST access:
+Claude only needs staging REST access:
 
 - `WP_STAGING_URL`
 - `WP_REST_USER`
@@ -77,11 +77,24 @@ Every custom plugin feature must follow these rules:
 - Review output after writing.
 - Screenshot and audit affected pages after content changes.
 
+## Temporary QA Page Rules
+
+Temporary QA pages may be used on staging to isolate one pattern, template part, or approved block for review.
+
+- QA pages are staging-only.
+- QA pages must never be deployed to production.
+- REST creation requires explicit approval.
+- REST cleanup requires explicit approval.
+- Dry-run creation and cleanup before live REST requests.
+- Use draft status unless the user explicitly approves another status.
+- Delete/trash QA pages after approval unless the user wants to keep them as reusable drafts.
+- Do not create QA pages that expose private client data, secrets, or production-only content.
+
 ## Production Protection
 
 Production deploys are handled manually by the site owner.
 
-Codex may prepare checklists and reviewed assets, but must not deploy to production.
+Claude may prepare checklists and reviewed assets, but must not deploy to production.
 
 Before the site owner deploys production, confirm:
 

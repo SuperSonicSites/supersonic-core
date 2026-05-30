@@ -50,7 +50,7 @@ function Copy-PackageSource {
 	Copy-Item -LiteralPath $Source -Destination $Destination -Recurse -Force
 
 	Get-ChildItem -LiteralPath $Destination -Recurse -Force -Filter ".gitkeep" | Remove-Item -Force
-	Get-ChildItem -LiteralPath $Destination -Recurse -Force -Filter "AGENTS.md" | Remove-Item -Force
+	Get-ChildItem -LiteralPath $Destination -Recurse -Force -Filter "CLAUDE.md" | Remove-Item -Force
 }
 
 function New-WordPressZip {

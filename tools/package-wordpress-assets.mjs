@@ -66,7 +66,7 @@ function writeUInt32(value) {
 }
 
 function shouldExclude(name) {
-  return name === '.gitkeep' || name === 'AGENTS.md' || name.startsWith('.');
+  return name === '.gitkeep' || name === 'CLAUDE.md' || name.startsWith('.');
 }
 
 async function collectEntries(sourceDir, rootName) {

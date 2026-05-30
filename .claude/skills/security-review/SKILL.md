@@ -1,3 +1,8 @@
+---
+name: security-review
+description: Use when reviewing security for plugin code, REST endpoints, or sensitive workflows, including requests like "security review", "security audit", "check this REST endpoint", "is this plugin code safe", or "review sanitization and nonces". Checks input sanitization, output escaping, nonces, prepared queries, capability checks, unauthenticated writes, and committed secrets.
+---
+
 # Security Review Skill
 
 Use this skill when reviewing plugin code, REST/API automation, deploy changes, user roles, forms, or third-party plugin requests.
