@@ -101,7 +101,7 @@ Minimum per-pattern checks:
 - confirm no block validation warning appears
 - confirm the edit did not break gutter, max-width, or responsive stacking
 
-For a large batch such as `0.1.5`, run a deeper token pass on one representative pattern in each registered category, then spot-check the remaining patterns for edit controls and block validity.
+For a large batch, run a deeper token pass on one representative pattern in each registered category, then spot-check the remaining patterns for edit controls and block validity.
 
 ## Temporary QA Page Rule
 
@@ -136,6 +136,8 @@ npm run rest:qa-page:trash-dry-run -- --id <page-id>
 ```
 
 For live creation or cleanup, get explicit approval first, then use a separate implementation step.
+
+Exception: invoking the `visual-qa` workflow with `{live:true}` *is* that explicit approval for the temporary `qa-pattern-*` page lifecycle it runs (create → capture → trash, all in one agent, always cleaned up). The workflow defaults to dry-run and writes only staging-only QA pages, so its live mode satisfies this gate. The exception is limited to that self-contained lifecycle; all other live REST writes still require separate approval.
 
 ## Page Heading Rule
 

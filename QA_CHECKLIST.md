@@ -56,7 +56,7 @@ For each pattern, confirm:
 - edits do not create block validation errors
 - edits do not break the 5% gutter, 1440px max width, or mobile stacking
 
-For a full 0.1.5 batch QA, do a focused token pass on one representative pattern in each category, then spot-check the remaining patterns for edit controls and block validity.
+For a large batch QA, do a focused token pass on one representative pattern in each category, then spot-check the remaining patterns for edit controls and block validity.
 
 ## Theme And Pattern Certification
 

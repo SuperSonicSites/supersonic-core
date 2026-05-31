@@ -199,6 +199,8 @@ Use temporary staging-only QA pages for new visual patterns, template parts, and
 - Keep the QA page focused on the single component under review.
 - Delete/trash the QA page after approval unless the user wants to keep it as a draft.
 
+Exception — `visual-qa` workflow live mode: invoking the `visual-qa` workflow with `{live:true}` *is* the explicit approval for the temporary `qa-pattern-*` page lifecycle (create → capture → trash) it performs. The workflow is gated to dry-run by default, creates only staging-only QA pages, and always trashes them in the same agent, so its live mode satisfies this gate without a separate per-page approval. This exception covers only that self-contained QA-page lifecycle — all other live REST writes still require explicit approval.
+
 ## Definition Of Done
 
 A task is done only when the final report includes:

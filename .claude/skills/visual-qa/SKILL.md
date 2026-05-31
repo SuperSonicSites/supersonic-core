@@ -18,8 +18,11 @@ open visual items.
 2. Open the latest report in `docs/reports/` — the highest-versioned `*-qa.md` /
    release report (e.g. `0.1.12-full-qa.md`). This is the release record; there is no
    separate changelog file.
-3. Build the QA target list from its **Prioritized fix list** and **Remaining risks /
-   verify visually on staging** sections — those are the open visual items.
+3. Build the QA target list from its open-items sections. The canonical headings (see
+   Step 4) are **Prioritized Fix List** and **Remaining Risks / Verify Visually**. Older
+   reports may title these differently (e.g. a numbered `Findings By Severity` section with
+   no separate fix list) — if the canonical headings are absent, fall back to the report's
+   severity-ranked findings list. Those open items are the QA targets.
 
 Then scope:
 
@@ -42,14 +45,17 @@ Then scope:
 Use the project tool. It captures all three breakpoints automatically —
 **desktop 1440px, tablet 768px, mobile 390px** — so you only run it once per target.
 
-PowerShell:
-
-```powershell
-npm run screenshot -- --url "$env:WP_STAGING_URL/<page-or-qa-page-slug>" --selector "<section-selector>" --label "<short-label>" --out "screenshots/after/<review-folder>"
+```bash
+npm run screenshot -- --url "$WP_STAGING_URL/<page-or-qa-page-slug>" --selector "<section-selector>" --label "<short-label>" --out "screenshots/after/<review-folder>"
 ```
 
+(On Windows PowerShell, reference the env var as `$env:WP_STAGING_URL` instead of `$WP_STAGING_URL`.)
+
 - `--selector` targets the specific section/pattern, not the whole page (default is `main`).
-  Prefer a tight selector so the review focuses on the change.
+  Prefer a tight selector so the review focuses on the change. Exception: on a temporary
+  QA page that renders only the pattern, `--selector "main"` is correct — the pattern *is*
+  the main content. The tight-selector rule is for screenshotting a section embedded in a
+  fuller page.
 - `--label` names the files: produces `<label>-desktop.png`, `<label>-tablet.png`, `<label>-mobile.png`.
 - Output lands in `screenshots/after/<review-folder>`; keep baselines in `screenshots/before/` if comparing.
 
@@ -58,7 +64,7 @@ is not already placed on a real page, the root URL renders default content, not 
 pattern. Use a temporary staging-only QA page per pattern (created, captured, then
 trashed). The commands are gated and refuse to write without `--confirm`:
 
-```powershell
+```bash
 # 1. dry-run to show the payload (for approval)
 npm run rest:qa-page:dry-run -- --pattern <theme-slug>/<pattern>
 # 2. create the page (publishes so it is screenshot-able; idempotent — reuses if it exists)
@@ -88,14 +94,24 @@ duplicate them here — open that file. Key checks per breakpoint:
 
 ## Step 4 — Report
 
-Include:
+Write the report to `docs/reports/<version>-visual-qa.md`. Use these **canonical section
+headings** so every release report is consistent and Step 0's discovery can parse it on the
+next run (keep this order):
 
-- scope reviewed (which release items from the report, or which pattern)
-- active theme/plugin version on staging
-- screenshots captured (paths)
-- issues found, with severity
-- recommended fixes
-- approval status (pass/fail per item)
+1. **Scope Reviewed** — which release items from the latest report, or which pattern
+2. **Active Versions On Staging** — theme/plugin version active on staging
+3. **Method** — this workflow + model tiers + the create/capture/trash page lifecycle
+4. **Screenshots Captured** — paths
+5. **Findings By Severity** — issues grouped critical → nit
+6. **Prioritized Fix List** — the ordered "do these next" list
+7. **Considered And Dismissed** — false-positives, so future runs do not re-flag them
+8. **Remaining Risks / Verify Visually** — open items to check on staging
+9. **Approval Status** — pass / pass-with-polish / fail
+
+This visual pass does **not** cover accessibility or on-page SEO depth — those live in the
+`accessibility-review` and `seo-auditor` skills, and the `/qa-review` command runs the
+combined `QA_CHECKLIST.md` pass (a11y, SEO, single-H1, header-nav scoping). Use those for
+full coverage.
 
 Fix only the issues identified, then re-capture and re-review. Do not deploy.
 
