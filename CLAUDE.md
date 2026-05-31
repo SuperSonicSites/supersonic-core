@@ -43,44 +43,44 @@ Before creating or packaging theme/plugin work:
 
 Do not use beta, nightly, trunk, or Gutenberg plugin-only features unless explicitly approved.
 
-## Gutenberg Authoring
+## Task Routing — Skills First
 
-Read `docs/gutenberg-authoring-standard.md` before building templates, template parts, patterns, or blocks.
+Always read first (cheap, orienting): `CLAUDE.md`, `README.md`, `SITE.md`.
 
-Read `docs/design-tokens-standard.md` before making visual or layout changes.
+Then route by task. **Invoke the matching skill first** — each skill is the operational runbook (steps, capture commands, breakpoints, checklists) and pulls in the docs it needs, so you avoid re-reading the whole doc set. Read the reference docs directly only for depth a skill does not cover. Do not front-load every doc.
 
-Read `docs/workflows/theme-pattern-certification.md` before packaging, uploading, or certifying a visual theme/pattern change.
+| Task | Invoke this skill | Reference docs for depth |
+|------|-------------------|--------------------------|
+| Start / initialize a new site build | `new-site-init` | repo docs it generates |
+| Build or change one pattern or section | `pattern-builder` | `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, theme `CLAUDE.md` |
+| Visual / responsive screenshot review | `visual-qa` | `QA_CHECKLIST.md` |
+| Accessibility review | `accessibility-review` | `QA_CHECKLIST.md` |
+| On-page SEO audit | `seo-auditor` | `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `PAGE_MAP.md`, `BRAND.md` |
+| Plugin, REST, or security review | `security-review` | `SECURITY.md`, `docs/wordpress-compatibility.md`, plugin `CLAUDE.md` |
+| Deploy readiness / owner handoff | `deployment-review` | `DEPLOY_CHECKLIST.md`, `SECURITY.md` |
+
+Certifying, packaging, or uploading a theme/pattern change — and any REST/staging write — follows `docs/workflows/theme-pattern-certification.md`.
+
+These repo skills in `.claude/skills/` are canonical; prefer them over similarly named global skills (use this repo's `visual-qa` and `pattern-builder`, not generic look-alikes).
+
+## Gutenberg Authoring & Build Order
+
+Build in this order; only move down the list when the levels above genuinely cannot solve the need cleanly:
+
+1. Native WordPress blocks
+2. Block patterns
+3. Synced patterns or template parts
+4. Custom blocks (approval required — see Human Approval Gates)
+5. Plugin functionality
 
 Hard rules:
 
 - all visual output must remain editable in the WordPress block editor
-- use native blocks first
-- use patterns before custom blocks
-- use theme design tokens for spacing, typography, colors, radius, and layout
+- use theme design tokens for spacing, typography, colors, radius, and layout; no arbitrary font sizes, spacing values, colors, radii, or shadows without approval
 - every section pattern must choose one semantic section spacing token
 - keep the pattern inserter limited to Supersonic-approved theme patterns
-- every AI-built page layout must include exactly one editable H1; do not rely on the default page template to add it
+- one editable H1 per page layout — see Page Layout Responsibility
 - do not use `core/html` or Custom HTML blocks for design work
-- do not use arbitrary font sizes, spacing values, colors, radii, or shadows without approval
-- do not create custom blocks without approval
-
-## Files To Read First
-
-Always read first (cheap, orienting):
-
-1. `CLAUDE.md`
-2. `README.md`
-3. `SITE.md`
-
-Then read only what the task needs — do not front-load every doc:
-
-- Visual / pattern / layout work: `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, `QA_CHECKLIST.md`, `docs/workflows/theme-pattern-certification.md`, and `wp-content/themes/supersonic-site-theme/CLAUDE.md`
-- Plugin / functionality work: `SECURITY.md`, `docs/wordpress-compatibility.md`, and `wp-content/plugins/supersonic-site-core/CLAUDE.md`
-- REST / staging writes: `SECURITY.md` and `docs/workflows/theme-pattern-certification.md`
-- Deployment handoff: `DEPLOY_CHECKLIST.md` and `SECURITY.md`
-- Content / SEO work: `CONTENT_MODEL.md`, `PAGE_MAP.md`, `SEO_STRATEGY.md`, and `BRAND.md`
-
-For visual QA specifically, invoke the `visual-qa` skill — it is the operational runbook (what to QA, capture command, breakpoints, review checklist) and avoids re-reading the whole doc set.
 
 ## Architecture Rules
 
@@ -115,18 +115,6 @@ The plugin owns:
 - integrations
 - reusable business logic
 - dynamic blocks only when native blocks and patterns are not enough
-
-## Native Blocks First
-
-Preferred build order:
-
-1. Native WordPress blocks
-2. Block patterns
-3. Synced patterns or template parts
-4. Custom blocks
-5. Plugin functionality
-
-Do not create custom blocks unless native blocks and patterns cannot solve the need cleanly.
 
 ## Modularity First
 
