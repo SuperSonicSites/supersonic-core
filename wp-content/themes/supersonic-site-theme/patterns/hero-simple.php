@@ -24,11 +24,11 @@
 	<!-- wp:buttons {"style":{"spacing":{"blockGap":"var:preset|spacing|s"}}} -->
 	<div class="wp-block-buttons">
 		<!-- wp:button -->
-		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Primary action</a></div>
+		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Get started</a></div>
 		<!-- /wp:button -->
 
 		<!-- wp:button {"className":"is-style-outline"} -->
-		<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#">Secondary action</a></div>
+		<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#">See how it works</a></div>
 		<!-- /wp:button -->
 	</div>
 	<!-- /wp:buttons -->

@@ -44,7 +44,7 @@
 			<!-- /wp:paragraph -->
 
 			<!-- wp:paragraph {"textColor":"contrast-subtle","fontSize":"small"} -->
-			<p class="has-contrast-subtle-color has-text-color has-small-font-size">hello@example.com<br>(555) 555-5555</p>
+			<p class="has-contrast-subtle-color has-text-color has-small-font-size"><a href="mailto:hello@example.com">hello@example.com</a><br><a href="tel:+15555555555">(555) 555-5555</a></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

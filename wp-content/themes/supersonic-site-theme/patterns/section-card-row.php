@@ -9,6 +9,10 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Section: Card Row"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-small","bottom":"var:preset|spacing|section-small"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-small);padding-bottom:var(--wp--preset--spacing--section-small)">
+	<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+	<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Highlights</h2>
+	<!-- /wp:heading -->
+
 	<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
 	<div class="wp-block-columns">
 		<!-- wp:column -->

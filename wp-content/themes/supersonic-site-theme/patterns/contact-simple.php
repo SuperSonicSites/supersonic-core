@@ -24,7 +24,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
 			<div class="wp-block-group">
 				<!-- wp:paragraph -->
 				<p><strong>Email</strong><br><a href="mailto:hello@example.com">hello@example.com</a></p>

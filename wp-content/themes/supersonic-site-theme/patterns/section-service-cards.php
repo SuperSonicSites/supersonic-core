@@ -36,7 +36,7 @@
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph -->
-				<p><a href="#">View service</a></p>
+				<p><a href="#">View service one</a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->
@@ -56,7 +56,7 @@
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph -->
-				<p><a href="#">View service</a></p>
+				<p><a href="#">View service two</a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->
@@ -76,7 +76,7 @@
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph -->
-				<p><a href="#">View service</a></p>
+				<p><a href="#">View service three</a></p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->

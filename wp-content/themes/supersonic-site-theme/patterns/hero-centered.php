@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Hero: Centered"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"860px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
 	<div class="wp-block-group">
 		<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"small"} -->
 		<p class="has-text-align-center has-accent-color has-text-color has-small-font-size"><strong>Starter page hero</strong></p>
@@ -26,11 +26,11 @@
 		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"blockGap":"var:preset|spacing|s"}}} -->
 		<div class="wp-block-buttons">
 			<!-- wp:button -->
-			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Primary action</a></div>
+			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Get started</a></div>
 			<!-- /wp:button -->
 
 			<!-- wp:button {"className":"is-style-outline"} -->
-			<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#">Secondary action</a></div>
+			<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#">See how it works</a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->

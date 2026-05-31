@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Section: Pricing Cards"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"860px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Choose a package</h2>

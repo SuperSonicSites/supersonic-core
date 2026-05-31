@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Section: Page Intro"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-small"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-small)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"860px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
 	<div class="wp-block-group">
 		<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
 		<p class="has-accent-color has-text-color has-small-font-size"><strong>Page label</strong></p>
