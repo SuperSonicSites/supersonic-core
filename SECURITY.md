@@ -25,11 +25,17 @@ Security is part of the framework from day one.
 
 Use `.env.example` to document required environment variables.
 
-Claude only needs staging REST access:
+Claude and the scripts in `tools/` only read staging REST access:
 
 - `WP_STAGING_URL`
 - `WP_REST_USER`
 - `WP_REST_APP_PASSWORD`
+
+SSH and production credentials are human-only and live in a separate,
+git-ignored `.env.deploy` (documented by `.env.deploy.example`). The agent and
+`tools/` must never read `.env.deploy`. This split means a compromised agent
+cannot reach production or SSH. Do not move SSH/production values back into
+`.env`.
 
 Never commit:
 
@@ -89,6 +95,20 @@ Temporary QA pages may be used on staging to isolate one pattern, template part,
 - Use draft status unless the user explicitly approves another status.
 - Delete/trash QA pages after approval unless the user wants to keep them as reusable drafts.
 - Do not create QA pages that expose private client data, secrets, or production-only content.
+
+## Automated Theme Deploy
+
+The site-core plugin ships a verified theme auto-update path (see
+`docs/workflows/theme-auto-deploy.md`). Its security model:
+
+- The deploy endpoint `POST /wp-json/supersonic/v1/check-updates` requires an
+  authenticated user with the `update_themes` capability and accepts no payload.
+- The trigger carries no code. It only makes staging pull the official theme zip
+  from a GitHub Release and install it after a SHA-256 match. A checksum mismatch
+  aborts the install.
+- CI authenticates as a dedicated `supersonic_deployer` role (application
+  password), never the human admin. Revoke the application password anytime.
+- The flow targets staging only. Production is never deployed by it.
 
 ## Production Protection
 

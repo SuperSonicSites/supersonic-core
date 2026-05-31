@@ -1,0 +1,157 @@
+name: Release theme to staging
+
+# Phone-friendly: open the GitHub mobile app -> Actions -> "Release theme to
+# staging" -> Run workflow -> type the new version (e.g. 0.1.7). This validates,
+# packages, publishes a checksummed GitHub Release, and pokes staging to pull it.
+#
+# The trigger carries no code. Staging pulls the official, SHA-256-verified theme
+# zip from the Release via the site-core plugin. Production is never touched here.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "New version X.Y.Z (leave blank to auto-bump the patch number)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-theme
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Only release from the canonical branch.
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Lint plugin and theme PHP
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends php-cli
+          echo "PHP: $(php --version | head -1)"
+          fail=0
+          while IFS= read -r file; do
+            if ! php -l "$file"; then fail=1; fi
+          done < <(find wp-content/plugins/supersonic-site-core -name '*.php')
+          php -l wp-content/themes/supersonic-site-theme/functions.php || fail=1
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::PHP lint failed"; exit 1
+          fi
+
+      - name: Resolve target version
+        id: ver
+        run: |
+          INPUT="${{ github.event.inputs.version }}"
+          if [ -z "$INPUT" ]; then
+            CUR=$(node -p "require('./package.json').version")
+            IFS='.' read -r MA MI PA <<< "$CUR"
+            INPUT="${MA}.${MI}.$((PA + 1))"
+            echo "No version given; auto-bumping ${CUR} -> ${INPUT}"
+          fi
+          if ! echo "$INPUT" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Version '$INPUT' is not semver (X.Y.Z)"; exit 1
+          fi
+          echo "version=$INPUT" >> "$GITHUB_OUTPUT"
+          echo "tag=theme-v$INPUT" >> "$GITHUB_OUTPUT"
+
+      - name: Guard against existing tag
+        run: |
+          TAG="${{ steps.ver.outputs.tag }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "::error::Tag $TAG already exists. Choose a higher version."; exit 1
+          fi
+
+      - name: Bump version in lockstep
+        run: node tools/bump-version.mjs "${{ steps.ver.outputs.version }}"
+
+      - name: Package WordPress assets
+        run: npm run package
+
+      - name: Validate framework
+        run: npm run validate
+
+      - name: Compute SHA-256 checksum
+        id: sum
+        run: |
+          ZIP=packages/supersonic-site-theme.zip
+          SHA=$(sha256sum "$ZIP" | awk '{print $1}')
+          echo "$SHA  supersonic-site-theme.zip" > "$ZIP.sha256"
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Theme zip SHA-256: $SHA"
+
+      - name: Commit version bump and tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add wp-content/themes/supersonic-site-theme/style.css \
+                  wp-content/plugins/supersonic-site-core/plugin.php \
+                  package.json
+          git commit -m "Release theme v${{ steps.ver.outputs.version }}"
+          git tag "${{ steps.ver.outputs.tag }}"
+          git push origin HEAD:main
+          git push origin "${{ steps.ver.outputs.tag }}"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.ver.outputs.tag }}" \
+            packages/supersonic-site-theme.zip \
+            packages/supersonic-site-theme.zip.sha256 \
+            --title "Theme v${{ steps.ver.outputs.version }}" \
+            --notes "Automated theme release.
+
+          Theme zip SHA-256: \`${{ steps.sum.outputs.sha256 }}\`
+
+          Installed automatically on staging via the Supersonic Site Core updater."
+
+      - name: Trigger staging to pull the update
+        env:
+          STAGING_URL: ${{ secrets.WP_STAGING_URL }}
+          DEPLOY_USER: ${{ secrets.WP_DEPLOY_USER }}
+          DEPLOY_PASS: ${{ secrets.WP_DEPLOY_APP_PASSWORD }}
+        run: |
+          if [ -z "$STAGING_URL" ] || [ -z "$DEPLOY_USER" ] || [ -z "$DEPLOY_PASS" ]; then
+            echo "::warning::Staging deploy secrets are not set; skipping the instant trigger. The release is published and staging will update on its next scheduled check."
+            exit 0
+          fi
+          BASE="${STAGING_URL%/}"
+          echo "Triggering staging update check at $BASE ..."
+          HTTP=$(curl -sS -o response.json -w "%{http_code}" \
+            -X POST \
+            -u "$DEPLOY_USER:$DEPLOY_PASS" \
+            -H "Accept: application/json" \
+            "$BASE/wp-json/supersonic/v1/check-updates")
+          echo "HTTP $HTTP"
+          cat response.json || true
+          echo ""
+          if [ "$HTTP" != "200" ]; then
+            echo "::error::Staging trigger failed (HTTP $HTTP)."; exit 1
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "## Theme v${{ steps.ver.outputs.version }} released"
+            echo ""
+            echo "- Tag: \`${{ steps.ver.outputs.tag }}\`"
+            echo "- SHA-256: \`${{ steps.sum.outputs.sha256 }}\`"
+            echo "- Staging was triggered to pull the verified update."
+            echo ""
+            echo "Next: review staging, then run QA."
+          } >> "$GITHUB_STEP_SUMMARY"

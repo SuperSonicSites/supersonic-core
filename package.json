@@ -12,7 +12,9 @@
     "rest:qa-page:dry-run": "node tools/staging-rest.mjs qa-page-dry-run",
     "rest:qa-page:trash-dry-run": "node tools/staging-rest.mjs qa-page-trash-dry-run",
     "rest:dry-run": "node tools/staging-rest.mjs dry-run",
-    "screenshot": "node tools/capture-screenshots.mjs"
+    "screenshot": "node tools/capture-screenshots.mjs",
+    "version:check": "node tools/bump-version.mjs --check",
+    "version:bump": "node tools/bump-version.mjs"
   },
   "devDependencies": {
     "playwright": "^1.52.0"

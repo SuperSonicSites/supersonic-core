@@ -9,6 +9,17 @@ Production is protected and handled manually by the site owner. Claude must not 
 - Final deploy: Production, handled by the site owner
 - Rollback: Updraft backups
 
+## Staging Theme Deploy (Automated)
+
+Theme updates reach staging through the automated deploy path, not manual zip
+uploads. See `docs/workflows/theme-auto-deploy.md` for the full runbook.
+
+- Trigger the "Release theme to staging" GitHub Actions workflow (mobile or web).
+- It validates, packages, publishes a checksummed GitHub Release, and tells
+  staging to pull and verify it.
+- This path is staging-only and never touches production.
+- Manual zip upload remains the fallback if CI is unavailable.
+
 ## Before Staging Review
 
 Confirm:

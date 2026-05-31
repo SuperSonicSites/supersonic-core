@@ -1,6 +1,6 @@
 # Site-Core Plugin Agent Instructions
 
-This directory contains the small site-core plugin skeleton.
+This directory contains the site-core plugin.
 
 ## Plugin Responsibility
 
@@ -13,6 +13,7 @@ The plugin controls functionality that should survive theme changes:
 - SEO helper functions
 - integrations
 - reusable business logic
+- the verified theme auto-update layer
 - dynamic blocks only when approved and necessary
 
 ## Rules
@@ -27,9 +28,19 @@ The plugin controls functionality that should survive theme changes:
 - Prepare database queries.
 - Do not commit secrets.
 
-## V1 Status
+## Current Functionality
 
-Phase 1 creates instructions and structure only.
+The plugin ships the theme auto-update system (see
+`docs/workflows/theme-auto-deploy.md`):
 
-Plugin functionality is deferred until later phases.
+- `includes/class-supersonic-theme-updater.php` — offers verified theme updates
+  from GitHub Releases and checks SHA-256 before WordPress installs them.
+- `includes/class-supersonic-deploy-controller.php` — registers
+  `POST /wp-json/supersonic/v1/check-updates`, gated on the `update_themes`
+  capability, payload-free, to trigger an immediate verified update.
+- `includes/class-supersonic-deploy-role.php` — the least-privilege
+  `supersonic_deployer` role used by CI, created on activation.
 
+Keep new functionality aligned with these patterns: capability-checked REST
+routes, no unauthenticated writes, least-privilege roles, and verification
+before any install.
