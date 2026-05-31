@@ -6,7 +6,7 @@ export const meta = {
     { title: 'Discover', detail: 'version, latest report, theme patterns, staging up', model: 'haiku' },
     { title: 'Review', detail: 'per pattern: create QA page, capture 3 breakpoints, review, trash page', model: 'sonnet' },
     { title: 'Verify', detail: 'one agent per finding: refute against source', model: 'opus' },
-    { title: 'Synthesize', detail: 'dedupe, prioritize, write the report', model: 'opus' },
+    { title: 'Synthesize', detail: 'dedupe, prioritize, write the report, distill systemic findings into docs/pattern-lessons.md (live only)', model: 'opus' },
   ],
 }
 
@@ -99,6 +99,11 @@ const SYNTH_SCHEMA = {
     },
     coverage: { type: 'string', description: 'how many targets got real per-pattern captures vs blocked' },
     approval: { type: 'string', enum: ['pass', 'pass-with-polish', 'fail'] },
+    lessonsAppended: {
+      type: 'array',
+      description: 'pattern-lessons.md ids added or whose Seen line was bumped this run (live only)',
+      items: { type: 'string' },
+    },
   },
 }
 
@@ -260,11 +265,17 @@ Context:
 
 Write a markdown report to docs/reports/${scope.version}${reportSuffix}.md, matching the format of the latest existing report in docs/reports/ (read one for structure).${dryRunOnly ? ' This is a DRY-RUN report — title it clearly as a dry-run/source-only preview and do NOT overwrite the canonical release report.' : ''} Include: scope reviewed, active theme/plugin version on staging, method (this workflow + model tiers + the create/capture/trash page lifecycle), screenshots captured (paths), coverage (targets captured vs blocked), a prioritized fix list by severity, a "considered and dismissed" section, remaining risks / verify-visually items, any QA pages that need manual cleanup, and an approval status (pass / pass-with-polish / fail). Use the project's own report style; do not invent findings beyond those provided. Do not write scratch files into the repo other than the report itself.
 
-Then return the synthesis JSON.${FINAL}`,
+${dryRunOnly
+  ? 'DISTILL: skip the lessons step in dry-run — do NOT modify docs/pattern-lessons.md. Set lessonsAppended to []. '
+  : `DISTILL (close the loop — Step 5 of the SOP): after writing the report, feed SYSTEMIC findings back into docs/pattern-lessons.md so the next build avoids them. A finding is systemic only if it recurs across multiple patterns this run OR reappears versus a prior report — one-off, pattern-specific defects do NOT get a lesson. Read docs/pattern-lessons.md first. For each systemic confirmed finding: if a matching lesson already exists, append "${scope.version}" to its Seen line (do not duplicate); otherwise add a new PL-NNN lesson (or PL-QNN for a QA-process lesson) following the file's format — a quick-checklist line under "Active Build Rules" plus a detail block with Status (default active), Do/Don't phrased as a rule a builder follows before QA, Applies to, and Seen. APPEND ONLY: never edit lessons marked graduated or retired, and never rewrite the wording of existing active lessons. Promoting a lesson into DESIGN_SYSTEM.md (graduation) needs human approval — do not do it here. Put every id you added or bumped in lessonsAppended. `}Then return the synthesis JSON.${FINAL}`,
   { schema: SYNTH_SCHEMA, model: 'opus', phase: 'Synthesize', label: 'synthesize-report' }
 )
 
 log(`Report: ${result?.reportPath || 'docs/reports/' + scope.version + reportSuffix + '.md'} — ${result?.approval || 'see report'}`)
+const lessons = result?.lessonsAppended || []
+if (!dryRunOnly && lessons.length > 0) {
+  log(`Distilled ${lessons.length} lesson(s) into docs/pattern-lessons.md: ${lessons.join(', ')}. Review/prune them before the next build.`)
+}
 return {
   version: scope.version,
   targets: scope.targets.length,
@@ -272,5 +283,6 @@ return {
   confirmed: real.length,
   dismissed: dismissed.length,
   leakedPages: leakedPages.map((r) => ({ target: r.target, pageId: r.lifecycle?.pageId })),
+  lessonsAppended: lessons,
   report: result,
 }

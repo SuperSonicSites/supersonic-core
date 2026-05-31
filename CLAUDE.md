@@ -74,7 +74,7 @@ Always read first (cheap, orienting):
 
 Then read only what the task needs — do not front-load every doc:
 
-- Visual / pattern / layout work: `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, `QA_CHECKLIST.md`, `docs/workflows/theme-pattern-certification.md`, and `wp-content/themes/supersonic-site-theme/CLAUDE.md`
+- Visual / pattern / layout work: `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, `docs/pattern-lessons.md` (QA-derived build rules — don't re-introduce solved defects), `QA_CHECKLIST.md`, `docs/workflows/theme-pattern-certification.md`, and `wp-content/themes/supersonic-site-theme/CLAUDE.md`
 - Plugin / functionality work: `SECURITY.md`, `docs/wordpress-compatibility.md`, and `wp-content/plugins/supersonic-site-core/CLAUDE.md`
 - REST / staging writes: `SECURITY.md` and `docs/workflows/theme-pattern-certification.md`
 - Deployment handoff: `DEPLOY_CHECKLIST.md` and `SECURITY.md`
