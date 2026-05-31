@@ -62,7 +62,7 @@ the **Human Approval Gates** in `CLAUDE.md`.
 
 Distilled do/don'ts. Each links to its detailed lesson.
 
-- **PL-001** Narrow inner groups: set `contentSize` to `760px` (the `narrowWidth` value), or drop the inner constraint. Never `860`/`920px`; `var:custom|...` does **not** resolve in layout `contentSize`.
+- **PL-001** *(graduated — enforced by `npm run validate`)* Narrow inner groups: set `contentSize` to the `narrowWidth` value (`760px`), or drop the inner constraint. Never `860`/`920px`; `var:custom|...` does **not** resolve in layout `contentSize`.
 - **PL-002** *(pending-decision)* Prefer real `core/image` slots for media placeholders over styled `core/group` "replace with image" wrappers.
 - **PL-003** No hardcoded `minHeight` px (`420`/`460`/`520`) on media placeholders — use a token or fluid/aspect-ratio sizing.
 - **PL-004** Section/card CTAs are `core/button` blocks with descriptive labels. `href="#"` is a tracked starter convention only — list it as known-open.
@@ -83,7 +83,10 @@ Distilled do/don'ts. Each links to its detailed lesson.
 ## Lessons (detail)
 
 ### PL-001 — Bind narrow inner-group `contentSize` to the `narrowWidth` value (760px)
-- **Status:** active
+- **Status:** graduated — enforced by `validatePatternHorizontalSpacing()` in
+  `tools/validate-framework.mjs` (reads `settings.custom.layout.narrowWidth` from `theme.json`;
+  any inner, non-full group whose `contentSize` is a px value other than `narrowWidth` fails
+  `npm run validate`). Kept here so the rule isn't re-learned.
 - **Do:** When an inner group needs the narrow reading width, set `contentSize` to the literal
   `760px` (the value of the `narrowWidth` token). If the section should span the full content
   width, omit the inner constraint and inherit 1440px.
@@ -136,6 +139,11 @@ Distilled do/don'ts. Each links to its detailed lesson.
   metadata with no contentSize benefit.
 - **Applies to:** card/grid/testimonial/comparison/contact-form patterns.
 - **Seen:** 0.1.12 (systemic theme 5); 0.1.13 (L6, L8, L10, N1, N2, N3, N4).
+- **Graduation evaluated — kept advisory.** A bare `layout:constrained` (no `contentSize`)
+  legitimately means "use the theme default width," and 46 such occurrences exist across the
+  library, many of them correct. Distinguishing the *redundant* inner-group case from a
+  meaningful one needs nesting-context analysis that would throw false positives, so this stays
+  a review-time lesson rather than a hard `validate` gate.
 
 ### PL-006 — Quotes use `core/quote` + `cite`, not styled paragraphs
 - **Status:** active
