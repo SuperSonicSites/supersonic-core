@@ -12,16 +12,22 @@ Use this skill when creating or changing one WordPress block pattern.
 - Build one pattern at a time.
 - Use native WordPress blocks first.
 - Use design tokens from `DESIGN_SYSTEM.md` and theme settings.
+- Build so the pattern satisfies every `active` lesson in `docs/pattern-lessons.md` — these are
+  recurring QA defects already turned into build rules. Don't reintroduce a solved mistake.
 - Do not create custom blocks unless approved.
 - Do not change global tokens unless approved.
 - Do not add third-party plugins.
 
 ## Workflow
 
-1. Read `CLAUDE.md`, `DESIGN_SYSTEM.md`, `BRAND.md`, and the theme `CLAUDE.md`.
-2. Define the single pattern being built.
-3. Build only that pattern.
+1. Read `CLAUDE.md`, `DESIGN_SYSTEM.md`, `BRAND.md`, the theme `CLAUDE.md`, and
+   `docs/pattern-lessons.md` (start with its **Active Build Rules** checklist).
+2. Define the single pattern being built. Note which lessons in `docs/pattern-lessons.md` apply to
+   it (match on **Applies to**: heroes, sections, CTAs, contact, header/footer).
+3. Build only that pattern, satisfying every applicable `active` lesson.
 4. Sync to Hostinger staging when needed.
 5. Capture section-level desktop, tablet, and mobile screenshots.
 6. Fix only the issues found in review.
-7. Report files changed, screenshots reviewed, checks run, and remaining risks.
+7. Before reporting, self-check the pattern against each applicable lesson. Report files changed,
+   screenshots reviewed, checks run, the lessons you verified against, and remaining risks. If you
+   had to violate a lesson, say which and why.

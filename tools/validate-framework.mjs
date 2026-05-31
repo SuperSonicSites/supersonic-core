@@ -320,8 +320,21 @@ async function validatePatternHorizontalSpacing() {
   // theme: every section rides the 5% root gutter and the default content width.
   // A pattern must never add horizontal inset on top of that base, via either
   // hardcoded left/right padding or a section-level contentSize override.
+  //
+  // PL-001 (graduated from docs/pattern-lessons.md): when an inner group does
+  // narrow its content, the only approved narrow width is the narrowWidth token
+  // value. Arbitrary inner widths (860px/920px) are a recurring QA defect; var()
+  // does not resolve in layout contentSize, so the literal narrowWidth is required.
   const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
   const blockComment = /<!--\s*wp:[\w/-]+\s+(\{[\s\S]*?\})\s*\/?-->/g;
+
+  let narrowWidth = '760px';
+  try {
+    const parsed = JSON.parse(await readText('wp-content/themes/supersonic-site-theme/theme.json'));
+    narrowWidth = parsed.settings?.custom?.layout?.narrowWidth ?? narrowWidth;
+  } catch {
+    // fall back to the documented narrowWidth value
+  }
 
   for (const file of patternFiles) {
     const content = await readText(file);
@@ -338,6 +351,18 @@ async function validatePatternHorizontalSpacing() {
 
       if (attrs.align === 'full' && attrs.layout?.contentSize) {
         violations.push('full-width group sets its own contentSize (narrows below the theme default width)');
+      }
+
+      const contentSize = attrs.layout?.contentSize;
+      if (
+        contentSize &&
+        attrs.align !== 'full' &&
+        /px$/.test(contentSize) &&
+        contentSize !== narrowWidth
+      ) {
+        violations.push(
+          `inner group sets contentSize ${contentSize}; narrow inner widths must use the ${narrowWidth} narrowWidth value (PL-001)`
+        );
       }
 
       const padding = attrs.style?.spacing?.padding;

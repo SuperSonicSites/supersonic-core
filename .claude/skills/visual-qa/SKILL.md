@@ -99,6 +99,27 @@ Include:
 
 Fix only the issues identified, then re-capture and re-review. Do not deploy.
 
+## Step 5 — Distill lessons (close the loop)
+
+After the report is written, feed systemic findings back into the build rules so the next build
+starts smarter. **Auto-append** to `docs/pattern-lessons.md`; a human prunes later.
+
+A finding earns a lesson only when it is **systemic** — it recurs across multiple patterns in this
+run, or it reappears versus a prior report. One-off, pattern-specific defects stay in the report
+and do **not** get a lesson.
+
+For each systemic finding:
+
+- If `docs/pattern-lessons.md` already has a matching lesson, append this report's ref to its
+  **Seen** line (don't duplicate).
+- Otherwise add a new `PL-NNN` lesson (or `PL-QNN` for a QA-process lesson) using the file's
+  format: a quick-checklist line plus a detail block with **Status** (default `active`),
+  **Do/Don't** phrased as a rule a builder follows *before* QA, **Applies to**, and **Seen**.
+
+Don't touch lessons marked `graduated` or `retired`, and don't silently rewrite `active` ones —
+only append. Promoting a lesson into `DESIGN_SYSTEM.md` / `design-tokens-standard.md` (graduation)
+is a global-rule change and needs human approval per `CLAUDE.md`.
+
 ## Execution model — agents and model tiers
 
 For anything beyond a single pattern, run this SOP as a multi-agent fan-out. The saved

@@ -52,7 +52,7 @@ Then route by task. **Invoke the matching skill first** — each skill is the op
 | Task | Invoke this skill | Reference docs for depth |
 |------|-------------------|--------------------------|
 | Start / initialize a new site build | `new-site-init` | repo docs it generates |
-| Build or change one pattern or section | `pattern-builder` | `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, theme `CLAUDE.md` |
+| Build or change one pattern or section | `pattern-builder` | `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, `docs/pattern-lessons.md`, theme `CLAUDE.md` |
 | Visual / responsive screenshot review | `visual-qa` | `QA_CHECKLIST.md` |
 | Accessibility review | `accessibility-review` | `QA_CHECKLIST.md` |
 | On-page SEO audit | `seo-auditor` | `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `PAGE_MAP.md`, `BRAND.md` |
@@ -82,6 +82,7 @@ Hard rules:
 - keep the pattern inserter limited to Supersonic-approved theme patterns
 - one editable H1 per page layout — see Page Layout Responsibility
 - do not use `core/html` or Custom HTML blocks for design work
+- do not create custom blocks without approval
 
 ## Architecture Rules
 
