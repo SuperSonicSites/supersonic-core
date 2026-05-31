@@ -174,6 +174,32 @@ async function certify() {
   }
 }
 
+// Read-only: list staging pages (id, title, slug, status, link). Used by the
+// visual-qa workflow to find qa-pattern-* pages without depending on tools/tmp.
+async function pages() {
+  const env = await loadEnv();
+  const baseUrl = requireStagingUrl(env);
+  const auth = authHeader(env);
+  if (!auth) {
+    throw new Error('WP_REST_USER and WP_REST_APP_PASSWORD are required to list pages.');
+  }
+  const { response, data } = await readJson(
+    `${baseUrl}/wp-json/wp/v2/pages?status=any&per_page=100&context=edit`,
+    { Authorization: auth }
+  );
+  if (!response.ok || !Array.isArray(data)) {
+    throw new Error(`Page list failed (${response.status}): ${JSON.stringify(data)}`);
+  }
+  const list = data.map((p) => ({
+    id: p.id,
+    title: p.title?.raw ?? p.title?.rendered ?? '',
+    slug: p.slug,
+    status: p.status,
+    link: p.link
+  }));
+  console.log(JSON.stringify(list, null, 2));
+}
+
 async function dryRun() {
   const env = await loadEnv();
   const baseUrl = requireStagingUrl(env);
@@ -251,8 +277,88 @@ async function qaPageTrashDryRun() {
   console.log('Live QA page cleanup requires explicit approval.');
 }
 
-if (!['check', 'certify', 'dry-run', 'qa-page-dry-run', 'qa-page-trash-dry-run'].includes(command)) {
-  console.error('Usage: node tools/staging-rest.mjs <check|certify|dry-run|qa-page-dry-run|qa-page-trash-dry-run> [--pattern theme/pattern] [--id page-id] [--method POST] [--route /wp-json/wp/v2/pages] [--payload data/page-json/example.json]');
+// Live QA page write. Refuses without --confirm so it can never fire by accident.
+// Staging-only by design; pages are published (so they are screenshot-able) and
+// trashed after review. Never run against production.
+async function qaPageCreate() {
+  const confirmed = args.includes('--confirm');
+  const env = await loadEnv();
+  const baseUrl = requireStagingUrl(env);
+  const auth = authHeader(env);
+  const positional = positionalArgs();
+  const patternSlug = getArg('--pattern', positional[0]);
+  const title = getArg('--title');
+  const status = getArg('--status', 'publish');
+
+  if (!auth) {
+    throw new Error('WP_REST_USER and WP_REST_APP_PASSWORD are required for QA page creation.');
+  }
+  if (!patternSlug) {
+    throw new Error('Provide --pattern theme/pattern-slug for QA page creation.');
+  }
+
+  const patternName = patternSlug.split('/').pop();
+  const pageTitle = title ?? `QA - Pattern - ${patternName}`;
+  const pageSlug = `qa-pattern-${slugify(patternName)}`;
+  const content = `<!-- wp:pattern {"slug":"${patternSlug}"} /-->`;
+
+  if (!confirmed) {
+    console.log('REFUSED: live QA page creation needs --confirm. Run qa-page-dry-run first for approval, then re-run with --confirm.');
+    console.log(JSON.stringify({ wouldCreate: { status, title: pageTitle, slug: pageSlug, content } }, null, 2));
+    process.exit(2);
+  }
+
+  // Idempotent: reuse an existing qa-pattern page instead of duplicating it.
+  const existing = await readJson(`${baseUrl}/wp-json/wp/v2/pages?slug=${pageSlug}&status=any&context=edit`, { Authorization: auth });
+  if (Array.isArray(existing.data) && existing.data.length > 0) {
+    const page = existing.data[0];
+    console.log(JSON.stringify({ reused: true, id: page.id, slug: page.slug, link: page.link, status: page.status }, null, 2));
+    return;
+  }
+
+  const res = await fetch(`${baseUrl}/wp-json/wp/v2/pages`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: auth },
+    body: JSON.stringify({ status, title: pageTitle, slug: pageSlug, content })
+  });
+  const page = await res.json();
+  if (!res.ok) {
+    throw new Error(`QA page create failed (${res.status}): ${JSON.stringify(page)}`);
+  }
+  console.log(JSON.stringify({ created: true, id: page.id, slug: page.slug, link: page.link, status: page.status }, null, 2));
+}
+
+async function qaPageTrash() {
+  const confirmed = args.includes('--confirm');
+  const env = await loadEnv();
+  const baseUrl = requireStagingUrl(env);
+  const auth = authHeader(env);
+  const pageId = getArg('--id', positionalArgs()[0]);
+
+  if (!auth) {
+    throw new Error('WP_REST_USER and WP_REST_APP_PASSWORD are required for QA page cleanup.');
+  }
+  if (!pageId) {
+    throw new Error('Provide --id <page-id> for QA page trash.');
+  }
+  if (!confirmed) {
+    console.log(`REFUSED: live QA page cleanup needs --confirm. Would trash page ${pageId} (force=false).`);
+    process.exit(2);
+  }
+
+  const res = await fetch(`${baseUrl}/wp-json/wp/v2/pages/${pageId}?force=false`, {
+    method: 'DELETE',
+    headers: { Authorization: auth }
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(`QA page trash failed (${res.status}): ${JSON.stringify(data)}`);
+  }
+  console.log(JSON.stringify({ trashed: true, id: data.id ?? pageId, status: data.status ?? 'trash' }, null, 2));
+}
+
+if (!['check', 'certify', 'pages', 'dry-run', 'qa-page-dry-run', 'qa-page-trash-dry-run', 'qa-page-create', 'qa-page-trash'].includes(command)) {
+  console.error('Usage: node tools/staging-rest.mjs <check|certify|pages|dry-run|qa-page-dry-run|qa-page-trash-dry-run|qa-page-create|qa-page-trash> [--pattern theme/pattern] [--id page-id] [--confirm] [--status publish] [--method POST] [--route /wp-json/wp/v2/pages] [--payload data/page-json/example.json]');
   process.exit(1);
 }
 
@@ -262,6 +368,10 @@ if (command === 'check') {
 
 if (command === 'certify') {
   await certify();
+}
+
+if (command === 'pages') {
+  await pages();
 }
 
 if (command === 'dry-run') {
@@ -274,4 +384,12 @@ if (command === 'qa-page-dry-run') {
 
 if (command === 'qa-page-trash-dry-run') {
   await qaPageTrashDryRun();
+}
+
+if (command === 'qa-page-create') {
+  await qaPageCreate();
+}
+
+if (command === 'qa-page-trash') {
+  await qaPageTrash();
 }

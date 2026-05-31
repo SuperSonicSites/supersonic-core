@@ -66,27 +66,21 @@ Hard rules:
 
 ## Files To Read First
 
-Before starting meaningful work, read:
+Always read first (cheap, orienting):
 
 1. `CLAUDE.md`
 2. `README.md`
 3. `SITE.md`
-4. `BRAND.md`
-5. `DESIGN_SYSTEM.md`
-6. `PAGE_MAP.md`
-7. `CONTENT_MODEL.md`
-8. `SEO_STRATEGY.md`
-9. `SECURITY.md`
-10. `QA_CHECKLIST.md`
-11. `DEPLOY_CHECKLIST.md`
-12. `docs/wordpress-compatibility.md`
-13. `docs/gutenberg-authoring-standard.md`
-14. `docs/design-tokens-standard.md`
-15. `docs/workflows/theme-pattern-certification.md`
 
-When working inside the theme, also read `wp-content/themes/supersonic-site-theme/CLAUDE.md`.
+Then read only what the task needs — do not front-load every doc:
 
-When working inside the plugin, also read `wp-content/plugins/supersonic-site-core/CLAUDE.md`.
+- Visual / pattern / layout work: `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, `QA_CHECKLIST.md`, `docs/workflows/theme-pattern-certification.md`, and `wp-content/themes/supersonic-site-theme/CLAUDE.md`
+- Plugin / functionality work: `SECURITY.md`, `docs/wordpress-compatibility.md`, and `wp-content/plugins/supersonic-site-core/CLAUDE.md`
+- REST / staging writes: `SECURITY.md` and `docs/workflows/theme-pattern-certification.md`
+- Deployment handoff: `DEPLOY_CHECKLIST.md` and `SECURITY.md`
+- Content / SEO work: `CONTENT_MODEL.md`, `PAGE_MAP.md`, `SEO_STRATEGY.md`, and `BRAND.md`
+
+For visual QA specifically, invoke the `visual-qa` skill — it is the operational runbook (what to QA, capture command, breakpoints, review checklist) and avoids re-reading the whole doc set.
 
 ## Architecture Rules
 

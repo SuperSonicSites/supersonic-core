@@ -9,7 +9,7 @@ For `supersonic-core`, keep this file generic. For a cloned client/site repo, re
 - Site name: TBD
 - Business type: TBD
 - Launch domain: TBD
-- Staging URL: TBD
+- Staging URL: set via the `WP_STAGING_URL` environment variable (canonical source the tools read; in a cloned client repo you may also record the literal URL here)
 - Production URL: TBD
 - Primary contact: TBD
 

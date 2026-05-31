@@ -43,6 +43,13 @@ yarn-error.log*
 screenshots/tmp/
 tools/tmp/
 
+# Agent/workflow scratch (discovery dumps, temp file lists)
+.claude/discovery.json
+__files_list.txt
+_tmp_files.txt
+_tmp*.txt
+_tmp*.json
+
 # Claude Code local overrides (personal, not shared)
 .claude/settings.local.json
 
