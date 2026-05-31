@@ -57,9 +57,10 @@ Then route by task. **Invoke the matching skill first** — each skill is the op
 | Accessibility review | `accessibility-review` | `QA_CHECKLIST.md` |
 | On-page SEO audit | `seo-auditor` | `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `PAGE_MAP.md`, `BRAND.md` |
 | Plugin, REST, or security review | `security-review` | `SECURITY.md`, `docs/wordpress-compatibility.md`, plugin `CLAUDE.md` |
+| Certify / package / upload a theme or pattern change | `certify-pattern` | `docs/workflows/theme-pattern-certification.md` |
 | Deploy readiness / owner handoff | `deployment-review` | `DEPLOY_CHECKLIST.md`, `SECURITY.md` |
 
-Certifying, packaging, or uploading a theme/pattern change — and any REST/staging write — follows `docs/workflows/theme-pattern-certification.md`.
+Any live REST or staging write also follows `docs/workflows/theme-pattern-certification.md` (dry-run + explicit approval first).
 
 These repo skills in `.claude/skills/` are canonical; prefer them over similarly named global skills (use this repo's `visual-qa` and `pattern-builder`, not generic look-alikes).
 
