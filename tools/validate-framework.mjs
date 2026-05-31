@@ -248,7 +248,8 @@ async function validateSourceGuardrails() {
     'wp-content/themes/supersonic-site-theme/templates/text-page.html',
     'wp-content/themes/supersonic-site-theme/parts/header.html',
     'wp-content/themes/supersonic-site-theme/parts/footer.html',
-    'wp-content/plugins/supersonic-site-core/plugin.php',
+    // The plugin is the approved home for functionality (REST routes, etc.), so
+    // these presentation guardrails scope to the theme only.
     ...await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html'])
   ];
 
