@@ -144,7 +144,9 @@ The default page template stays layout-neutral so it does not force the same tit
 - `index.html` and `page.html` use default, unpadded `main` and `post-content`
   wrappers. Section patterns own their own outer gutter and 1440px container.
   Do not add constrained layout to those wrappers because it double-applies or
-  offsets the 5% gutter and breaks full-width section behavior.
+  offsets the 5% gutter and breaks full-width section behavior. The
+  `supersonic-section-page` wrapper intentionally neutralizes WordPress'
+  default post-content padding on these section-pattern pages.
 - Every AI-built page layout must include exactly one editable H1.
 - The H1 should normally live in the first hero or intro pattern.
 - Do not depend on `page.html` to add the page H1.

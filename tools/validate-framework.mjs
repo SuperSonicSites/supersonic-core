@@ -505,6 +505,8 @@ async function validatePostContentWrappers() {
 
     if (mainGroup?.attrs?.layout?.type === 'constrained') {
       fail(`${file} must not use a constrained main wrapper around section-pattern post content`);
+    } else if (!String(mainGroup?.attrs?.className ?? '').split(/\s+/).includes('supersonic-section-page')) {
+      fail(`${file} must mark the section-pattern wrapper with supersonic-section-page`);
     } else if (postContent?.attrs?.layout?.type !== 'default') {
       fail(`${file} must keep post-content default/unpadded so section patterns own the 5% gutter`);
     } else {

@@ -11,6 +11,16 @@ Update URI: https://github.com/SuperSonicSites/supersonic-core
 Text Domain: supersonic-site-theme
 */
 
+.supersonic-section-page > .wp-block-post-content.has-global-padding {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.supersonic-section-page > .wp-block-post-content.has-global-padding > .alignfull {
+	margin-left: 0;
+	margin-right: 0;
+}
+
 .supersonic-site-footer .wp-block-site-title,
 .supersonic-site-footer .wp-block-site-title a {
 	font-size: var(--wp--preset--font-size--body);
