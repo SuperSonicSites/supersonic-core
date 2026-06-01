@@ -501,15 +501,14 @@ async function validatePostContentWrappers() {
       block.name === 'core/group' &&
       block.attrs.tagName === 'main'
     );
-    const hasConstrainedPostContent = blocks.some((block) =>
-      block.name === 'core/post-content' &&
-      block.attrs.layout?.type === 'constrained'
-    );
+    const postContent = blocks.find((block) => block.name === 'core/post-content');
 
-    if (hasConstrainedPostContent && mainGroup?.attrs?.layout?.type === 'constrained') {
-      fail(`${file} must not wrap constrained post content in a second constrained main group`);
+    if (mainGroup?.attrs?.layout?.type === 'constrained') {
+      fail(`${file} must not use a constrained main wrapper around section-pattern post content`);
+    } else if (postContent?.attrs?.layout?.type !== 'default') {
+      fail(`${file} must keep post-content default/unpadded so section patterns own the 5% gutter`);
     } else {
-      pass(`${file} keeps the post-content wrapper from double-applying the 5% gutter`);
+      pass(`${file} keeps page wrappers from double-applying or offsetting the 5% gutter`);
     }
   }
 }

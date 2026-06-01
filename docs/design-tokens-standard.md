@@ -36,7 +36,7 @@ Patterns own vertical section rhythm only. They must never add horizontal inset 
 - A section group may own an approved `760px` content rail only when the block's editor-control contract depends on native Gutenberg content justification, such as `Hero: Simple`.
 - Do not add nested constrained groups solely to create a text rail when that adds another `has-global-padding` layer.
 - Nested `760px` text groups are still valid for patterns where the inner group is the actual edited content area and no parent justification control is promised.
-- Layout-neutral page templates must not wrap constrained post content in another constrained main group. That double-applies the gutter and prevents full-width section patterns from reaching the expected 1440px container.
+- Layout-neutral page templates must not wrap section-pattern post content in constrained main or post-content layout. Section patterns own their outer gutter and 1440px container; text-only content belongs in the text-page template.
 - This rule is enforced by `npm run validate`; a pattern that adds horizontal padding or uses an unapproved full-width section rail fails the check.
 
 ## Section Spacing Tokens
