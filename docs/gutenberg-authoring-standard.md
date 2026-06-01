@@ -117,8 +117,10 @@ Foreground behavior:
 - section background changes must be paired with a readable foreground strategy
 - section text color should affect normal readable copy unless child blocks
   intentionally own their own color
-- button colors are a separate contract and should not inherit section text
-  color in a way that harms contrast
+- button colors are a separate contract by default; when an editor explicitly
+  applies text color to an ancestor, button labels without their own text color
+  inherit that color, while buttons with explicit text color keep the local
+  button setting
 - inline text links and button links are separate color contracts
 - group typography is not a reliable primary control when child text blocks use
   explicit font-size presets

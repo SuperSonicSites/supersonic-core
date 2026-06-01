@@ -63,8 +63,9 @@ works or document that the control is intentionally local to a child block.
 - Section background changes must have a deliberate readable foreground plan.
 - Section text color should affect normal readable copy unless a child block
   intentionally owns its own text color.
-- Buttons keep a separate color contract by default; inherited section text
-  color should not accidentally make a button unreadable.
+- Buttons keep a separate color contract by default. If an editor explicitly
+  applies text color to an ancestor, button labels without their own text color
+  inherit that color; buttons with explicit text color keep their local setting.
 - Inline links and button links are separate color contracts.
 - Group typography is not the primary typography control when child text blocks
   use preset font sizes. Test typography at the intended text block.

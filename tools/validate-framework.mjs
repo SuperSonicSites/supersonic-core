@@ -180,6 +180,13 @@ async function validateCssGuardrails() {
       pass(`${file} uses approved shadow values`);
     }
   }
+
+  const styleCss = await readText('wp-content/themes/supersonic-site-theme/style.css');
+  if (/\.has-text-color\s+\.wp-block-button__link:not\(\.has-text-color\)\s*\{[\s\S]*?color:\s*inherit\s*;[\s\S]*?\}/.test(styleCss)) {
+    pass('button labels without local text color inherit explicit ancestor text color');
+  } else {
+    fail('button labels without local text color should inherit explicit ancestor text color');
+  }
 }
 
 async function validateJsonFile(relativePath) {
