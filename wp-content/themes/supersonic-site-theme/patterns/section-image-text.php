@@ -13,13 +13,9 @@
 	<div class="wp-block-columns are-vertically-aligned-center">
 		<!-- wp:column {"verticalAlignment":"center"} -->
 		<div class="wp-block-column is-vertically-aligned-center">
-			<!-- wp:group {"backgroundColor":"muted","style":{"border":{"radius":"var(--wp--custom--radius--large)"},"dimensions":{"minHeight":"420px"},"spacing":{"padding":{"top":"var:preset|spacing|xl","right":"var:preset|spacing|xl","bottom":"var:preset|spacing|xl","left":"var:preset|spacing|xl"}}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"center","verticalAlignment":"center"}} -->
-			<div class="wp-block-group has-muted-background-color has-background" style="border-radius:var(--wp--custom--radius--large);min-height:420px;padding-top:var(--wp--preset--spacing--xl);padding-right:var(--wp--preset--spacing--xl);padding-bottom:var(--wp--preset--spacing--xl);padding-left:var(--wp--preset--spacing--xl)">
-				<!-- wp:image -->
-				<figure class="wp-block-image"><img alt=""/></figure>
-				<!-- /wp:image -->
-			</div>
-			<!-- /wp:group -->
+			<!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"large","className":"supersonic-pattern-image","style":{"border":{"radius":"var(--wp--custom--radius--large)"}}} -->
+			<figure class="wp-block-image size-large has-custom-border supersonic-pattern-image"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/pattern-placeholder.svg' ) ); ?>" alt="" style="border-radius:var(--wp--custom--radius--large);aspect-ratio:4/3;object-fit:cover"/></figure>
+			<!-- /wp:image -->
 		</div>
 		<!-- /wp:column -->
 
@@ -33,8 +29,8 @@
 			<h2 class="wp-block-heading has-heading-2-font-size">Pair proof with a simple explanation</h2>
 			<!-- /wp:heading -->
 
-			<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
-			<p class="has-contrast-subtle-color has-text-color">Use this variation when the visual should lead the section and the supporting copy should clarify what visitors are seeing.</p>
+			<!-- wp:paragraph -->
+			<p>Use this variation when the visual should lead the section and the supporting copy should clarify what visitors are seeing.</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

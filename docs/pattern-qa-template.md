@@ -39,6 +39,7 @@ Briefly describe where this pattern should be used and what job it does.
 - Color tokens:
 - Layout width:
 - Gutter behavior:
+- Interior horizontal padding:
 - Radius token:
 - Shadow preset:
 - Motion tokens, if applicable:
@@ -52,6 +53,7 @@ Briefly describe where this pattern should be used and what job it does.
 - Light background plus dark text remains readable:
 - Inline link color works, if inline links are present:
 - Button color controls work separately from section text color, if buttons are present:
+- Button labels inherit ancestor text color only when the button has no local text color:
 - Group typography is not relied on where child text blocks own preset sizes:
 - Text typography controls work at the intended text blocks:
 - Left/center/right positioning works, if the pattern category promises it:
@@ -74,6 +76,7 @@ Briefly describe where this pattern should be used and what job it does.
 - Radius/shadow presets are available where relevant:
 - Token edits avoid arbitrary custom values:
 - Token edits preserve gutter/max-width behavior:
+- Token edits do not introduce nested gutters or interior layout padding:
 - Token edits preserve mobile stacking:
 - No block validation errors after edit/undo:
 - Header/footer template part remains a thin pattern mount, if applicable:

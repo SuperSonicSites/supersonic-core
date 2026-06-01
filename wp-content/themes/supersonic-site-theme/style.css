@@ -25,6 +25,26 @@ Text Domain: supersonic-site-theme
 	color: inherit;
 }
 
+.supersonic-brand-lockup {
+	align-items: center;
+	display: flex;
+	gap: var(--wp--preset--spacing--s);
+	min-width: 0;
+}
+
+.supersonic-brand-lockup .wp-block-site-title {
+	margin: 0;
+}
+
+.supersonic-pattern-image {
+	margin: 0;
+}
+
+.supersonic-pattern-image img {
+	display: block;
+	width: 100%;
+}
+
 .supersonic-site-footer .wp-block-site-title,
 .supersonic-site-footer .wp-block-site-title a {
 	font-size: var(--wp--preset--font-size--body);

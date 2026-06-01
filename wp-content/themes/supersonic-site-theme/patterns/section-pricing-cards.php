@@ -14,8 +14,8 @@
 		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Choose a package</h2>
 		<!-- /wp:heading -->
-		<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle"} -->
-		<p class="has-text-align-center has-contrast-subtle-color has-text-color">Use this for package summaries, retainers, service levels, or offer tiers.</p>
+		<!-- wp:paragraph {"align":"center"} -->
+		<p class="has-text-align-center">Use this for package summaries, retainers, service levels, or offer tiers.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -24,7 +24,7 @@
 	<div class="wp-block-columns">
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Starter</h3>
@@ -36,7 +36,7 @@
 				<ul><li>Key feature</li><li>Key feature</li><li>Key feature</li></ul>
 				<!-- /wp:list -->
 				<!-- wp:buttons -->
-				<div class="wp-block-buttons"><!-- wp:button {"width":100} --><div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="#">Select</a></div><!-- /wp:button --></div>
+				<div class="wp-block-buttons"><!-- wp:button {"width":100} --><div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="#">Choose starter</a></div><!-- /wp:button --></div>
 				<!-- /wp:buttons -->
 			</div>
 			<!-- /wp:group -->
@@ -45,7 +45,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"backgroundColor":"base","style":{"border":{"color":"var:preset|color|accent","radius":"var(--wp--custom--radius--medium)","width":"2px"},"shadow":"var:preset|shadow|medium","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"backgroundColor":"base","style":{"border":{"color":"var:preset|color|accent","radius":"var(--wp--custom--radius--medium)","width":"2px"},"shadow":"var:preset|shadow|medium","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-border-color has-base-background-color has-background" style="border-color:var(--wp--preset--color--accent);border-width:2px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--medium)">
 				<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
 				<p class="has-accent-color has-text-color has-small-font-size"><strong>Popular</strong></p>
@@ -60,7 +60,7 @@
 				<ul><li>Key feature</li><li>Key feature</li><li>Key feature</li></ul>
 				<!-- /wp:list -->
 				<!-- wp:buttons -->
-				<div class="wp-block-buttons"><!-- wp:button {"width":100} --><div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="#">Select</a></div><!-- /wp:button --></div>
+				<div class="wp-block-buttons"><!-- wp:button {"width":100} --><div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="#">Choose growth</a></div><!-- /wp:button --></div>
 				<!-- /wp:buttons -->
 			</div>
 			<!-- /wp:group -->
@@ -69,7 +69,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Scale</h3>
@@ -81,7 +81,7 @@
 				<ul><li>Key feature</li><li>Key feature</li><li>Key feature</li></ul>
 				<!-- /wp:list -->
 				<!-- wp:buttons -->
-				<div class="wp-block-buttons"><!-- wp:button {"width":100} --><div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="#">Select</a></div><!-- /wp:button --></div>
+				<div class="wp-block-buttons"><!-- wp:button {"width":100} --><div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="#">Choose scale</a></div><!-- /wp:button --></div>
 				<!-- /wp:buttons -->
 			</div>
 			<!-- /wp:group -->

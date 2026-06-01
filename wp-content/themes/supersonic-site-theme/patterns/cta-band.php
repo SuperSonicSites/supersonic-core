@@ -7,16 +7,16 @@
  * Description: A full-width call-to-action band with centered copy and buttons.
  */
 ?>
-<!-- wp:group {"metadata":{"name":"CTA: Band"},"align":"full","backgroundColor":"accent","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull has-accent-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+<!-- wp:group {"metadata":{"name":"CTA: Band"},"align":"full","backgroundColor":"accent","textColor":"accent-contrast","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-accent-contrast-color has-accent-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
 	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
 	<div class="wp-block-group">
-		<!-- wp:heading {"textAlign":"center","textColor":"accent-contrast","fontSize":"heading-2"} -->
-		<h2 class="wp-block-heading has-text-align-center has-accent-contrast-color has-text-color has-heading-2-font-size">Ready for the next step?</h2>
+		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Ready for the next step?</h2>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"align":"center","textColor":"accent-contrast","fontSize":"large"} -->
-		<p class="has-text-align-center has-accent-contrast-color has-text-color has-large-font-size">Use this section when the visitor has enough context and needs one clear action.</p>
+		<!-- wp:paragraph {"align":"center","fontSize":"large"} -->
+		<p class="has-text-align-center has-large-font-size">Use this section when the visitor has enough context and needs one clear action.</p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->

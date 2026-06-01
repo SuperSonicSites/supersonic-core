@@ -19,8 +19,8 @@
 		<h1 class="wp-block-heading has-heading-1-font-size">Page title goes here</h1>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"textColor":"contrast-subtle","fontSize":"large"} -->
-		<p class="has-contrast-subtle-color has-text-color has-large-font-size">Add one concise paragraph that tells visitors what this page is for and why it matters.</p>
+		<!-- wp:paragraph {"fontSize":"large"} -->
+		<p class="has-large-font-size">Add one concise paragraph that tells visitors what this page is for and why it matters.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->

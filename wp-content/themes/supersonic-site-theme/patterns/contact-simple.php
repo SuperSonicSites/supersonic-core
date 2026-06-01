@@ -16,8 +16,8 @@
 			<!-- wp:heading {"fontSize":"heading-2"} -->
 			<h2 class="wp-block-heading has-heading-2-font-size">Contact us</h2>
 			<!-- /wp:heading -->
-			<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
-			<p class="has-contrast-subtle-color has-text-color">Use this section for clear contact details and one simple invitation.</p>
+			<!-- wp:paragraph -->
+			<p>Use this section for clear contact details and one simple invitation.</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

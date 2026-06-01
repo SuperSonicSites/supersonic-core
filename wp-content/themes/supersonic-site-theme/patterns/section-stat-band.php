@@ -16,8 +16,8 @@
 			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-2"} -->
 			<p class="has-text-align-center has-accent-color has-text-color has-heading-2-font-size"><strong>25+</strong></p>
 			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle","fontSize":"small"} -->
-			<p class="has-text-align-center has-contrast-subtle-color has-text-color has-small-font-size">Proof point</p>
+			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
+			<p class="has-text-align-center has-small-font-size">Proof point</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
@@ -26,8 +26,8 @@
 			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-2"} -->
 			<p class="has-text-align-center has-accent-color has-text-color has-heading-2-font-size"><strong>98%</strong></p>
 			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle","fontSize":"small"} -->
-			<p class="has-text-align-center has-contrast-subtle-color has-text-color has-small-font-size">Proof point</p>
+			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
+			<p class="has-text-align-center has-small-font-size">Proof point</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
@@ -36,8 +36,8 @@
 			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-2"} -->
 			<p class="has-text-align-center has-accent-color has-text-color has-heading-2-font-size"><strong>10k</strong></p>
 			<!-- /wp:paragraph -->
-			<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle","fontSize":"small"} -->
-			<p class="has-text-align-center has-contrast-subtle-color has-text-color has-small-font-size">Proof point</p>
+			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
+			<p class="has-text-align-center has-small-font-size">Proof point</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

@@ -14,8 +14,8 @@
 		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">How it works</h2>
 		<!-- /wp:heading -->
-		<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle"} -->
-		<p class="has-text-align-center has-contrast-subtle-color has-text-color">Use this to make a service, onboarding flow, or project process easy to understand.</p>
+		<!-- wp:paragraph {"align":"center"} -->
+		<p class="has-text-align-center">Use this to make a service, onboarding flow, or project process easy to understand.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -30,8 +30,8 @@
 			<!-- wp:heading {"level":3} -->
 			<h3 class="wp-block-heading">Step one</h3>
 			<!-- /wp:heading -->
-			<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
-			<p class="has-contrast-subtle-color has-text-color">Explain what happens first.</p>
+			<!-- wp:paragraph -->
+			<p>Explain what happens first.</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
@@ -44,8 +44,8 @@
 			<!-- wp:heading {"level":3} -->
 			<h3 class="wp-block-heading">Step two</h3>
 			<!-- /wp:heading -->
-			<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
-			<p class="has-contrast-subtle-color has-text-color">Explain what the visitor or team can expect next.</p>
+			<!-- wp:paragraph -->
+			<p>Explain what the visitor or team can expect next.</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
@@ -58,8 +58,8 @@
 			<!-- wp:heading {"level":3} -->
 			<h3 class="wp-block-heading">Step three</h3>
 			<!-- /wp:heading -->
-			<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
-			<p class="has-contrast-subtle-color has-text-color">Describe the outcome or final handoff.</p>
+			<!-- wp:paragraph -->
+			<p>Describe the outcome or final handoff.</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

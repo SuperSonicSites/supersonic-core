@@ -15,8 +15,8 @@
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">What makes this work</h2>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle"} -->
-		<p class="has-text-align-center has-contrast-subtle-color has-text-color">Use three focused points to explain why this offer, process, or service is worth choosing.</p>
+		<!-- wp:paragraph {"align":"center"} -->
+		<p class="has-text-align-center">Use three focused points to explain why this offer, process, or service is worth choosing.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -25,7 +25,7 @@
 	<div class="wp-block-columns">
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
 				<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
 				<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>01</strong></p>
@@ -45,7 +45,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
 				<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
 				<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>02</strong></p>
@@ -65,7 +65,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
 				<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
 				<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>03</strong></p>

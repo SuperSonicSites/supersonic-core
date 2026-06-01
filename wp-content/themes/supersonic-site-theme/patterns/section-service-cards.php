@@ -15,8 +15,8 @@
 		<h2 class="wp-block-heading has-heading-2-font-size">Services</h2>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
-		<p class="has-contrast-subtle-color has-text-color">Choose the right starting point.</p>
+		<!-- wp:paragraph -->
+		<p>Choose the right starting point.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -25,7 +25,7 @@
 	<div class="wp-block-columns">
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"style":{"border":{"color":"var:preset|color|border","radius":"var(--wp--custom--radius--medium)","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"style":{"border":{"color":"var:preset|color|border","radius":"var(--wp--custom--radius--medium)","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Service title</h3>
@@ -35,9 +35,13 @@
 				<p class="has-contrast-subtle-color has-text-color">A short explanation of who this is for and what outcome it supports.</p>
 				<!-- /wp:paragraph -->
 
-				<!-- wp:paragraph -->
-				<p><a href="#">View service one</a></p>
-				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button -->
+					<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">View service</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
 			</div>
 			<!-- /wp:group -->
 		</div>
@@ -45,7 +49,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"style":{"border":{"color":"var:preset|color|border","radius":"var(--wp--custom--radius--medium)","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"style":{"border":{"color":"var:preset|color|border","radius":"var(--wp--custom--radius--medium)","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Service title</h3>
@@ -55,9 +59,13 @@
 				<p class="has-contrast-subtle-color has-text-color">A short explanation of who this is for and what outcome it supports.</p>
 				<!-- /wp:paragraph -->
 
-				<!-- wp:paragraph -->
-				<p><a href="#">View service two</a></p>
-				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button -->
+					<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">View service</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
 			</div>
 			<!-- /wp:group -->
 		</div>
@@ -65,7 +73,7 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:group {"style":{"border":{"color":"var:preset|color|border","radius":"var(--wp--custom--radius--medium)","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}},"layout":{"type":"constrained"}} -->
+			<!-- wp:group {"style":{"border":{"color":"var:preset|color|border","radius":"var(--wp--custom--radius--medium)","width":"1px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Service title</h3>
@@ -75,9 +83,13 @@
 				<p class="has-contrast-subtle-color has-text-color">A short explanation of who this is for and what outcome it supports.</p>
 				<!-- /wp:paragraph -->
 
-				<!-- wp:paragraph -->
-				<p><a href="#">View service three</a></p>
-				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button -->
+					<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">View service</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
 			</div>
 			<!-- /wp:group -->
 		</div>

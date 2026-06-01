@@ -15,8 +15,8 @@
 		<h2 class="wp-block-heading has-heading-2-font-size">A clear section heading</h2>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"textColor":"contrast-subtle","fontSize":"large"} -->
-		<p class="has-contrast-subtle-color has-text-color has-large-font-size">Use this section for a compact explanation, service overview, brand note, or supporting story.</p>
+		<!-- wp:paragraph {"fontSize":"large"} -->
+		<p class="has-large-font-size">Use this section for a compact explanation, service overview, brand note, or supporting story.</p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:paragraph -->

@@ -17,8 +17,8 @@
 	<h1 class="wp-block-heading has-heading-1-font-size">Build a clear homepage hero</h1>
 	<!-- /wp:heading -->
 
-	<!-- wp:paragraph {"textColor":"contrast-subtle","fontSize":"large"} -->
-	<p class="has-contrast-subtle-color has-text-color has-large-font-size">Use this native-block pattern as a clean starting point for a page hero, service intro, or landing-page opener.</p>
+	<!-- wp:paragraph {"fontSize":"large"} -->
+	<p class="has-large-font-size">Use this native-block pattern as a clean starting point for a page hero, service intro, or landing-page opener.</p>
 	<!-- /wp:paragraph -->
 
 	<!-- wp:buttons {"style":{"spacing":{"blockGap":"var:preset|spacing|s"}}} -->

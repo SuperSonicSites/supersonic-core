@@ -21,42 +21,13 @@
 
 		<!-- wp:column {"verticalAlignment":"top"} -->
 		<div class="wp-block-column is-vertically-aligned-top">
-			<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}},"layout":{"type":"constrained"}} -->
-			<div class="wp-block-group">
-				<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
-				<div class="wp-block-group">
-					<!-- wp:paragraph {"textColor":"accent","fontSize":"large"} -->
-					<p class="has-accent-color has-text-color has-large-font-size"><strong>01</strong></p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p><strong>Benefit title</strong><br><span class="has-contrast-subtle-color">A short explanation of the benefit.</span></p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-
-				<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
-				<div class="wp-block-group">
-					<!-- wp:paragraph {"textColor":"accent","fontSize":"large"} -->
-					<p class="has-accent-color has-text-color has-large-font-size"><strong>02</strong></p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p><strong>Benefit title</strong><br><span class="has-contrast-subtle-color">A short explanation of the benefit.</span></p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-
-				<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"top"}} -->
-				<div class="wp-block-group">
-					<!-- wp:paragraph {"textColor":"accent","fontSize":"large"} -->
-					<p class="has-accent-color has-text-color has-large-font-size"><strong>03</strong></p>
-					<!-- /wp:paragraph -->
-					<!-- wp:paragraph -->
-					<p><strong>Benefit title</strong><br><span class="has-contrast-subtle-color">A short explanation of the benefit.</span></p>
-					<!-- /wp:paragraph -->
-				</div>
-				<!-- /wp:group -->
-			</div>
-			<!-- /wp:group -->
+			<!-- wp:list {"ordered":true} -->
+			<ol>
+				<li><strong>Benefit title</strong><br>A short explanation of the benefit.</li>
+				<li><strong>Benefit title</strong><br>A short explanation of the benefit.</li>
+				<li><strong>Benefit title</strong><br>A short explanation of the benefit.</li>
+			</ol>
+			<!-- /wp:list -->
 		</div>
 		<!-- /wp:column -->
 	</div>

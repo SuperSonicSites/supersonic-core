@@ -24,6 +24,8 @@ on a parent-level control if child blocks override it or if the pattern layout
 cannot make the change visible.
 
 - Outer section group owns background color and vertical section spacing.
+- Outer section group rides the theme root gutter: 5% left/right padding and a
+  1440px desktop content width by default.
 - Inner layout group owns content width and horizontal positioning unless the
   section group must own a native Gutenberg justification control.
 - Text blocks own text alignment and typography presets.
@@ -34,6 +36,10 @@ cannot make the change visible.
 
 If a control appears in the editor, either structure the pattern so it visibly
 works or document that the control is intentionally local to a child block.
+
+Do not add horizontal padding to the section group or to plain layout wrappers.
+Tokenized left/right padding is allowed only on real local surfaces such as
+cards, CTA panels, form panels, and similar framed content.
 
 ## Category Contracts
 
@@ -51,6 +57,9 @@ works or document that the control is intentionally local to a child block.
   variants instead of relying on generic group justification.
 - Cards and grids: the section group controls the band; each card controls its
   own background, radius, border, shadow, padding, and local text.
+- Media patterns: the media block owns replacement, alt text, aspect ratio, and
+  crop intent. Do not simulate a media slot with a styled group around an empty
+  image if a native image block can own the visible media surface.
 - Trust sections: preserve quote, list, logo, or stat semantics before adding
   decorative controls.
 - Conversion sections and CTAs: verify light and dark foreground/background
@@ -67,8 +76,19 @@ works or document that the control is intentionally local to a child block.
   applies text color to an ancestor, button labels without their own text color
   inherit that color; buttons with explicit text color keep their local setting.
 - Inline links and button links are separate color contracts.
-- Group typography is not the primary typography control when child text blocks
-  use preset font sizes. Test typography at the intended text block.
+- Group typography is not a primary typography control. Do not rely on group
+  typography when child text blocks have preset font sizes; test typography at
+  the intended heading, paragraph, quote, or list block.
+- Decorative text, such as eyebrows, stats, and numbered markers, may own a
+  local accent color. Normal headings and readable body copy should inherit
+  section or local-surface text color unless there is a documented reason.
+
+## Existing Pattern Remediation
+
+When improving an existing pattern, preserve its visual intent while making the
+editor controls truthful. Fix source markup before treating screenshots as
+approval evidence. For category batches, certify each pattern independently even
+when the source changes ship together.
 
 ## Workflow
 

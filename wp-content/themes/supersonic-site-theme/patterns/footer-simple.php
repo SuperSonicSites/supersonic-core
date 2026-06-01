@@ -14,19 +14,24 @@
 	<div class="wp-block-columns">
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:site-logo {"width":120} /-->
+			<!-- wp:group {"className":"supersonic-brand-lockup","style":{"spacing":{"blockGap":"var:preset|spacing|s"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+			<div class="wp-block-group supersonic-brand-lockup">
+				<!-- wp:site-logo {"width":120} /-->
+				<!-- wp:site-title /-->
+			</div>
+			<!-- /wp:group -->
 
-			<!-- wp:paragraph {"textColor":"contrast-subtle","fontSize":"small"} -->
-			<p class="has-contrast-subtle-color has-text-color has-small-font-size">A short line describing the site or business. Edit this in the Footer: Simple pattern.</p>
+			<!-- wp:paragraph {"fontSize":"small"} -->
+			<p class="has-small-font-size">A short line describing the site or business. Edit this in the Footer: Simple pattern.</p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"fontSize":"small"} -->
-			<p class="has-small-font-size"><strong>Explore</strong></p>
-			<!-- /wp:paragraph -->
+			<!-- wp:heading {"level":2,"fontSize":"small"} -->
+			<h2 class="wp-block-heading has-small-font-size">Explore</h2>
+			<!-- /wp:heading -->
 
 			<!-- wp:navigation {"overlayMenu":"never","fontSize":"small","style":{"spacing":{"blockGap":"var:preset|spacing|xs"}},"layout":{"type":"flex","orientation":"vertical"}} -->
 				<!-- wp:navigation-link {"label":"Home","url":"#"} /-->
@@ -39,12 +44,12 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"fontSize":"small"} -->
-			<p class="has-small-font-size"><strong>Get in touch</strong></p>
-			<!-- /wp:paragraph -->
+			<!-- wp:heading {"level":2,"fontSize":"small"} -->
+			<h2 class="wp-block-heading has-small-font-size">Get in touch</h2>
+			<!-- /wp:heading -->
 
-			<!-- wp:paragraph {"textColor":"contrast-subtle","fontSize":"small"} -->
-			<p class="has-contrast-subtle-color has-text-color has-small-font-size"><a href="mailto:hello@example.com">hello@example.com</a><br><a href="tel:+15555555555">(555) 555-5555</a></p>
+			<!-- wp:paragraph {"fontSize":"small"} -->
+			<p class="has-small-font-size"><a href="mailto:hello@example.com">hello@example.com</a><br><a href="tel:+15555555555">(555) 555-5555</a></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
@@ -55,8 +60,8 @@
 	<hr class="wp-block-separator has-alpha-channel-opacity"/>
 	<!-- /wp:separator -->
 
-	<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle","fontSize":"small"} -->
-	<p class="has-text-align-center has-contrast-subtle-color has-text-color has-small-font-size">&copy; Your Company. Powered by Supersonic Site Theme.</p>
+	<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
+	<p class="has-text-align-center has-small-font-size">&copy; Your Company. Powered by Supersonic Site Theme.</p>
 	<!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->

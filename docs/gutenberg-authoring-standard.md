@@ -95,6 +95,15 @@ For each section pattern:
 - use approved shadow presets when shadows are needed
 - avoid arbitrary one-off shadow values
 
+Local surface exception:
+
+- Cards, CTA panels, form panels, and similar framed surfaces may use tokenized
+  left/right padding because those blocks own their own interior spacing.
+- Plain layout wrappers, section groups, and nested constrained groups must not
+  add horizontal padding just to create a gutter.
+- Redundant constrained groups without a content-width purpose should be removed
+  or changed to normal flow so they do not imply hidden layout ownership.
+
 ## Editor Control Contracts
 
 Patterns must be built around the editor controls they actually support. A
@@ -124,6 +133,9 @@ Foreground behavior:
 - inline text links and button links are separate color contracts
 - group typography is not a reliable primary control when child text blocks use
   explicit font-size presets
+- decorative text such as eyebrows, stats, and numbered markers may own a local
+  accent color; normal headings and body copy should inherit section or local
+  surface text color unless the local override is documented
 
 Category behavior:
 
@@ -132,6 +144,9 @@ Category behavior:
   group; use separate approved variants for fixed-position hero layouts
 - media split patterns should use explicit image/text ordering variants instead
   of generic section justification
+- media slots should be real native media blocks that own replacement, alt text,
+  aspect ratio, and crop intent; do not hide an empty image inside a styled group
+  when the wrapper is the visible media surface
 - card and grid patterns should keep section-level controls separate from
   card-level controls
 - CTA patterns must be checked on light and dark backgrounds for text, inline
@@ -213,3 +228,6 @@ Every visual pattern, template, or block must be reviewed on Hostinger staging w
 - frontend render check
 - overflow check
 - accessibility review
+- editor-control contract check for section background/text color, text-block
+  typography, button colors, media replacement, local card styling, and any
+  promised hero positioning

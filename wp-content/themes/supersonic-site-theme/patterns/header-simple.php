@@ -12,7 +12,12 @@
 <div class="wp-block-group alignfull supersonic-site-header has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--xs);padding-bottom:var(--wp--preset--spacing--xs)">
 	<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
 	<div class="wp-block-group">
-		<!-- wp:site-logo {"width":140} /-->
+		<!-- wp:group {"className":"supersonic-brand-lockup","style":{"spacing":{"blockGap":"var:preset|spacing|s"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+		<div class="wp-block-group supersonic-brand-lockup">
+			<!-- wp:site-logo {"width":140} /-->
+			<!-- wp:site-title /-->
+		</div>
+		<!-- /wp:group -->
 
 		<!-- wp:navigation {"overlayMenu":"mobile","overlayBackgroundColor":"contrast","overlayTextColor":"base","style":{"spacing":{"blockGap":"var:preset|spacing|l"}},"layout":{"type":"flex","justifyContent":"right","flexWrap":"wrap"}} -->
 			<!-- wp:navigation-link {"label":"Home","url":"#"} /-->

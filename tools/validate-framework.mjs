@@ -223,21 +223,84 @@ function parseBlockAttrs(attrsText) {
   }
 }
 
+function normalizeBlockName(rawName) {
+  return rawName.includes('/') ? rawName : `core/${rawName}`;
+}
+
 function collectBlockComments(content) {
   const blockPattern = /<!--\s*wp:([\w/-]+)(?:\s+(\{[\s\S]*?\}))?\s*\/?-->/g;
   const blocks = [];
   let match;
 
   while ((match = blockPattern.exec(content)) !== null) {
-    const rawName = match[1];
     blocks.push({
-      name: rawName.includes('/') ? rawName : `core/${rawName}`,
+      name: normalizeBlockName(match[1]),
       attrs: parseBlockAttrs(match[2]),
       index: match.index
     });
   }
 
   return blocks;
+}
+
+function collectBlockTree(content) {
+  const tokenPattern = /<!--\s*(\/)?wp:([\w/-]+)(?:\s+(\{[\s\S]*?\}))?\s*(\/)?-->/g;
+  const rootBlock = { name: 'root', attrs: {}, index: -1, parent: null, children: [] };
+  const stack = [rootBlock];
+  const blocks = [];
+  let match;
+
+  while ((match = tokenPattern.exec(content)) !== null) {
+    const isClosing = Boolean(match[1]);
+    const name = normalizeBlockName(match[2]);
+
+    if (isClosing) {
+      while (stack.length > 1) {
+        const current = stack.pop();
+        if (current.name === name) {
+          break;
+        }
+      }
+      continue;
+    }
+
+    const block = {
+      name,
+      attrs: parseBlockAttrs(match[3]),
+      index: match.index,
+      parent: stack[stack.length - 1],
+      children: []
+    };
+
+    stack[stack.length - 1].children.push(block);
+    blocks.push(block);
+
+    if (!match[4]) {
+      stack.push(block);
+    }
+  }
+
+  return { root: rootBlock, blocks };
+}
+
+function hasAncestor(block, predicate) {
+  let current = block.parent;
+  while (current && current.name !== 'root') {
+    if (predicate(current)) {
+      return true;
+    }
+    current = current.parent;
+  }
+  return false;
+}
+
+function hasDescendant(block, predicate) {
+  for (const child of block.children ?? []) {
+    if (predicate(child) || hasDescendant(child, predicate)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function countLevelOneBlocks(content) {
@@ -569,27 +632,49 @@ async function validatePluginSecurityPolicy() {
   }
 }
 
+function getSectionGroup(blocks) {
+  return blocks.find((block) => block.name === 'core/group' && block.attrs.align === 'full') ??
+    blocks.find((block) => block.name === 'core/group') ??
+    null;
+}
+
+function hasHorizontalPadding(attrs) {
+  const padding = attrs.style?.spacing?.padding;
+  return Boolean(padding && (padding.left !== undefined || padding.right !== undefined));
+}
+
+function isLocalSurfaceGroup(block, sectionGroup) {
+  if (block.name !== 'core/group' || block === sectionGroup) {
+    return false;
+  }
+
+  const style = block.attrs.style ?? {};
+  return Boolean(
+    block.attrs.backgroundColor ||
+    style.color?.background ||
+    style.border?.color ||
+    style.border?.radius ||
+    style.border?.width ||
+    style.shadow
+  );
+}
+
 async function validatePatternHorizontalSpacing() {
   // Patterns own vertical section rhythm only. Horizontal spacing is owned by the
   // theme: every section rides the 5% root gutter and the default content width,
   // unless a section-level content rail is part of an approved editor-control
   // contract.
   const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
-  const blockComment = /<!--\s*wp:[\w/-]+\s+(\{[\s\S]*?\})\s*\/?-->/g;
 
   for (const file of patternFiles) {
     const content = await readText(file);
     const header = parsePatternHeader(content);
+    const { blocks } = collectBlockTree(content);
+    const sectionGroup = getSectionGroup(blocks);
     const violations = [];
-    let match;
 
-    while ((match = blockComment.exec(content)) !== null) {
-      let attrs;
-      try {
-        attrs = JSON.parse(match[1]);
-      } catch {
-        continue;
-      }
+    for (const block of blocks) {
+      const attrs = block.attrs;
 
       if (
         attrs.align === 'full' &&
@@ -599,6 +684,24 @@ async function validatePatternHorizontalSpacing() {
         violations.push('full-width group sets an unapproved section-level contentSize');
       }
 
+      if (
+        block.name === 'core/group' &&
+        block !== sectionGroup &&
+        attrs.layout?.type === 'constrained' &&
+        !attrs.layout?.contentSize
+      ) {
+        violations.push('nested constrained group has no contentSize and should not imply hidden layout ownership');
+      }
+
+      if (
+        block.name === 'core/group' &&
+        block !== sectionGroup &&
+        attrs.layout?.contentSize &&
+        attrs.layout.contentSize !== '760px'
+      ) {
+        violations.push(`nested constrained group uses unapproved contentSize "${attrs.layout.contentSize}"`);
+      }
+
       const padding = attrs.style?.spacing?.padding;
       if (
         attrs.align === 'full' &&
@@ -606,6 +709,15 @@ async function validatePatternHorizontalSpacing() {
         (padding.left !== undefined || padding.right !== undefined)
       ) {
         violations.push('full-width section sets explicit left/right padding instead of relying on the 5% gutter');
+      }
+
+      if (
+        block.name === 'core/group' &&
+        block !== sectionGroup &&
+        hasHorizontalPadding(attrs) &&
+        !isLocalSurfaceGroup(block, sectionGroup)
+      ) {
+        violations.push('plain layout wrapper sets left/right padding instead of relying on the section gutter');
       }
     }
 
@@ -630,6 +742,36 @@ function isReadableTextBlock(block) {
 
 function blockOwnsTextColor(block) {
   return Boolean(block.attrs.textColor || block.attrs.style?.color?.text);
+}
+
+function groupOwnsTypography(block) {
+  return Boolean(block.attrs.fontSize || block.attrs.style?.typography);
+}
+
+function isInsideIgnoredTextContainer(block) {
+  return hasAncestor(block, (ancestor) => [
+    'core/buttons',
+    'core/button',
+    'core/navigation',
+    'core/navigation-link',
+    'core/navigation-submenu',
+    'core/site-title',
+    'core/site-logo',
+    'core/shortcode'
+  ].includes(ancestor.name));
+}
+
+function isDecorativeAccentText(block) {
+  return block.name === 'core/paragraph' &&
+    block.attrs.textColor === 'accent' &&
+    ['small', 'large', 'heading-2', 'heading-3'].includes(block.attrs.fontSize ?? '');
+}
+
+function shouldInheritSectionTextColor(block, sectionGroup) {
+  return isReadableTextBlock(block) &&
+    !isInsideIgnoredTextContainer(block) &&
+    !isDecorativeAccentText(block) &&
+    !hasAncestor(block, (ancestor) => isLocalSurfaceGroup(ancestor, sectionGroup));
 }
 
 function sectionPromisesTextColor(block) {
@@ -668,7 +810,7 @@ async function validateEditorControlContracts() {
   for (const file of patternFiles) {
     const content = await readText(file);
     const header = parsePatternHeader(content);
-    const blocks = collectBlockComments(content);
+    const { blocks } = collectBlockTree(content);
 
     if (header.Categories === 'supersonic-heroes') {
       const sectionOwnsRail = hasSectionOwnedHeroContentRail(blocks);
@@ -688,11 +830,22 @@ async function validateEditorControlContracts() {
       }
     }
 
-    const sectionGroup = blocks.find((block) => block.name === 'core/group' && block.attrs.align === 'full') ??
-      blocks.find((block) => block.name === 'core/group');
+    const groupTypographyBlocks = blocks.filter((block) => block.name === 'core/group' && groupOwnsTypography(block));
+    for (const block of groupTypographyBlocks) {
+      fail(`${file} sets typography on a group; typography must be owned by heading, paragraph, quote, or list blocks`);
+    }
+
+    const sectionGroup = getSectionGroup(blocks);
+    const readableSectionBlocks = blocks.filter((block) => shouldInheritSectionTextColor(block, sectionGroup));
+    const locallyColoredReadableBlocks = readableSectionBlocks.filter(blockOwnsTextColor);
+
+    if (locallyColoredReadableBlocks.length > 0) {
+      colorContractViolations += locallyColoredReadableBlocks.length;
+      fail(`${file} sets local text color on normal readable section copy, masking section text color controls`);
+    }
 
     if (sectionPromisesTextColor(sectionGroup)) {
-      const readableTextBlocks = blocks.filter(isReadableTextBlock);
+      const readableTextBlocks = readableSectionBlocks;
       const allReadableTextOverridesSectionColor = readableTextBlocks.length > 0 &&
         readableTextBlocks.every(blockOwnsTextColor);
 
@@ -704,7 +857,99 @@ async function validateEditorControlContracts() {
   }
 
   if (colorContractViolations === 0) {
-    pass('No section text color contracts are fully masked by child text colors');
+    pass('Readable section text can inherit section text color controls');
+  }
+}
+
+async function validateCategoryContracts() {
+  const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+
+  for (const file of patternFiles) {
+    const content = await readText(file);
+    const header = parsePatternHeader(content);
+    const { blocks } = collectBlockTree(content);
+    const sectionGroup = getSectionGroup(blocks);
+    const slug = header.Slug ?? '';
+    const category = header.Categories ?? '';
+    const violations = [];
+
+    const needsNativeMediaSlot = category === 'supersonic-media' || slug.endsWith('/contact-map-info');
+    if (needsNativeMediaSlot) {
+      const wrapperOwnedMedia = blocks.filter((block) =>
+        block.name === 'core/group' &&
+        block.attrs.style?.dimensions?.minHeight &&
+        hasDescendant(block, (child) => child.name === 'core/image')
+      );
+      const imageBlocks = blocks.filter((block) => block.name === 'core/image');
+
+      if (wrapperOwnedMedia.length > 0) {
+        violations.push('media slot is owned by a styled wrapper group instead of the native image block');
+      }
+
+      if (imageBlocks.length === 0) {
+        violations.push('media pattern must expose a native image block for replacement and alt text');
+      } else if (!content.includes('assets/images/pattern-placeholder.svg') && !imageBlocks.some((block) => block.attrs.url)) {
+        violations.push('media image block should render a theme-owned placeholder or define a real image URL');
+      }
+    }
+
+    if (slug.endsWith('/header-simple') || slug.endsWith('/footer-simple')) {
+      if (!blocks.some((block) => block.name === 'core/site-title')) {
+        violations.push('header/footer pattern must include a site-title fallback beside the site-logo');
+      }
+    }
+
+    if (slug.endsWith('/section-faq-rankmath')) {
+      const faqBlock = blocks.find((block) => block.name === 'rank-math/faq-block');
+      if (content.includes('wp:spacer')) {
+        violations.push('FAQ section must use section padding instead of a trailing spacer for rhythm');
+      }
+      if (!faqBlock) {
+        violations.push('FAQ pattern must use the approved Rank Math FAQ block');
+      } else if (!hasAncestor(faqBlock, (ancestor) => ancestor === sectionGroup)) {
+        violations.push('Rank Math FAQ block must live inside the section group and its 760px content rail');
+      }
+    }
+
+    if (slug.endsWith('/section-testimonial')) {
+      if (blocks.filter((block) => block.name === 'core/quote').length < 1) {
+        violations.push('testimonial section must preserve quote semantics with a core/quote block');
+      }
+      if (sectionGroup?.attrs.backgroundColor === 'contrast' && !sectionPromisesTextColor(sectionGroup)) {
+        violations.push('dark testimonial section must set readable text color on the section group');
+      }
+    }
+
+    if (slug.endsWith('/section-testimonial-grid') && blocks.filter((block) => block.name === 'core/quote').length < 3) {
+      violations.push('testimonial grid must preserve quote semantics for each testimonial card');
+    }
+
+    if (slug.endsWith('/section-icon-list') && !blocks.some((block) => block.name === 'core/list')) {
+      violations.push('icon/list pattern must use a native list block for benefit semantics');
+    }
+
+    if (slug.endsWith('/section-service-cards') && blocks.filter((block) => block.name === 'core/button').length < 3) {
+      violations.push('service card CTAs must use button blocks for accessible tap targets');
+    }
+
+    if (slug.endsWith('/cta-band') && !sectionPromisesTextColor(sectionGroup)) {
+      violations.push('CTA band must set readable text color on the colored section group instead of every text child');
+    }
+
+    if (slug.endsWith('/cta-split')) {
+      const contrastPanels = blocks.filter((block) => block.name === 'core/group' && block.attrs.backgroundColor === 'contrast');
+      if (!contrastPanels.some(sectionPromisesTextColor)) {
+        violations.push('dark CTA panel must set readable text color on the panel group instead of every text child');
+      }
+    }
+
+    if (violations.length) {
+      for (const violation of violations) {
+        fail(`${file}: ${violation}`);
+      }
+    } else {
+      pass(`${file} satisfies static category contract checks`);
+    }
   }
 }
 
@@ -722,6 +967,7 @@ async function validatePackages() {
         'supersonic-site-theme/theme.json',
         'supersonic-site-theme/functions.php',
         'supersonic-site-theme/assets/css/navigation.css',
+        'supersonic-site-theme/assets/images/pattern-placeholder.svg',
         'supersonic-site-theme/templates/index.html',
         'supersonic-site-theme/templates/page.html',
         'supersonic-site-theme/templates/text-page.html',
@@ -796,6 +1042,7 @@ await validatePostContentWrappers();
 await validatePluginSecurityPolicy();
 await validatePatternHorizontalSpacing();
 await validateEditorControlContracts();
+await validateCategoryContracts();
 await validatePatternRegistryChecks();
 await validatePackages();
 

@@ -19,8 +19,8 @@
 		<h1 class="wp-block-heading has-text-align-center has-display-font-size">A focused headline for the page</h1>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle","fontSize":"large"} -->
-		<p class="has-text-align-center has-contrast-subtle-color has-text-color has-large-font-size">Use this when the page needs one clear promise, one supporting idea, and a direct next step.</p>
+		<!-- wp:paragraph {"align":"center","fontSize":"large"} -->
+		<p class="has-text-align-center has-large-font-size">Use this when the page needs one clear promise, one supporting idea, and a direct next step.</p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"blockGap":"var:preset|spacing|s"}}} -->
