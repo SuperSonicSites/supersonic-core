@@ -109,6 +109,11 @@ For a large batch such as `0.1.5`, run a deeper token pass on one representative
 
 Every new visual pattern, template part, or block should be reviewed on a dedicated published staging QA page. These pages form the staging pattern lab: they are live on staging so screenshots are real hosted WordPress output, but they must never be migrated to production.
 
+This intentionally supersedes the audit assumption that QA pages should default
+to draft. Published staging QA pages are the review surface for new patterns;
+the safety controls are staging host enforcement, explicit confirmation, and
+cleanup.
+
 Use a QA page when reviewing:
 
 - section patterns

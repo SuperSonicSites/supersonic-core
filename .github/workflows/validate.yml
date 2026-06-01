@@ -1,0 +1,53 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Lint plugin and theme PHP
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends php-cli
+          echo "PHP: $(php --version | head -1)"
+          fail=0
+          while IFS= read -r file; do
+            if ! php -l "$file"; then fail=1; fi
+          done < <(find wp-content/plugins/supersonic-site-core -name '*.php')
+          php -l wp-content/themes/supersonic-site-theme/functions.php || fail=1
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::PHP lint failed"; exit 1
+          fi
+
+      - name: Verify release metadata
+        run: npm run version:check
+
+      - name: Test theme updater release parser
+        run: npm run test:updater-parser
+
+      - name: Package WordPress assets
+        run: npm run package
+
+      - name: Check package determinism
+        run: npm run package:determinism
+
+      - name: Validate framework
+        run: npm run validate
+
+      - name: Validate pattern registry
+        run: npm run pattern:registry:check

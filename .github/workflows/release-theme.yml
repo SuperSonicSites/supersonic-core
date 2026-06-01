@@ -79,6 +79,9 @@ jobs:
       - name: Bump theme release version
         run: node tools/bump-version.mjs "${{ steps.ver.outputs.version }}"
 
+      - name: Verify release metadata
+        run: npm run version:check
+
       - name: Package WordPress assets
         run: npm run package
 
@@ -121,6 +124,7 @@ jobs:
           Installed automatically on staging via the Supersonic Site Core updater."
 
       - name: Trigger staging to pull the update
+        id: trigger
         env:
           STAGING_URL: ${{ secrets.WP_STAGING_URL }}
           DEPLOY_USER: ${{ secrets.WP_DEPLOY_USER }}
@@ -128,6 +132,7 @@ jobs:
         run: |
           if [ -z "$STAGING_URL" ] || [ -z "$DEPLOY_USER" ] || [ -z "$DEPLOY_PASS" ]; then
             echo "::warning::Staging deploy secrets are not set; skipping the instant trigger. The release is published and staging will update on its next scheduled check."
+            echo "triggered=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           BASE="${STAGING_URL%/}"
@@ -143,6 +148,7 @@ jobs:
           if [ "$HTTP" != "200" ]; then
             echo "::error::Staging trigger failed (HTTP $HTTP)."; exit 1
           fi
+          echo "triggered=true" >> "$GITHUB_OUTPUT"
 
       - name: Summary
         run: |
@@ -151,7 +157,11 @@ jobs:
             echo ""
             echo "- Tag: \`${{ steps.ver.outputs.tag }}\`"
             echo "- SHA-256: \`${{ steps.sum.outputs.sha256 }}\`"
-            echo "- Staging was triggered to pull the verified update."
+            if [ "${{ steps.trigger.outputs.triggered }}" = "true" ]; then
+              echo "- Staging was triggered to pull the verified update."
+            else
+              echo "- Staging trigger skipped because deploy secrets were missing; the release was still published."
+            fi
             echo ""
             echo "Next: review staging, then run QA."
           } >> "$GITHUB_STEP_SUMMARY"

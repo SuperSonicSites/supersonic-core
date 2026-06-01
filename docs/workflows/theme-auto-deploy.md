@@ -63,6 +63,9 @@ repository secret. Add three:
 | `WP_DEPLOY_USER` | The deploy user's login (or its email) |
 | `WP_DEPLOY_APP_PASSWORD` | The application password from step 2 |
 
+See [`environment-and-secrets.md`](../environment-and-secrets.md) for the full
+local-vs-CI credential matrix.
+
 If any of these are missing the workflow still publishes the Release; it just
 skips the instant trigger and warns. Staging would then pick the update up on
 its own schedule instead of within seconds.
@@ -111,6 +114,8 @@ Every deploy is a numbered GitHub Release.
   authenticated user with `update_themes`, accepts no payload, and only triggers
   a verified pull.
 - A checksum mismatch aborts the install.
+- The updater accepts only the exact release assets
+  `supersonic-site-theme.zip` and `supersonic-site-theme.zip.sha256`.
 - The CI credential is a scoped application password for the `supersonic_deployer`
   role only; revoke it anytime in wp-admin without touching your admin account.
 - SSH and production credentials live in the human-only `.env.deploy` and are

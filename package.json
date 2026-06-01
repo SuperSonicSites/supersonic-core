@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "package": "node tools/package-wordpress-assets.mjs",
+    "package:determinism": "node tools/check-package-determinism.mjs",
     "validate": "node tools/validate-framework.mjs",
     "rest:certify": "node tools/staging-rest.mjs certify",
     "rest:check": "node tools/staging-rest.mjs check",
@@ -19,6 +20,7 @@
     "screenshot": "node tools/capture-screenshots.mjs",
     "certify:staging": "node tools/staging-rest.mjs certify",
     "pattern:registry:check": "node tools/validate-pattern-registry.mjs",
+    "test:updater-parser": "php tools/test-theme-updater-parser.php",
     "version:check": "node tools/bump-version.mjs --check",
     "version:bump": "node tools/bump-version.mjs"
   },

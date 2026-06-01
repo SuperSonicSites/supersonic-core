@@ -8,6 +8,16 @@ const root = path.resolve(__dirname, '..');
 const outputDir = path.join(root, 'packages');
 const themeSlug = 'supersonic-site-theme';
 const pluginSlug = 'supersonic-site-core';
+const stableMtime = new Date(Date.UTC(2024, 0, 1, 0, 0, 0));
+const excludedNames = new Set([
+  '.git',
+  '.github',
+  '.gitkeep',
+  '.DS_Store',
+  'Thumbs.db',
+  'AGENTS.md',
+  'CLAUDE.md'
+]);
 
 const packages = [
   {
@@ -40,15 +50,15 @@ function crc32(buffer) {
 }
 
 function dosDateTime(date) {
-  const year = Math.max(date.getFullYear(), 1980);
+  const year = Math.max(date.getUTCFullYear(), 1980);
   const dosTime =
-    (date.getHours() << 11) |
-    (date.getMinutes() << 5) |
-    Math.floor(date.getSeconds() / 2);
+    (date.getUTCHours() << 11) |
+    (date.getUTCMinutes() << 5) |
+    Math.floor(date.getUTCSeconds() / 2);
   const dosDate =
     ((year - 1980) << 9) |
-    ((date.getMonth() + 1) << 5) |
-    date.getDate();
+    ((date.getUTCMonth() + 1) << 5) |
+    date.getUTCDate();
 
   return { dosDate, dosTime };
 }
@@ -66,14 +76,15 @@ function writeUInt32(value) {
 }
 
 function shouldExclude(name) {
-  return name === '.gitkeep' || name === 'CLAUDE.md' || name.startsWith('.');
+  return excludedNames.has(name);
 }
 
 async function collectEntries(sourceDir, rootName) {
-  const entries = [{ name: `${rootName}/`, type: 'dir', mtime: new Date() }];
+  const entries = [{ name: `${rootName}/`, type: 'dir', mtime: stableMtime }];
 
   async function walk(currentDir, relativeDir = '') {
-    const children = await readdir(currentDir, { withFileTypes: true });
+    const children = (await readdir(currentDir, { withFileTypes: true }))
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     for (const child of children) {
       if (shouldExclude(child.name)) {
@@ -82,16 +93,15 @@ async function collectEntries(sourceDir, rootName) {
 
       const absolutePath = path.join(currentDir, child.name);
       const relativePath = path.posix.join(rootName, relativeDir.split(path.sep).join('/'), child.name);
-      const info = await stat(absolutePath);
 
       if (child.isDirectory()) {
-        entries.push({ name: `${relativePath}/`, type: 'dir', mtime: info.mtime });
+        entries.push({ name: `${relativePath}/`, type: 'dir', mtime: stableMtime });
         await walk(absolutePath, path.join(relativeDir, child.name));
       } else if (child.isFile()) {
         entries.push({
           name: relativePath,
           type: 'file',
-          mtime: info.mtime,
+          mtime: stableMtime,
           content: await readFile(absolutePath)
         });
       }

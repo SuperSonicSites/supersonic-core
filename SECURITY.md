@@ -24,6 +24,7 @@ Security is part of the framework from day one.
 ## Secrets Handling
 
 Use `.env.example` to document required environment variables.
+Credential ownership and storage are defined in `docs/environment-and-secrets.md`.
 
 Claude and the scripts in `tools/` only read staging REST access:
 

@@ -28,6 +28,9 @@ Claude only needs these local environment values:
 
 Do not request production credentials, SSH credentials, database credentials, backup files, or hosting account access.
 
+See `docs/environment-and-secrets.md` for the split between local `.env`,
+human-only `.env.deploy`, and GitHub Actions deploy secrets.
+
 ## WordPress Compatibility
 
 Current latest stable core target: WordPress 7.0.

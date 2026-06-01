@@ -283,8 +283,7 @@ class Supersonic_Theme_Updater {
 	/**
 	 * Turn one GitHub release object into our normalized shape.
 	 *
-	 * Picks the theme zip asset (named supersonic-site-theme*.zip) and reads the
-	 * SHA-256 either from a `*.sha256` asset or from a `sha256:` line in the body.
+	 * Picks the exact theme zip asset and its exact SHA-256 sidecar asset.
 	 *
 	 * @param array  $release GitHub release object.
 	 * @param string $version Parsed semver version.
@@ -292,44 +291,48 @@ class Supersonic_Theme_Updater {
 	 */
 	protected function parse_release($release, $version) {
 		$assets = isset($release['assets']) && is_array($release['assets']) ? $release['assets'] : array();
+		$expected_zip_name = self::THEME_SLUG . '.zip';
+		$expected_sha_name = self::THEME_SLUG . '.zip.sha256';
 
-		$zip_url = '';
-		$sha_url = '';
+		$zip_assets = array();
+		$sha_assets = array();
 		foreach ($assets as $asset) {
 			$name = isset($asset['name']) ? (string) $asset['name'] : '';
 			$download = isset($asset['browser_download_url']) ? (string) $asset['browser_download_url'] : '';
 			if (! $download) {
 				continue;
 			}
-			if (preg_match('/^' . preg_quote(self::THEME_SLUG, '/') . '.*\.zip$/', $name)) {
-				$zip_url = $download;
-			} elseif (preg_match('/\.sha256$/', $name)) {
-				$sha_url = $download;
+			if ($expected_zip_name === $name) {
+				$zip_assets[] = $download;
+			} elseif ($expected_sha_name === $name) {
+				$sha_assets[] = $download;
 			}
 		}
 
-		if (! $zip_url) {
+		if (1 !== count($zip_assets) || 1 !== count($sha_assets)) {
 			return null;
 		}
 
-		$sha256 = $this->resolve_checksum($sha_url, isset($release['body']) ? (string) $release['body'] : '');
+		$sha256 = $this->resolve_checksum($sha_assets[0]);
+		if (! $sha256) {
+			return null;
+		}
 
 		return array(
 			'version'  => $version,
-			'zip_url'  => $zip_url,
+			'zip_url'  => $zip_assets[0],
 			'sha256'   => $sha256,
 			'html_url' => isset($release['html_url']) ? (string) $release['html_url'] : '',
 		);
 	}
 
 	/**
-	 * Resolve the expected SHA-256 from a checksum asset or the release body.
+	 * Resolve the expected SHA-256 from the exact checksum asset.
 	 *
-	 * @param string $sha_url Optional URL to a `.sha256` asset.
-	 * @param string $body    Release body text (fallback source).
+	 * @param string $sha_url URL to the `supersonic-site-theme.zip.sha256` asset.
 	 * @return string Lowercase hex digest, or '' if none found.
 	 */
-	protected function resolve_checksum($sha_url, $body) {
+	protected function resolve_checksum($sha_url) {
 		if ($sha_url) {
 			$response = wp_remote_get($sha_url, array(
 				'timeout' => 15,
@@ -341,11 +344,6 @@ class Supersonic_Theme_Updater {
 					return strtolower($m[0]);
 				}
 			}
-		}
-
-		// Fallback: a 64-hex token in the release notes.
-		if ($body && preg_match('/[a-f0-9]{64}/i', $body, $m)) {
-			return strtolower($m[0]);
 		}
 
 		return '';

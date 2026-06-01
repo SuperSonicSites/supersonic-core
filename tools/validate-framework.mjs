@@ -34,7 +34,7 @@ async function collectFiles(relativePath, extensions) {
   const entries = await readdir(absolutePath, { withFileTypes: true }).catch(() => []);
   const files = [];
 
-  for (const entry of entries) {
+  for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
     const childRelativePath = path.join(relativePath, entry.name);
     if (entry.isDirectory()) {
       files.push(...await collectFiles(childRelativePath, extensions));
@@ -199,6 +199,57 @@ function readPluginConstant(content) {
   return content.match(/define\(\s*['"]SUPERSONIC_SITE_CORE_VERSION['"]\s*,\s*['"]([^'"]+)['"]\s*\)/)?.[1] ?? null;
 }
 
+function parseBlockAttrs(attrsText) {
+  if (!attrsText) {
+    return {};
+  }
+  try {
+    return JSON.parse(attrsText);
+  } catch {
+    return {};
+  }
+}
+
+function countLevelOneBlocks(content) {
+  const blockPattern = /<!--\s*wp:(heading|post-title)(?:\s+(\{[\s\S]*?\}))?\s*\/?-->/g;
+  let count = 0;
+  let match;
+
+  while ((match = blockPattern.exec(content)) !== null) {
+    const attrs = parseBlockAttrs(match[2]);
+    if (attrs.level === 1) {
+      count += 1;
+    }
+  }
+
+  return count;
+}
+
+function countRawH1(content) {
+  return (content.match(/<h1\b/ig) ?? []).length;
+}
+
+function countLogicalH1(content) {
+  return Math.max(countLevelOneBlocks(content), countRawH1(content));
+}
+
+function parsePatternHeader(content) {
+  const header = {};
+  const match = content.match(/\/\*\*([\s\S]*?)\*\//);
+  if (!match) {
+    return header;
+  }
+
+  for (const line of match[1].split(/\r?\n/)) {
+    const item = line.match(/^\s*\*\s*([^:]+):\s*(.+?)\s*$/);
+    if (item) {
+      header[item[1].trim()] = item[2].trim();
+    }
+  }
+
+  return header;
+}
+
 async function validateVersionMetadata() {
   try {
     const packageJson = JSON.parse(await readText('package.json'));
@@ -239,6 +290,7 @@ async function validatePackageScripts() {
   const requiredScripts = [
     'package',
     'validate',
+    'package:determinism',
     'rest:check',
     'rest:certify',
     'rest:qa-pages',
@@ -247,7 +299,8 @@ async function validatePackageScripts() {
     'rest:dry-run',
     'screenshot',
     'certify:staging',
-    'pattern:registry:check'
+    'pattern:registry:check',
+    'test:updater-parser'
   ];
 
   for (const script of requiredScripts) {
@@ -373,6 +426,92 @@ async function validatePatternLibraryPolicy() {
   }
 }
 
+async function validateH1Policy() {
+  const layoutNeutralTemplates = [
+    'wp-content/themes/supersonic-site-theme/templates/index.html',
+    'wp-content/themes/supersonic-site-theme/templates/page.html'
+  ];
+
+  for (const file of layoutNeutralTemplates) {
+    const content = await readText(file);
+    const h1Count = countLogicalH1(content);
+    if (h1Count === 0) {
+      pass(`${file} remains layout-neutral with no H1`);
+    } else {
+      fail(`${file} must not inject an H1; full page layouts own page headings`);
+    }
+  }
+
+  const textPage = 'wp-content/themes/supersonic-site-theme/templates/text-page.html';
+  const textPageContent = await readText(textPage);
+  if (countLogicalH1(textPageContent) === 1) {
+    pass(`${textPage} contains exactly one level-1 post title`);
+  } else {
+    fail(`${textPage} must contain exactly one level-1 post title`);
+  }
+
+  const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+  for (const file of patternFiles) {
+    const content = await readText(file);
+    const header = parsePatternHeader(content);
+    const category = header.Categories ?? '';
+    const slug = header.Slug ?? '';
+    const h1Count = countLogicalH1(content);
+    const requiresEditableH1 = category === 'supersonic-heroes' || slug.endsWith('/section-page-intro');
+
+    if (requiresEditableH1 && h1Count === 1) {
+      pass(`${file} has exactly one editable H1`);
+    } else if (requiresEditableH1) {
+      fail(`${file} must have exactly one editable H1`);
+    } else if (h1Count === 0) {
+      pass(`${file} has no H1`);
+    } else {
+      fail(`${file} must not include an H1`);
+    }
+  }
+}
+
+async function validatePluginSecurityPolicy() {
+  const deployRole = await readText('wp-content/plugins/supersonic-site-core/includes/class-supersonic-deploy-role.php');
+  const deployController = await readText('wp-content/plugins/supersonic-site-core/includes/class-supersonic-deploy-controller.php');
+  const roleHasRead = /['"]read['"]\s*=>\s*true/.test(deployRole);
+  const roleHasUpdateThemes = /['"]update_themes['"]\s*=>\s*true/.test(deployRole);
+  const forbiddenCapabilities = ['manage_options', 'edit_posts', 'upload_files', 'install_plugins', 'update_plugins'];
+  const expandedCapability = forbiddenCapabilities.find((capability) =>
+    new RegExp(`['"]${capability}['"]\\s*=>\\s*true`).test(deployRole)
+  );
+
+  if (roleHasRead && roleHasUpdateThemes && !expandedCapability) {
+    pass('deploy role remains limited to read and update_themes');
+  } else {
+    fail('deploy role should grant only read and update_themes');
+  }
+
+  if (/['"]methods['"]\s*=>\s*['"]POST['"]/.test(deployController)) {
+    pass('deploy route is POST-only');
+  } else {
+    fail('deploy route must stay POST-only');
+  }
+
+  if (/['"]permission_callback['"]\s*=>\s*array\(\$this,\s*['"]check_permission['"]\)/.test(deployController)) {
+    pass('deploy route uses explicit permission callback');
+  } else {
+    fail('deploy route must use check_permission as its permission callback');
+  }
+
+  if (/current_user_can\(\s*['"]update_themes['"]\s*\)/.test(deployController)) {
+    pass('deploy route is gated by update_themes');
+  } else {
+    fail('deploy route must require update_themes');
+  }
+
+  if (/['"]args['"]\s*=>\s*array\(\)/.test(deployController) && !/get_(?:json_params|body|param|params)\s*\(/.test(deployController)) {
+    pass('deploy route remains payload-free');
+  } else {
+    fail('deploy route must remain payload-free');
+  }
+}
+
 async function validatePatternHorizontalSpacing() {
   // Patterns own vertical section rhythm only. Horizontal spacing is owned by the
   // theme: every section rides the 5% root gutter and the default content width.
@@ -455,7 +594,10 @@ async function validatePackages() {
 
     const entries = listZipEntries(await readFile(path.join(root, spec.file)));
     const hasBackslashes = entries.some((entry) => entry.includes('\\'));
-    const hasRepoOnlyFiles = entries.some((entry) => entry.endsWith('CLAUDE.md') || entry.endsWith('.gitkeep') || entry.includes('/.'));
+    const deniedNames = new Set(['.git', '.github', '.gitkeep', '.DS_Store', 'Thumbs.db', 'AGENTS.md', 'CLAUDE.md']);
+    const hasRepoOnlyFiles = entries.some((entry) =>
+      entry.split('/').some((part) => deniedNames.has(part))
+    );
 
     if (entries.includes(spec.root)) {
       pass(`${spec.file} contains top-level ${spec.root}`);
@@ -498,6 +640,8 @@ await validateSourceGuardrails();
 await validateBlockAllowList();
 await validateCssGuardrails();
 await validatePatternLibraryPolicy();
+await validateH1Policy();
+await validatePluginSecurityPolicy();
 await validatePatternHorizontalSpacing();
 await validatePatternRegistryChecks();
 await validatePackages();

@@ -5,6 +5,8 @@
       "Bash(npm run validate:*)",
       "Bash(npm run package)",
       "Bash(npm run package:*)",
+      "Bash(npm run package:determinism)",
+      "Bash(npm run test:updater-parser)",
       "Bash(npm run screenshot:*)",
       "Bash(npm run rest:check)",
       "Bash(npm run rest:certify)",

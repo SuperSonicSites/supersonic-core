@@ -27,6 +27,7 @@ Visual output must remain editable in the WordPress block editor. See `docs/gute
 Default visual decisions are governed by `docs/design-tokens-standard.md` and implemented in `wp-content/themes/supersonic-site-theme/theme.json`.
 
 Theme and pattern changes are certified with `docs/workflows/theme-pattern-certification.md`.
+Environment and secret handling is defined in `docs/environment-and-secrets.md`.
 
 ## Operating Model
 
@@ -90,6 +91,7 @@ wp-content/plugins/              small site-core plugin skeleton
 
 ```text
 npm run package       Build WordPress upload zips from source
+npm run package:determinism
 npm run validate      Run static framework checks
 npm run rest:check    Check staging REST availability
 npm run rest:certify  Read-only staging certification summary
@@ -99,6 +101,7 @@ npm run rest:qa-page:dry-run -- <pattern-slug>
 npm run rest:qa-page:trash-dry-run -- <page-id>
 npm run rest:dry-run  Validate a planned staging REST write without sending it
 npm run pattern:registry:check      Validate pattern certification registry and evidence
+npm run test:updater-parser         Test exact GitHub Release asset parsing
 npm run screenshot    Capture desktop/tablet/mobile screenshots when Playwright is installed
 ```
 
