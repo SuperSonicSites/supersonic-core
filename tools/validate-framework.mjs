@@ -163,6 +163,12 @@ async function validateDesignTokens() {
     } else {
       fail('default WordPress shadow presets should be disabled');
     }
+
+    if (! parsed.styles?.elements?.heading?.color?.text) {
+      pass('headings inherit explicit ancestor text color');
+    } else {
+      fail('heading text color should not be globally fixed because it masks section text color');
+    }
   } catch (error) {
     fail(`design token validation failed: ${error.message}`);
   }

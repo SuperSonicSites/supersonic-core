@@ -301,9 +301,6 @@
         }
       },
       "heading": {
-        "color": {
-          "text": "var:preset|color|contrast"
-        },
         "typography": {
           "fontWeight": "700",
           "letterSpacing": "0",
