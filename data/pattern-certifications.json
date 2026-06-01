@@ -37,16 +37,15 @@
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/hero-simple.php",
       "qaPageSlug": "qa-pattern-hero-simple",
       "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-hero-simple/",
-      "status": "needs-revision",
-      "certifiedThemeVersion": "0.1.15",
-      "reportPath": "docs/reports/0.1.15-hero-simple-qa.md",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.19",
+      "reportPath": "docs/reports/0.1.19-hero-simple-qa.md",
       "screenshots": {
-        "desktop": "screenshots/after/0.1.15-hero-simple-qa/hero-simple-desktop.png",
-        "tablet": "screenshots/after/0.1.15-hero-simple-qa/hero-simple-tablet.png",
-        "mobile": "screenshots/after/0.1.15-hero-simple-qa/hero-simple-mobile.png"
+        "desktop": "screenshots/after/0.1.19-hero-simple-qa/hero-simple-desktop.png",
+        "tablet": "screenshots/after/0.1.19-hero-simple-qa/hero-simple-tablet.png",
+        "mobile": "screenshots/after/0.1.19-hero-simple-qa/hero-simple-mobile.png"
       },
       "knownIssues": [
-        "Group justification still does not visibly move the hero copy left, center, or right because the inner constrained group centers its own child content.",
         "CTA button URLs remain placeholder href=\"#\" starter links."
       ],
       "lastReviewedAt": "2026-06-01"
