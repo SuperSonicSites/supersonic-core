@@ -8,13 +8,17 @@
       "category": "supersonic-headers",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/header-simple.php",
       "qaPageSlug": "qa-pattern-header-simple",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-header-simple/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/header-simple-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/header-simple-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/header-simple-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/footer-simple",
@@ -22,13 +26,17 @@
       "category": "supersonic-footers",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/footer-simple.php",
       "qaPageSlug": "qa-pattern-footer-simple",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-footer-simple/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/footer-simple-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/footer-simple-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/footer-simple-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/hero-simple",
@@ -36,17 +44,17 @@
       "category": "supersonic-heroes",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/hero-simple.php",
       "qaPageSlug": "qa-pattern-hero-simple",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-hero-simple/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
       "screenshots": {
-        "desktop": "",
-        "tablet": "",
-        "mobile": ""
+        "desktop": "screenshots/after/0.1.25-pattern-certification/hero-simple-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/hero-simple-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/hero-simple-mobile.png"
       },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/hero-centered",
@@ -54,13 +62,17 @@
       "category": "supersonic-heroes",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/hero-centered.php",
       "qaPageSlug": "qa-pattern-hero-centered",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-hero-centered/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/hero-centered-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/hero-centered-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/hero-centered-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-page-intro",
@@ -68,13 +80,17 @@
       "category": "supersonic-intros",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-page-intro.php",
       "qaPageSlug": "qa-pattern-section-page-intro",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-page-intro/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-page-intro-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-page-intro-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-page-intro-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-text",
@@ -82,13 +98,17 @@
       "category": "supersonic-intros",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-text.php",
       "qaPageSlug": "qa-pattern-section-text",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-text/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-text-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-text-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-text-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-text-image",
@@ -96,13 +116,17 @@
       "category": "supersonic-media",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-text-image.php",
       "qaPageSlug": "qa-pattern-section-text-image",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-text-image/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-text-image-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-text-image-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-text-image-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-image-text",
@@ -110,13 +134,17 @@
       "category": "supersonic-media",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-image-text.php",
       "qaPageSlug": "qa-pattern-section-image-text",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-image-text/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-image-text-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-image-text-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-image-text-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-media-feature",
@@ -124,13 +152,17 @@
       "category": "supersonic-media",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-media-feature.php",
       "qaPageSlug": "qa-pattern-section-media-feature",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-media-feature/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-media-feature-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-media-feature-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-media-feature-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-feature-grid",
@@ -138,13 +170,17 @@
       "category": "supersonic-cards",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-feature-grid.php",
       "qaPageSlug": "qa-pattern-section-feature-grid",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-feature-grid/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-feature-grid-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-feature-grid-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-feature-grid-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-service-cards",
@@ -152,13 +188,17 @@
       "category": "supersonic-cards",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-service-cards.php",
       "qaPageSlug": "qa-pattern-section-service-cards",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-service-cards/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-service-cards-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-service-cards-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-service-cards-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-card-row",
@@ -166,13 +206,17 @@
       "category": "supersonic-cards",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-card-row.php",
       "qaPageSlug": "qa-pattern-section-card-row",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-card-row/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-card-row-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-card-row-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-card-row-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-icon-list",
@@ -180,13 +224,17 @@
       "category": "supersonic-cards",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-icon-list.php",
       "qaPageSlug": "qa-pattern-section-icon-list",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-icon-list/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-icon-list-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-icon-list-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-icon-list-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-testimonial",
@@ -194,13 +242,17 @@
       "category": "supersonic-trust",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-testimonial.php",
       "qaPageSlug": "qa-pattern-section-testimonial",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-testimonial/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-testimonial-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-testimonial-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-testimonial-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-testimonial-grid",
@@ -208,13 +260,17 @@
       "category": "supersonic-trust",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-testimonial-grid.php",
       "qaPageSlug": "qa-pattern-section-testimonial-grid",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-testimonial-grid/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-testimonial-grid-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-testimonial-grid-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-testimonial-grid-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-logo-row",
@@ -222,13 +278,17 @@
       "category": "supersonic-trust",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-logo-row.php",
       "qaPageSlug": "qa-pattern-section-logo-row",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-logo-row/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-logo-row-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-logo-row-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-logo-row-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-stat-band",
@@ -236,13 +296,17 @@
       "category": "supersonic-trust",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-stat-band.php",
       "qaPageSlug": "qa-pattern-section-stat-band",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-stat-band/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-stat-band-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-stat-band-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-stat-band-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/cta-band",
@@ -250,13 +314,17 @@
       "category": "supersonic-conversion",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/cta-band.php",
       "qaPageSlug": "qa-pattern-cta-band",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-cta-band/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/cta-band-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/cta-band-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/cta-band-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/cta-split",
@@ -264,13 +332,17 @@
       "category": "supersonic-conversion",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/cta-split.php",
       "qaPageSlug": "qa-pattern-cta-split",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-cta-split/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/cta-split-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/cta-split-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/cta-split-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/contact-simple",
@@ -278,13 +350,17 @@
       "category": "supersonic-conversion",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/contact-simple.php",
       "qaPageSlug": "qa-pattern-contact-simple",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-contact-simple/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/contact-simple-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/contact-simple-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/contact-simple-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/contact-map-info",
@@ -292,13 +368,17 @@
       "category": "supersonic-conversion",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/contact-map-info.php",
       "qaPageSlug": "qa-pattern-contact-map-info",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-contact-map-info/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/contact-map-info-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/contact-map-info-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/contact-map-info-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/contact-form-simple",
@@ -306,13 +386,17 @@
       "category": "supersonic-conversion",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/contact-form-simple.php",
       "qaPageSlug": "qa-pattern-contact-form-simple",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-contact-form-simple/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/contact-form-simple-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/contact-form-simple-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/contact-form-simple-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-process-steps",
@@ -320,13 +404,17 @@
       "category": "supersonic-info",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-process-steps.php",
       "qaPageSlug": "qa-pattern-section-process-steps",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-process-steps/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-process-steps-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-process-steps-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-process-steps-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-faq-rankmath",
@@ -334,13 +422,17 @@
       "category": "supersonic-info",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-faq-rankmath.php",
       "qaPageSlug": "qa-pattern-section-faq-rankmath",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-faq-rankmath/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-faq-rankmath-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-faq-rankmath-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-faq-rankmath-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-comparison",
@@ -348,13 +440,17 @@
       "category": "supersonic-info",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-comparison.php",
       "qaPageSlug": "qa-pattern-section-comparison",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-comparison/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-comparison-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-comparison-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-comparison-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     },
     {
       "slug": "supersonic-site-theme/section-pricing-cards",
@@ -362,13 +458,17 @@
       "category": "supersonic-info",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-pricing-cards.php",
       "qaPageSlug": "qa-pattern-section-pricing-cards",
-      "qaPageUrl": "",
-      "status": "source-ready",
-      "certifiedThemeVersion": "",
-      "reportPath": "",
-      "screenshots": { "desktop": "", "tablet": "", "mobile": "" },
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-section-pricing-cards/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.25",
+      "reportPath": "docs/reports/0.1.25-pattern-certification.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.25-pattern-certification/section-pricing-cards-desktop.png",
+        "tablet": "screenshots/after/0.1.25-pattern-certification/section-pricing-cards-tablet.png",
+        "mobile": "screenshots/after/0.1.25-pattern-certification/section-pricing-cards-mobile.png"
+      },
       "knownIssues": [],
-      "lastReviewedAt": ""
+      "lastReviewedAt": "2026-06-01"
     }
   ]
 }
