@@ -786,6 +786,10 @@ function isNestedBackgroundPanel(block, sectionGroup) {
   return Boolean(block.attrs.backgroundColor || block.attrs.style?.color?.background);
 }
 
+function hasBorderColorStyle(block) {
+  return Boolean(block.attrs.style?.border?.color);
+}
+
 function isSupportedJustification(value) {
   return ['left', 'center', 'right'].includes(value);
 }
@@ -851,6 +855,15 @@ async function validateEditorControlContracts() {
     );
     for (const block of nestedBackgroundPanels) {
       fail(`${file} uses a nested background card/panel without explicit readable text color`);
+    }
+
+    const borderColorTextPanels = blocks.filter((block) =>
+      isNestedBackgroundPanel(block, sectionGroup) &&
+      hasBorderColorStyle(block) &&
+      hasDescendant(block, isReadableTextBlock)
+    );
+    for (const block of borderColorTextPanels) {
+      fail(`${file} combines border color and readable background-panel text on the same group; use an outer border wrapper and inner text panel`);
     }
 
     const readableSectionBlocks = blocks.filter((block) => shouldInheritSectionTextColor(block, sectionGroup));
