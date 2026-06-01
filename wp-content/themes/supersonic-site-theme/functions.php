@@ -29,6 +29,13 @@ function supersonic_site_theme_setup() {
 
 	remove_theme_support('core-block-patterns');
 
+	$patterns_css = 'assets/css/patterns.css';
+	$patterns_css_path = get_theme_file_path($patterns_css);
+
+	if (file_exists($patterns_css_path)) {
+		add_editor_style($patterns_css);
+	}
+
 	// Navigation interaction/motion layer. Loaded only when the navigation
 	// block renders on the front end, and mirrored into the editor canvas.
 	$navigation_css = 'assets/css/navigation.css';
@@ -50,6 +57,22 @@ function supersonic_site_theme_setup() {
 }
 
 add_filter('should_load_remote_block_patterns', '__return_false');
+
+add_action('wp_enqueue_scripts', 'supersonic_site_theme_enqueue_styles');
+
+function supersonic_site_theme_enqueue_styles() {
+	$patterns_css = 'assets/css/patterns.css';
+	$patterns_css_path = get_theme_file_path($patterns_css);
+
+	if (file_exists($patterns_css_path)) {
+		wp_enqueue_style(
+			'supersonic-site-patterns',
+			get_theme_file_uri($patterns_css),
+			array(),
+			(string) filemtime($patterns_css_path)
+		);
+	}
+}
 
 add_action('init', 'supersonic_site_theme_register_pattern_categories');
 

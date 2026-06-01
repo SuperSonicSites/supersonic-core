@@ -187,11 +187,23 @@ async function validateCssGuardrails() {
     }
   }
 
-  const styleCss = await readText('wp-content/themes/supersonic-site-theme/style.css');
-  if (/\.has-text-color\s+\.wp-block-button__link:not\(\.has-text-color\)\s*\{[\s\S]*?color:\s*inherit\s*;[\s\S]*?\}/.test(styleCss)) {
+  const patternCssPath = 'wp-content/themes/supersonic-site-theme/assets/css/patterns.css';
+  const patternCss = await readText(patternCssPath);
+  const functionsPhp = await readText('wp-content/themes/supersonic-site-theme/functions.php');
+  if (/\.has-text-color\s+\.wp-block-button__link:not\(\.has-text-color\)\s*\{[\s\S]*?color:\s*inherit\s*;[\s\S]*?\}/.test(patternCss)) {
     pass('button labels without local text color inherit explicit ancestor text color');
   } else {
-    fail('button labels without local text color should inherit explicit ancestor text color');
+    fail(`${patternCssPath} must let button labels without local text color inherit explicit ancestor text color`);
+  }
+
+  if (
+    functionsPhp.includes('assets/css/patterns.css') &&
+    /wp_enqueue_style\s*\(\s*['"]supersonic-site-patterns['"]/.test(functionsPhp) &&
+    /add_editor_style\s*\(\s*\$patterns_css\s*\)/.test(functionsPhp)
+  ) {
+    pass('pattern contract CSS is loaded on the front end and in the editor');
+  } else {
+    fail('pattern contract CSS must be enqueued on the front end and loaded in the editor');
   }
 }
 
@@ -996,6 +1008,7 @@ async function validatePackages() {
         'supersonic-site-theme/style.css',
         'supersonic-site-theme/theme.json',
         'supersonic-site-theme/functions.php',
+        'supersonic-site-theme/assets/css/patterns.css',
         'supersonic-site-theme/assets/css/navigation.css',
         'supersonic-site-theme/assets/images/pattern-placeholder.svg',
         'supersonic-site-theme/templates/index.html',

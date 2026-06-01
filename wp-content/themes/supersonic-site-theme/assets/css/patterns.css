@@ -1,0 +1,50 @@
+/*
+ * Supersonic pattern contracts.
+ *
+ * This file contains global block-pattern behavior that must work in both the
+ * editor canvas and the front end. Keep these rules structural and token-based;
+ * visual design should still come from theme.json and native block attributes.
+ */
+
+.supersonic-section-page > .wp-block-post-content.has-global-padding {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.supersonic-section-page > .wp-block-post-content.has-global-padding > .alignfull {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.has-text-color .wp-block-button__link:not(.has-text-color) {
+	color: inherit;
+}
+
+.supersonic-brand-lockup {
+	align-items: center;
+	display: flex;
+	gap: var(--wp--preset--spacing--s);
+	min-width: 0;
+}
+
+.supersonic-brand-lockup .wp-block-site-title {
+	margin: 0;
+	min-width: 0;
+}
+
+.supersonic-brand-lockup .wp-block-site-title,
+.supersonic-brand-lockup .wp-block-site-title a {
+	font-size: var(--wp--preset--font-size--body);
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+	word-break: normal;
+}
+
+.supersonic-pattern-image {
+	margin: 0;
+}
+
+.supersonic-pattern-image img {
+	display: block;
+	width: 100%;
+}
