@@ -136,19 +136,34 @@ jobs:
             exit 0
           fi
           BASE="${STAGING_URL%/}"
-          echo "Triggering staging update check at $BASE ..."
-          HTTP=$(curl -sS -o response.json -w "%{http_code}" \
-            -X POST \
-            -u "$DEPLOY_USER:$DEPLOY_PASS" \
-            -H "Accept: application/json" \
-            "$BASE/wp-json/supersonic/v1/check-updates")
-          echo "HTTP $HTTP"
-          cat response.json || true
-          echo ""
-          if [ "$HTTP" != "200" ]; then
-            echo "::error::Staging trigger failed (HTTP $HTTP)."; exit 1
-          fi
-          echo "triggered=true" >> "$GITHUB_OUTPUT"
+          TARGET="${{ steps.ver.outputs.version }}"
+          echo "Triggering staging update check at $BASE for theme $TARGET ..."
+
+          for attempt in 1 2 3 4 5 6; do
+            HTTP=$(curl -sS -o response.json -w "%{http_code}" \
+              -X POST \
+              -u "$DEPLOY_USER:$DEPLOY_PASS" \
+              -H "Accept: application/json" \
+              "$BASE/wp-json/supersonic/v1/check-updates")
+            echo "Attempt $attempt: HTTP $HTTP"
+            cat response.json || true
+            echo ""
+
+            CURRENT=$(node -e "const fs=require('fs');try{const data=JSON.parse(fs.readFileSync('response.json','utf8'));process.stdout.write(data.current_version||'')}catch(e){}")
+            LATEST=$(node -e "const fs=require('fs');try{const data=JSON.parse(fs.readFileSync('response.json','utf8'));process.stdout.write(data.latest_version||'')}catch(e){}")
+
+            if [ "$HTTP" = "200" ] && [ "$CURRENT" = "$TARGET" ]; then
+              echo "triggered=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            if [ "$attempt" != "6" ]; then
+              echo "Staging is not on target yet (current=$CURRENT latest=$LATEST target=$TARGET). Retrying in 10s..."
+              sleep 10
+            fi
+          done
+
+          echo "::error::Staging did not report target theme $TARGET after update trigger retries."; exit 1
 
       - name: Summary
         run: |
