@@ -86,7 +86,8 @@ For each section pattern:
 
 - choose one semantic section spacing token: `section-none`, `section-small`, `section-medium`, or `section-large`
 - apply section spacing on the vertical axis only (top/bottom); never add left/right padding
-- never set `contentSize` on a full-width section group; inherit the theme default and ride the 5% gutter (760px is for inner text groups only)
+- full-width section groups inherit the theme default 5% gutter and 1440px container; only approved control contracts may set a narrower section-level content rail
+- simple heroes that promise Gutenberg left/center/right justification may set the selected section group to the approved `760px` content rail so the section-level justification control visibly moves the content
 - use the default 5% site gutter unless the pattern intentionally needs full-width media
 - use typography presets instead of arbitrary font sizes
 - use semantic color tokens instead of arbitrary colors
@@ -103,7 +104,8 @@ control to affect the pattern, the pattern structure must make the effect clear.
 Control ownership:
 
 - outer section group owns background color and vertical section spacing
-- inner layout group owns readable width and horizontal positioning
+- inner layout group owns readable width and horizontal positioning unless the
+  section group must own a native Gutenberg justification control
 - text blocks own text alignment and typography presets
 - buttons block owns button-group justification and button spacing
 - individual buttons own button labels, URLs, width, and button colors
@@ -123,9 +125,9 @@ Foreground behavior:
 
 Category behavior:
 
-- hero patterns must make left, center, and right content positioning visibly
-  available through an inner constrained content group or through separate
-  approved variants
+- hero patterns that expose a justification control must make left, center, and
+  right content positioning visibly available through the selected section
+  group; use separate approved variants for fixed-position hero layouts
 - media split patterns should use explicit image/text ordering variants instead
   of generic section justification
 - card and grid patterns should keep section-level controls separate from

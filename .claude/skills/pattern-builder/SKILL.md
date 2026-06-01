@@ -24,7 +24,8 @@ on a parent-level control if child blocks override it or if the pattern layout
 cannot make the change visible.
 
 - Outer section group owns background color and vertical section spacing.
-- Inner layout group owns content width and horizontal positioning.
+- Inner layout group owns content width and horizontal positioning unless the
+  section group must own a native Gutenberg justification control.
 - Text blocks own text alignment and typography presets.
 - Buttons block owns button-group justification and internal button spacing.
 - Individual buttons own button labels, URLs, button colors, and width.
@@ -36,10 +37,14 @@ works or document that the control is intentionally local to a child block.
 
 ## Category Contracts
 
-- Heroes: must support visible left, center, and right content positioning
-  through an inner constrained content group, or ship separate approved variants
-  that make the positioning explicit. Hero text should normally live in that
-  inner group so line length stays readable.
+- Heroes: must support visible left, center, and right content positioning when
+  the pattern exposes a justification control. For simple heroes, the selected
+  section group should own the approved `760px` content rail and
+  `justifyContent` setting so Gutenberg can move the rail left, center, or
+  right inside the default 5% gutter / 1440px container. Do not add a nested
+  constrained group solely to create the text rail when that adds another
+  `has-global-padding` layer. Ship separate approved variants when a hero layout
+  has fixed positioning by design.
 - Intros and text sections: prioritize narrow readable width and text-block
   alignment controls. Do not imply full-section justification changes the text.
 - Media split sections: use explicit image-left/text-right and text-left/image-right

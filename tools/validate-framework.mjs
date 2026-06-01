@@ -531,14 +531,15 @@ async function validatePluginSecurityPolicy() {
 
 async function validatePatternHorizontalSpacing() {
   // Patterns own vertical section rhythm only. Horizontal spacing is owned by the
-  // theme: every section rides the 5% root gutter and the default content width.
-  // A pattern must never add horizontal inset on top of that base, via either
-  // hardcoded left/right padding or a section-level contentSize override.
+  // theme: every section rides the 5% root gutter and the default content width,
+  // unless a section-level content rail is part of an approved editor-control
+  // contract.
   const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
   const blockComment = /<!--\s*wp:[\w/-]+\s+(\{[\s\S]*?\})\s*\/?-->/g;
 
   for (const file of patternFiles) {
     const content = await readText(file);
+    const header = parsePatternHeader(content);
     const violations = [];
     let match;
 
@@ -550,8 +551,12 @@ async function validatePatternHorizontalSpacing() {
         continue;
       }
 
-      if (attrs.align === 'full' && attrs.layout?.contentSize) {
-        violations.push('full-width group sets its own contentSize (narrows below the theme default width)');
+      if (
+        attrs.align === 'full' &&
+        attrs.layout?.contentSize &&
+        !hasApprovedSectionContentRail(header, attrs)
+      ) {
+        violations.push('full-width group sets an unapproved section-level contentSize');
       }
 
       const padding = attrs.style?.spacing?.padding;
@@ -569,7 +574,7 @@ async function validatePatternHorizontalSpacing() {
         fail(`${file}: ${violation}`);
       }
     } else {
-      pass(`${file} adds no horizontal padding beyond the base 5% gutter`);
+      pass(`${file} uses approved horizontal spacing and section rails`);
     }
   }
 }
@@ -591,6 +596,22 @@ function sectionPromisesTextColor(block) {
   return Boolean(block?.attrs?.textColor || block?.attrs?.style?.color?.text);
 }
 
+function isSupportedJustification(value) {
+  return ['left', 'center', 'right'].includes(value);
+}
+
+function hasApprovedSectionContentRail(header, attrs) {
+  return header.Categories === 'supersonic-heroes' &&
+    attrs.layout?.type === 'constrained' &&
+    attrs.layout?.contentSize === '760px' &&
+    isSupportedJustification(attrs.layout?.justifyContent);
+}
+
+function hasSectionOwnedHeroContentRail(blocks) {
+  const sectionGroup = blocks.find((block) => block.name === 'core/group' && block.attrs.align === 'full');
+  return Boolean(sectionGroup && hasApprovedSectionContentRail({ Categories: 'supersonic-heroes' }, sectionGroup.attrs));
+}
+
 function hasInnerConstrainedContentGroup(blocks) {
   return blocks.some((block) =>
     block.name === 'core/group' &&
@@ -610,10 +631,20 @@ async function validateEditorControlContracts() {
     const blocks = collectBlockComments(content);
 
     if (header.Categories === 'supersonic-heroes') {
-      if (hasInnerConstrainedContentGroup(blocks)) {
-        pass(`${file} has an inner constrained group for visible hero content positioning`);
+      const sectionOwnsRail = hasSectionOwnedHeroContentRail(blocks);
+      const hasInnerRail = hasInnerConstrainedContentGroup(blocks);
+      const isSimpleHero = header.Slug === 'supersonic-site-theme/hero-simple';
+
+      if (isSimpleHero && sectionOwnsRail && !hasInnerRail) {
+        pass(`${file} lets the selected hero section own its 760px justification rail`);
+      } else if (isSimpleHero && !sectionOwnsRail) {
+        fail(`${file} must let the selected section group own a 760px contentSize and left/center/right justifyContent`);
+      } else if (isSimpleHero) {
+        fail(`${file} must not add a nested 760px content group that masks section justification`);
+      } else if (sectionOwnsRail || hasInnerRail) {
+        pass(`${file} has an approved hero content rail for visible positioning`);
       } else {
-        fail(`${file} must include a 760px inner constrained group so hero left/center/right positioning is visible`);
+        fail(`${file} must include an approved hero content rail so positioning is visible`);
       }
     }
 

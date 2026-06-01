@@ -22,7 +22,9 @@ Rules:
 
 - Default layouts use the 5% site gutter.
 - Default constrained layouts center inside a 1440px max width.
-- Text-heavy inner groups should use a 760px content width.
+- Text-heavy content should use a 760px content width, either on the selected
+  section group when an editor-control contract depends on it or on a real inner
+  content group when no parent justification control is promised.
 - Full-width media is allowed only when the section intentionally needs edge-to-edge rendering.
 
 ### Horizontal Spacing Is Owned By The Theme
@@ -30,9 +32,11 @@ Rules:
 Patterns own vertical section rhythm only. They must never add horizontal inset on top of the base 5% gutter.
 
 - A section pattern must not set explicit left/right padding. The 5% gutter comes from the theme root padding automatically.
-- A full-width (`align:full`) section group must not set its own `contentSize`. It inherits the 1440px default width and rides the gutter.
-- Narrowing to `760px` is only for an **inner** text group nested inside the section, never the section group itself.
-- This rule is enforced by `npm run validate`; a pattern that adds horizontal padding or narrows a full-width section fails the check.
+- A full-width (`align:full`) section group must not set arbitrary left/right padding. It rides the theme's 5% root gutter and 1440px content container.
+- A section group may own an approved `760px` content rail only when the block's editor-control contract depends on native Gutenberg content justification, such as `Hero: Simple`.
+- Do not add nested constrained groups solely to create a text rail when that adds another `has-global-padding` layer.
+- Nested `760px` text groups are still valid for patterns where the inner group is the actual edited content area and no parent justification control is promised.
+- This rule is enforced by `npm run validate`; a pattern that adds horizontal padding or uses an unapproved full-width section rail fails the check.
 
 ## Section Spacing Tokens
 
