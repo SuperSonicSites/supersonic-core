@@ -488,6 +488,32 @@ async function validateH1Policy() {
   }
 }
 
+async function validatePostContentWrappers() {
+  const layoutNeutralTemplates = [
+    'wp-content/themes/supersonic-site-theme/templates/index.html',
+    'wp-content/themes/supersonic-site-theme/templates/page.html'
+  ];
+
+  for (const file of layoutNeutralTemplates) {
+    const content = await readText(file);
+    const blocks = collectBlockComments(content);
+    const mainGroup = blocks.find((block) =>
+      block.name === 'core/group' &&
+      block.attrs.tagName === 'main'
+    );
+    const hasConstrainedPostContent = blocks.some((block) =>
+      block.name === 'core/post-content' &&
+      block.attrs.layout?.type === 'constrained'
+    );
+
+    if (hasConstrainedPostContent && mainGroup?.attrs?.layout?.type === 'constrained') {
+      fail(`${file} must not wrap constrained post content in a second constrained main group`);
+    } else {
+      pass(`${file} keeps the post-content wrapper from double-applying the 5% gutter`);
+    }
+  }
+}
+
 async function validatePluginSecurityPolicy() {
   const deployRole = await readText('wp-content/plugins/supersonic-site-core/includes/class-supersonic-deploy-role.php');
   const deployController = await readText('wp-content/plugins/supersonic-site-core/includes/class-supersonic-deploy-controller.php');
@@ -752,6 +778,7 @@ await validateBlockAllowList();
 await validateCssGuardrails();
 await validatePatternLibraryPolicy();
 await validateH1Policy();
+await validatePostContentWrappers();
 await validatePluginSecurityPolicy();
 await validatePatternHorizontalSpacing();
 await validateEditorControlContracts();

@@ -141,6 +141,10 @@ Category behavior:
 
 The default page template stays layout-neutral so it does not force the same title treatment onto every website.
 
+- `index.html` and `page.html` use a default, unpadded `main` wrapper around
+  constrained `post-content`; do not add a second constrained main wrapper around
+  post content because it double-applies the 5% gutter and breaks full-width
+  section behavior.
 - Every AI-built page layout must include exactly one editable H1.
 - The H1 should normally live in the first hero or intro pattern.
 - Do not depend on `page.html` to add the page H1.
