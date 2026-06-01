@@ -88,12 +88,14 @@ Every custom plugin feature must follow these rules:
 Temporary QA pages may be used on staging to isolate one pattern, template part, or approved block for review.
 
 - QA pages are staging-only.
+- Live QA page writes through `tools/` must target a host whose name starts with `staging.`.
 - QA pages must never be deployed to production.
 - REST creation requires explicit approval.
 - REST cleanup requires explicit approval.
 - Dry-run creation and cleanup before live REST requests.
-- Use draft status unless the user explicitly approves another status.
-- Delete/trash QA pages after approval unless the user wants to keep them as reusable drafts.
+- Published QA pages are allowed on staging because they are used for hosted screenshot QA.
+- Draft QA pages are allowed when intentionally keeping a reusable staging draft.
+- Delete/trash QA pages after approval unless the user wants to keep them in the staging pattern lab.
 - Do not create QA pages that expose private client data, secrets, or production-only content.
 
 ## Automated Theme Deploy
@@ -120,6 +122,7 @@ Before the site owner deploys production, confirm:
 
 - staging review is complete
 - screenshots are approved
+- no `qa-pattern-*` staging QA pages are being migrated to production
 - forms are tested
 - SEO metadata is checked
 - backups are confirmed

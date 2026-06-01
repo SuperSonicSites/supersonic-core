@@ -56,19 +56,21 @@ npm run screenshot -- --url "$env:WP_STAGING_URL/<page-or-qa-page-slug>" --selec
 **Capture each pattern in isolation — never screenshot the staging root.** If a pattern
 is not already placed on a real page, the root URL renders default content, not the
 pattern. Use a temporary staging-only QA page per pattern (created, captured, then
-trashed). The commands are gated and refuse to write without `--confirm`:
+trashed). The commands are gated and refuse to write without `confirm`:
 
 ```powershell
 # 1. dry-run to show the payload (for approval)
-npm run rest:qa-page:dry-run -- --pattern <theme-slug>/<pattern>
+npm run rest:qa-page:dry-run -- <theme-slug>/<pattern>
 # 2. create the page (publishes so it is screenshot-able; idempotent — reuses if it exists)
-npm run rest:qa-page:create -- --pattern <theme-slug>/<pattern> --confirm
+npm run rest:qa-page:create -- confirm <theme-slug>/<pattern>
 # 3. screenshot the returned link, then ALWAYS clean up:
-npm run rest:qa-page:trash -- --id <page-id> --confirm
+npm run rest:qa-page:trash -- confirm <page-id>
 ```
 
-`npm run rest:pages` lists staging pages (read-only) so you can find and trash any
-leftover `qa-pattern-*` pages. QA pages are staging-only and must never reach production.
+`npm run rest:qa-pages` lists staging QA pages (read-only) so you can find and
+trash any leftover `qa-pattern-*` pages. QA page writes are refused unless
+`WP_STAGING_URL` is a `staging.*` host. QA pages are staging-only and must never
+reach production.
 
 Then read each captured PNG to review it.
 
@@ -93,6 +95,7 @@ Include:
 - scope reviewed (which release items from the report, or which pattern)
 - active theme/plugin version on staging
 - screenshots captured (paths)
+- pattern registry status, if this was a theme pattern
 - issues found, with severity
 - recommended fixes
 - approval status (pass/fail per item)
@@ -149,3 +152,5 @@ Rules for the handoff:
   separately as "considered and dismissed" so the next run doesn't re-flag them.
 - The report must match the existing format in `docs/reports/` (scope, active versions,
   screenshots, prioritized fixes, remaining risks, approval status).
+- Pattern reviews must update `data/pattern-certifications.json` and pass
+  `npm run pattern:registry:check` before approval.

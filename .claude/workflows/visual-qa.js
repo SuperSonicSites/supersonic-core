@@ -143,7 +143,7 @@ Do this:
 1. Read the "version" field from package.json.
 2. Find the latest QA report: the highest-versioned file matching docs/reports/*qa*.md. Read its "Prioritized fix list" and "Remaining risks / verify visually on staging" sections; list those item titles in knownOpenFindings. Set latestReport to its path (or "").
 3. Find the theme by glob: the wp-content/themes/*/ dir that contains a patterns/ folder. themeSlug is that folder name; themeDir is its path. Glob patterns/*.php for the pattern list.
-4. Confirm staging: run \`npm run rest:check\` (exit 0 + HTTP 200 = ready). Run \`npm run rest:certify\` and note whether the active theme version matches package.json; put that in stagingNote.
+4. Confirm staging: run \`npm run rest:check\` (exit 0 + HTTP 200 = ready). Run \`npm run certify:staging -- <package version> <expected plugin version>\` and note whether the active theme version matches package.json; put that in stagingNote.
 5. Build the FULL targets list (all patterns in the theme). The caller filters this list in code afterward, so always return every pattern. For each: name (file basename without .php), patternSlug ("<themeSlug>/<name>"), file (the .php path). The registered slug is always "<themeSlug>/<name>" for theme patterns.
 
 Return the discovery JSON.${FINAL}`,
@@ -185,10 +185,10 @@ const perTarget = await pipeline(
 Goal: capture this ONE pattern in isolation on staging, review it at 3 breakpoints, and ALWAYS clean up the temp page afterward.
 
 ${dryRunOnly
-  ? `DRY-RUN MODE: do NOT create or trash pages. Instead run \`npm run rest:qa-page:dry-run -- --pattern ${t.patternSlug}\` to show the payload, set pageLifecycle.created=false and trashed=false with note "dry-run", screenshots=[], and review the pattern from SOURCE ONLY (${t.file} + theme.json + DESIGN_SYSTEM.md). Flag source-grounded issues; do not invent visual ones.`
+  ? `DRY-RUN MODE: do NOT create or trash pages. Instead run \`npm run rest:qa-page:dry-run -- ${t.patternSlug}\` to show the payload, set pageLifecycle.created=false and trashed=false with note "dry-run", screenshots=[], and review the pattern from SOURCE ONLY (${t.file} + theme.json + DESIGN_SYSTEM.md). Flag source-grounded issues; do not invent visual ones.`
   : `LIFECYCLE (follow in order; you MUST run the trash step at the end even if an earlier step fails):
 1. CREATE a temp staging QA page rendering only this pattern:
-   npm run rest:qa-page:create -- --pattern ${t.patternSlug} --confirm
+   npm run rest:qa-page:create -- confirm ${t.patternSlug}
    Parse the JSON result for "id" and "link" (it may say "reused" if the page already existed — that is fine). Record id and url in pageLifecycle. If create fails, set created=false, note the error, skip capture, and still attempt nothing to trash.
 2. CAPTURE all three breakpoints in one run (desktop 1440 / tablet 768 / mobile 390 are automatic):
    npm run screenshot -- --url "<link from step 1>" --selector "main" --label "${t.name}" --out "screenshots/after/${reviewFolder}"
@@ -196,7 +196,7 @@ ${dryRunOnly
 3. READ each captured PNG.
 4. REVIEW against QA_CHECKLIST.md (Screenshot Review + Token Editability) and DESIGN_SYSTEM.md: token-based spacing (one section spacing token), no horizontal overflow, 5% gutter + 1440px max width, typography scale, readability, alignment, hierarchy, image cropping, CTA visibility, mobile stacking, tablet layout, approved shadow presets only (soft/medium), consistency with the design system. Cross-check against these known-open items if relevant: ${JSON.stringify(scope.knownOpenFindings || [])}.
 5. TRASH the temp page to clean up (REQUIRED):
-   npm run rest:qa-page:trash -- --id <id from step 1> --confirm
+   npm run rest:qa-page:trash -- confirm <id from step 1>
    Set pageLifecycle.trashed=true on success; if it fails, trashed=false with the error in note.`}
 
 For each issue give it a stable id "${t.name}-N", a severity, the breakpoint, concrete evidence (what you saw in which screenshot, or "source-only" in dry-run), and suspectedSource (pattern file + line/token). If clean, return an empty findings array. Do not write scratch files into the repo.
@@ -238,7 +238,7 @@ const captured = clean.filter((r) => r.lifecycle && r.lifecycle.created && (r.sc
 const leakedPages = clean.filter((r) => r.lifecycle && r.lifecycle.created && !r.lifecycle.trashed)
 log(`Reviewed ${clean.length} target(s): ${captured.length} with real captures, ${real.length} confirmed finding(s), ${dismissed.length} dismissed.`)
 if (leakedPages.length > 0) {
-  log(`WARNING: ${leakedPages.length} QA page(s) may not have been trashed: ${leakedPages.map((r) => `${r.target}(id ${r.lifecycle.pageId})`).join(', ')}. Run \`npm run rest:pages\` and trash leftovers with \`npm run rest:qa-page:trash -- --id <id> --confirm\`.`)
+  log(`WARNING: ${leakedPages.length} QA page(s) may not have been trashed: ${leakedPages.map((r) => `${r.target}(id ${r.lifecycle.pageId})`).join(', ')}. Run \`npm run rest:qa-pages\` and trash leftovers with \`npm run rest:qa-page:trash -- confirm <id>\`.`)
 }
 
 // ---- Stage 4: Synthesize (Opus) ------------------------------------------

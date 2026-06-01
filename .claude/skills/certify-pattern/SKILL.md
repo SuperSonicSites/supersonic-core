@@ -25,6 +25,7 @@ Do not use this skill to author a brand-new pattern — use `pattern-builder` fo
 - Certify one pattern or system piece at a time.
 - Every visual change needs desktop, tablet, and mobile screenshots.
 - Live REST writes require explicit approval and a dry-run first.
+- Published `qa-pattern-*` pages are allowed on staging for live hosted screenshot QA and must never be migrated to production.
 - Commit only after staging review passes.
 
 ## Workflow
@@ -33,13 +34,14 @@ Follow `docs/workflows/theme-pattern-certification.md` in order:
 
 1. Preflight — run `npm run validate`; confirm the WordPress target and theme/plugin headers; confirm no Custom HTML and no unapproved blocks, CPTs, taxonomies, REST routes, or third-party plugins; confirm pattern files use approved design tokens.
 2. Package — run `npm run package`; upload only the asset zip needed for the change.
-3. Staging activation check — run `npm run rest:certify`; confirm staging returns `200`, the active theme/plugin version is expected, approved patterns are registered, and core/remote patterns remain absent unless approved.
+3. Staging activation check — run `npm run certify:staging -- <theme-version> <plugin-version>`; confirm staging returns `200`, the active theme/plugin version is expected, approved patterns are registered, and core/remote patterns remain absent unless approved.
 4. Editor check — open `wp-admin` and confirm the block editor loads cleanly, native blocks and Supersonic presets are available, approved patterns appear in the expected category, and content stays maintainable.
 5. Token editability check — for each pattern under review, prove it stays editable in the block editor (text, links/labels, media, section padding, colors, typography, radius/shadow presets) with no block validation warnings.
 6. Rule audits — exactly one editable H1 per page layout, header/footer remain modular pattern files, header navigation CSS stays scoped to `.supersonic-site-header`, and shadows use only approved presets.
 7. Screenshot review — capture section-level desktop, tablet, and mobile screenshots with `npm run screenshot`, targeting the changed component selector.
-8. Report — write a certification report in `docs/reports/` (scope, QA page status, versions, checks, screenshots, editor result, issues, fixes, remaining risks, approval).
-9. Commit — only after validation, staging certification, screenshots, the editor check, and the report all pass.
+8. Registry — update `data/pattern-certifications.json` and run `npm run pattern:registry:check`.
+9. Report — write a certification report in `docs/reports/` (scope, QA page status, registry status, versions, checks, screenshots, editor result, issues, fixes, remaining risks, approval).
+10. Commit — only after validation, staging certification, screenshots, the editor check, the registry check, and the report all pass.
 
 ## Output
 

@@ -8,6 +8,8 @@
       "Bash(npm run screenshot:*)",
       "Bash(npm run rest:check)",
       "Bash(npm run rest:certify)",
+      "Bash(npm run certify:staging:*)",
+      "Bash(npm run rest:qa-pages)",
       "Bash(npm run rest:qa-page:dry-run:*)",
       "Bash(npm run rest:qa-page:trash-dry-run:*)",
       "Bash(npm run rest:dry-run:*)",

@@ -181,12 +181,14 @@ Use small controlled tasks:
 Use temporary staging-only QA pages for new visual patterns, template parts, and approved custom blocks.
 
 - QA pages are staging-only and must never deploy to production.
+- QA pages may be published on staging for live hosted screenshot QA.
+- Live QA page writes through repo tools must target a `staging.*` host.
 - Title format: `QA - Pattern - [Pattern Name]`.
 - Slug format: `qa-pattern-[pattern-slug]`.
 - Create only after explicit approval.
 - Run a dry-run before any REST creation or cleanup.
 - Keep the QA page focused on the single component under review.
-- Delete/trash the QA page after approval unless the user wants to keep it as a draft.
+- Delete/trash the QA page after approval unless the user wants to keep it in the staging pattern lab.
 
 ## Definition Of Done
 
@@ -200,6 +202,8 @@ A task is done only when the final report includes:
 - next recommended step
 
 For visual work, screenshots are required.
+
+For pattern certification work, update `data/pattern-certifications.json` and run `npm run pattern:registry:check`.
 
 For plugin/security work, security review is required.
 

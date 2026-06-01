@@ -2,7 +2,20 @@
 
 This registry tracks Supersonic theme patterns.
 
+The machine-readable source of truth is `data/pattern-certifications.json`.
+This Markdown file is the human-readable summary.
+
 Patterns are added as source first. A pattern is not approved until it has passed staging editor review plus desktop, tablet, and mobile screenshot review for that specific pattern or section.
+
+Run:
+
+```text
+npm run pattern:registry:check
+```
+
+The registry check confirms every pattern file has a registry entry, every entry
+points to an existing source file, evidence paths exist when recorded, and local
+documentation links resolve.
 
 ## 0.1.5 Source-Ready Pattern Set
 
@@ -52,7 +65,8 @@ Patterns are added as source first. A pattern is not approved until it has passe
 ## Status Definitions
 
 - Source ready: pattern source exists and static validation passes.
-- Staging QA: pattern has been uploaded to staging and is being reviewed.
+- QA page created: a published `qa-pattern-*` page exists on the staging host for live review.
+- Screenshots captured: desktop, tablet, and mobile screenshots exist and are linked in the registry.
 - Approved: pattern passed editor check and desktop, tablet, mobile screenshots.
 - Needs revision: pattern failed a QA check and needs a focused fix.
 
@@ -70,8 +84,9 @@ Patterns are added as source first. A pattern is not approved until it has passe
 - Header navigation CSS must stay scoped to `.supersonic-site-header`.
 - Shadows must use approved theme presets.
 - FAQ schema must be handled by Rank Math, not by theme-side JSON-LD.
-- New visual patterns, template parts, and blocks should be reviewed on a temporary staging-only QA page.
-- QA pages must be cleaned up after approval unless intentionally kept as drafts.
+- New visual patterns, template parts, and blocks should be reviewed on a published staging-only QA page.
+- QA pages must live only on `staging.*` hosts and must never be migrated to production.
+- QA pages may be cleaned up after approval or retained on staging as the pattern lab reference.
 - Screenshot review each pattern section before approval.
 
 ## Certification Workflow

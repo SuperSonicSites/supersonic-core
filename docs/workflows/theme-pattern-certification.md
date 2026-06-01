@@ -23,6 +23,8 @@ This workflow applies to:
 - Build and review one pattern or system piece at a time.
 - Every visual change needs desktop, tablet, and mobile screenshots.
 - Live REST writes require explicit approval and a dry-run first.
+- Published `qa-pattern-*` pages are allowed on staging for live hosted screenshots.
+- QA page live writes must target a `staging.*` host and must never target production.
 - Commit only after staging review passes.
 
 ## Preflight
@@ -61,7 +63,7 @@ Generated zips are ignored by Git and must be reproducible from source.
 After upload, run:
 
 ```text
-npm run rest:certify
+npm run certify:staging -- <expected-theme-version> <expected-plugin-version>
 ```
 
 Confirm:
@@ -69,7 +71,7 @@ Confirm:
 - staging frontend returns `200`
 - WordPress version matches the target or mismatch is documented
 - active theme version is the expected version
-- site-core plugin is active
+- site-core plugin is active at the expected version
 - approved patterns are registered as expected
 - core and remote patterns remain absent unless explicitly approved
 
@@ -105,7 +107,7 @@ For a large batch such as `0.1.5`, run a deeper token pass on one representative
 
 ## Temporary QA Page Rule
 
-Every new visual pattern, template part, or block should be reviewed on a dedicated temporary staging QA page.
+Every new visual pattern, template part, or block should be reviewed on a dedicated published staging QA page. These pages form the staging pattern lab: they are live on staging so screenshots are real hosted WordPress output, but they must never be migrated to production.
 
 Use a QA page when reviewing:
 
@@ -119,6 +121,7 @@ Use a QA page when reviewing:
 Rules:
 
 - QA pages are staging-only.
+- QA page live writes through repo tools are refused unless `WP_STAGING_URL` is a `staging.*` host.
 - QA pages must never be deployed to production.
 - QA pages must contain only the pattern/block under review plus minimal context when needed.
 - QA page title format: `QA - Pattern - [Pattern Name]`.
@@ -126,13 +129,14 @@ Rules:
 - QA pages may be created through REST only after explicit approval.
 - REST creation must be dry-run first.
 - Cleanup must be dry-run first and requires explicit approval.
-- After approval, delete/trash the QA page or leave it as a draft only if the user wants to reuse it.
+- After approval, delete/trash the QA page or keep it in the staging pattern lab for future review.
 
 Dry-run helpers:
 
 ```text
-npm run rest:qa-page:dry-run -- --pattern supersonic-site-theme/hero-simple
-npm run rest:qa-page:trash-dry-run -- --id <page-id>
+npm run rest:qa-page:dry-run -- supersonic-site-theme/hero-simple
+npm run rest:qa-page:trash-dry-run -- <page-id>
+npm run rest:qa-pages
 ```
 
 For live creation or cleanup, get explicit approval first, then use a separate implementation step.
@@ -223,6 +227,20 @@ The report must include:
 - remaining risks
 - approval status
 
+## Pattern Registry
+
+Update `data/pattern-certifications.json` after every pattern review. The entry
+must record the source file, QA page slug/URL, certification status, report path,
+and screenshot paths when screenshots have been captured.
+
+Run:
+
+```text
+npm run pattern:registry:check
+```
+
+The registry must pass before marking a pattern approved.
+
 ## Commit
 
 Commit only after:
@@ -232,6 +250,7 @@ Commit only after:
 - screenshots are reviewed
 - editor check passes
 - report is written
+- pattern registry is updated
 
 Keep ignored:
 

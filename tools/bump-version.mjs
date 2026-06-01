@@ -3,13 +3,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /*
- * Bump the framework version in lockstep across the theme, the plugin, and
- * package.json. The GitHub Actions release workflow calls this so a release tag
- * always matches the version baked into the shipped theme/plugin headers.
+ * Bump release metadata without pretending every release ships every asset.
  *
  * Usage:
- *   node tools/bump-version.mjs 0.1.7
- *   node tools/bump-version.mjs --check        (verify all three already match)
+ *   node tools/bump-version.mjs 0.1.15           (theme release: theme + package files)
+ *   node tools/bump-version.mjs 0.1.15 --plugin  (plugin release: plugin header + constant)
+ *   node tools/bump-version.mjs --check          (verify metadata coherence)
  */
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,6 +17,7 @@ const root = path.resolve(__dirname, '..');
 const THEME_STYLE = 'wp-content/themes/supersonic-site-theme/style.css';
 const PLUGIN_PHP = 'wp-content/plugins/supersonic-site-core/plugin.php';
 const PACKAGE_JSON = 'package.json';
+const PACKAGE_LOCK_JSON = 'package-lock.json';
 
 const SEMVER = /^\d+\.\d+\.\d+$/;
 
@@ -46,78 +46,123 @@ function readPackageVersion(content) {
 }
 
 function bumpPackageVersion(content, version) {
-  // Preserve formatting/indentation by editing only the version line.
+  const parsed = JSON.parse(content);
+  parsed.version = version;
+  if (parsed.packages?.['']) {
+    parsed.packages[''].version = version;
+  }
+  return `${JSON.stringify(parsed, null, 2)}\n`;
+}
+
+function readPluginConstant(content) {
+  return content.match(/define\(\s*['"]SUPERSONIC_SITE_CORE_VERSION['"]\s*,\s*['"]([^'"]+)['"]\s*\)/)?.[1] ?? null;
+}
+
+function bumpPluginConstant(content, version) {
   return content.replace(
-    /("version":\s*")[^"]+(")/,
+    /(define\(\s*['"]SUPERSONIC_SITE_CORE_VERSION['"]\s*,\s*['"])[^'"]+(['"]\s*\);)/,
     (_match, prefix, suffix) => `${prefix}${version}${suffix}`
   );
 }
 
 async function currentVersions() {
-  const [theme, plugin, pkg] = await Promise.all([
+  const [theme, plugin, pkg, lock] = await Promise.all([
     readText(THEME_STYLE),
     readText(PLUGIN_PHP),
-    readText(PACKAGE_JSON)
+    readText(PACKAGE_JSON),
+    readText(PACKAGE_LOCK_JSON)
   ]);
+  const parsedLock = JSON.parse(lock);
 
   return {
     theme: readHeaderVersion(theme),
     plugin: readHeaderVersion(plugin),
-    package: readPackageVersion(pkg)
+    pluginConstant: readPluginConstant(plugin),
+    package: readPackageVersion(pkg),
+    packageLock: parsedLock.version ?? null,
+    packageLockRoot: parsedLock.packages?.['']?.version ?? null
   };
 }
 
 async function check() {
   const versions = await currentVersions();
-  const unique = new Set(Object.values(versions));
 
-  console.log(`theme:   ${versions.theme}`);
-  console.log(`plugin:  ${versions.plugin}`);
-  console.log(`package: ${versions.package}`);
+  console.log(`theme:          ${versions.theme}`);
+  console.log(`plugin header:  ${versions.plugin}`);
+  console.log(`plugin const:   ${versions.pluginConstant}`);
+  console.log(`package:        ${versions.package}`);
+  console.log(`package-lock:   ${versions.packageLock}`);
+  console.log(`lock root:      ${versions.packageLockRoot}`);
 
-  if (unique.size !== 1) {
-    console.error('Version mismatch: theme, plugin, and package.json must match.');
+  const allVersions = Object.values(versions);
+  const invalid = allVersions.find((version) => !SEMVER.test(version ?? ''));
+  if (invalid) {
+    console.error(`Version "${invalid}" is not semver (X.Y.Z).`);
     process.exit(1);
   }
 
-  if (!SEMVER.test([...unique][0])) {
-    console.error(`Version "${[...unique][0]}" is not semver (X.Y.Z).`);
+  if (versions.theme !== versions.package) {
+    console.error('Version mismatch: theme style.css must match package.json.');
     process.exit(1);
   }
 
-  console.log(`OK: all sources at ${[...unique][0]}`);
+  if (versions.packageLock !== versions.package || versions.packageLockRoot !== versions.package) {
+    console.error('Version mismatch: package-lock.json root versions must match package.json.');
+    process.exit(1);
+  }
+
+  if (versions.plugin !== versions.pluginConstant) {
+    console.error('Version mismatch: plugin header must match SUPERSONIC_SITE_CORE_VERSION.');
+    process.exit(1);
+  }
+
+  console.log('OK: release metadata is coherent');
 }
 
-async function bump(version) {
+async function bumpTheme(version) {
   if (!SEMVER.test(version)) {
     console.error(`Provide a semver version (X.Y.Z). Got: "${version}"`);
     process.exit(1);
   }
 
-  const [theme, plugin, pkg] = await Promise.all([
+  const [theme, pkg, lock] = await Promise.all([
     readText(THEME_STYLE),
-    readText(PLUGIN_PHP),
-    readText(PACKAGE_JSON)
+    readText(PACKAGE_JSON),
+    readText(PACKAGE_LOCK_JSON)
   ]);
 
   await Promise.all([
     writeText(THEME_STYLE, bumpHeaderVersion(theme, version)),
-    writeText(PLUGIN_PHP, bumpHeaderVersion(plugin, version)),
-    writeText(PACKAGE_JSON, bumpPackageVersion(pkg, version))
+    writeText(PACKAGE_JSON, bumpPackageVersion(pkg, version)),
+    writeText(PACKAGE_LOCK_JSON, bumpPackageVersion(lock, version))
   ]);
 
-  console.log(`Bumped theme, plugin, and package.json to ${version}`);
+  console.log(`Bumped theme, package.json, and package-lock.json to ${version}`);
+}
+
+async function bumpPlugin(version) {
+  if (!SEMVER.test(version)) {
+    console.error(`Provide a semver version (X.Y.Z). Got: "${version}"`);
+    process.exit(1);
+  }
+
+  const plugin = await readText(PLUGIN_PHP);
+  await writeText(PLUGIN_PHP, bumpPluginConstant(bumpHeaderVersion(plugin, version), version));
+  console.log(`Bumped plugin header and SUPERSONIC_SITE_CORE_VERSION to ${version}`);
 }
 
 const arg = process.argv[2];
+const flags = process.argv.slice(3);
 
 if (!arg) {
-  console.error('Usage: node tools/bump-version.mjs <X.Y.Z> | --check');
+  console.error('Usage: node tools/bump-version.mjs <X.Y.Z> [--plugin] | --check');
   process.exit(1);
 }
 
 if (arg === '--check') {
   await check();
+} else if (flags.includes('--plugin')) {
+  await bumpPlugin(arg);
 } else {
-  await bump(arg);
+  await bumpTheme(arg);
 }

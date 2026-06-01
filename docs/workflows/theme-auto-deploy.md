@@ -10,9 +10,9 @@ checksummed **GitHub Release**, then pings a small endpoint on staging. The
 Supersonic Site Core plugin on staging pulls that release, **verifies its
 SHA-256**, and installs it through WordPress's own theme upgrader. The trigger
 never carries code: the worst a leaked trigger credential can do is make staging
-re-pull the official, checksum-verified theme. See
-[`docs/proposals/theme-instant-deploy.md`](../proposals/theme-instant-deploy.md)
-for the security rationale.
+re-pull the official, checksum-verified theme. The security rationale is the
+same one enforced throughout this runbook: staging only, least-privilege
+credentials, no deploy payload, and checksum verification before install.
 
 ```text
 You (GitHub mobile): Actions -> "Release theme to staging" -> Run workflow
@@ -88,8 +88,9 @@ That's it. No computer required.
 ## Verify a deploy
 
 - Workflow run: green check, and the Summary shows the version + SHA-256.
-- `npm run rest:certify` reports the active theme version (run locally when you
-  are back at a computer).
+- `npm run certify:staging -- <theme-version> <plugin-version>` reports and
+  enforces the active staging versions (run locally when you are back at a
+  computer).
 - Staging frontend reflects the change.
 
 ## Rollback

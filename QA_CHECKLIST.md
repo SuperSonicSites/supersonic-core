@@ -83,13 +83,15 @@ Confirm:
 For new visual patterns, template parts, and approved custom blocks:
 
 - use a dedicated staging-only QA page when it makes review clearer
+- published QA pages are allowed on staging for live hosted screenshots
+- QA pages must never be migrated to production
 - title format is `QA - Pattern - [Pattern Name]`
 - slug format is `qa-pattern-[pattern-slug]`
 - page contains only the reviewed component plus minimal context
 - REST creation had a dry-run first
 - REST cleanup had a dry-run first
 - screenshots target the reviewed component, not unrelated page chrome
-- QA page is trashed/deleted after approval unless intentionally kept as draft
+- QA page is trashed/deleted after approval unless intentionally kept in the staging pattern lab
 
 ## Pattern Approval Criteria
 
@@ -158,6 +160,7 @@ Every QA report should include:
 
 - scope reviewed
 - screenshots captured
+- pattern registry status, when reviewing a theme pattern
 - issues found
 - fixes made
 - remaining risks

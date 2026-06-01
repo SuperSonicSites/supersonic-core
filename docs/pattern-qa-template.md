@@ -21,6 +21,13 @@ Use this template for each pattern review.
 - Cleanup approved:
 - Cleanup completed:
 
+## Registry
+
+- Registry entry updated:
+- Registry status:
+- Certified theme version:
+- Report path:
+
 ## Intent
 
 Briefly describe where this pattern should be used and what job it does.

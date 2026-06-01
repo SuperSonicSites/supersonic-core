@@ -76,7 +76,7 @@ jobs:
             echo "::error::Tag $TAG already exists. Choose a higher version."; exit 1
           fi
 
-      - name: Bump version in lockstep
+      - name: Bump theme release version
         run: node tools/bump-version.mjs "${{ steps.ver.outputs.version }}"
 
       - name: Package WordPress assets
@@ -99,8 +99,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add wp-content/themes/supersonic-site-theme/style.css \
-                  wp-content/plugins/supersonic-site-core/plugin.php \
-                  package.json
+                  package.json \
+                  package-lock.json
           git commit -m "Release theme v${{ steps.ver.outputs.version }}"
           git tag "${{ steps.ver.outputs.tag }}"
           git push origin HEAD:main

@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validatePatternRegistry } from './validate-pattern-registry.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -190,6 +191,49 @@ async function validateJsonFile(relativePath) {
   }
 }
 
+function readHeaderVersion(content) {
+  return content.match(/^\s*(?:\*\s*)?Version:\s*(.+?)\s*$/m)?.[1] ?? null;
+}
+
+function readPluginConstant(content) {
+  return content.match(/define\(\s*['"]SUPERSONIC_SITE_CORE_VERSION['"]\s*,\s*['"]([^'"]+)['"]\s*\)/)?.[1] ?? null;
+}
+
+async function validateVersionMetadata() {
+  try {
+    const packageJson = JSON.parse(await readText('package.json'));
+    const packageLock = JSON.parse(await readText('package-lock.json'));
+    const themeStyle = await readText('wp-content/themes/supersonic-site-theme/style.css');
+    const pluginPhp = await readText('wp-content/plugins/supersonic-site-core/plugin.php');
+    const themeVersion = readHeaderVersion(themeStyle);
+    const pluginVersion = readHeaderVersion(pluginPhp);
+    const pluginConstant = readPluginConstant(pluginPhp);
+    const packageVersion = packageJson.version;
+    const lockVersion = packageLock.version;
+    const lockRootVersion = packageLock.packages?.['']?.version;
+
+    if (themeVersion === packageVersion) {
+      pass('theme version matches package.json');
+    } else {
+      fail(`theme version ${themeVersion} should match package.json ${packageVersion}`);
+    }
+
+    if (lockVersion === packageVersion && lockRootVersion === packageVersion) {
+      pass('package-lock root versions match package.json');
+    } else {
+      fail(`package-lock versions should match package.json ${packageVersion}`);
+    }
+
+    if (pluginVersion === pluginConstant) {
+      pass('plugin header version matches SUPERSONIC_SITE_CORE_VERSION');
+    } else {
+      fail(`plugin header version ${pluginVersion} should match SUPERSONIC_SITE_CORE_VERSION ${pluginConstant}`);
+    }
+  } catch (error) {
+    fail(`version metadata validation failed: ${error.message}`);
+  }
+}
+
 async function validatePackageScripts() {
   const packageJson = JSON.parse(await readText('package.json'));
   const requiredScripts = [
@@ -197,10 +241,13 @@ async function validatePackageScripts() {
     'validate',
     'rest:check',
     'rest:certify',
+    'rest:qa-pages',
     'rest:qa-page:dry-run',
     'rest:qa-page:trash-dry-run',
     'rest:dry-run',
-    'screenshot'
+    'screenshot',
+    'certify:staging',
+    'pattern:registry:check'
   ];
 
   for (const script of requiredScripts) {
@@ -208,6 +255,17 @@ async function validatePackageScripts() {
       pass(`package.json defines npm run ${script}`);
     } else {
       fail(`package.json missing npm run ${script}`);
+    }
+  }
+}
+
+async function validatePatternRegistryChecks() {
+  const results = await validatePatternRegistry({ rootDir: root });
+  for (const result of results) {
+    if (result.status === 'pass') {
+      pass(result.message);
+    } else {
+      fail(result.message);
     }
   }
 }
@@ -432,6 +490,8 @@ await validateDesignTokens();
 await validateJsonFile('data/site-intake.schema.json');
 await validateJsonFile('data/site-intake.example.json');
 await validateJsonFile('data/site-intake.json');
+await validateJsonFile('data/pattern-certifications.json');
+await validateVersionMetadata();
 await validatePackageScripts();
 await validateHeaders();
 await validateSourceGuardrails();
@@ -439,6 +499,7 @@ await validateBlockAllowList();
 await validateCssGuardrails();
 await validatePatternLibraryPolicy();
 await validatePatternHorizontalSpacing();
+await validatePatternRegistryChecks();
 await validatePackages();
 
 for (const check of checks) {

@@ -93,9 +93,12 @@ npm run package       Build WordPress upload zips from source
 npm run validate      Run static framework checks
 npm run rest:check    Check staging REST availability
 npm run rest:certify  Read-only staging certification summary
-npm run rest:qa-page:dry-run        Preview a temporary staging QA page creation
-npm run rest:qa-page:trash-dry-run  Preview temporary QA page cleanup
+npm run certify:staging -- <theme-version> <plugin-version>  Verify active staging versions
+npm run rest:qa-pages List staging-only qa-pattern pages
+npm run rest:qa-page:dry-run -- <pattern-slug>
+npm run rest:qa-page:trash-dry-run -- <page-id>
 npm run rest:dry-run  Validate a planned staging REST write without sending it
+npm run pattern:registry:check      Validate pattern certification registry and evidence
 npm run screenshot    Capture desktop/tablet/mobile screenshots when Playwright is installed
 ```
 

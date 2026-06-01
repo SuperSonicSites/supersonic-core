@@ -3,7 +3,7 @@
  * Plugin Name: Supersonic Site Core
  * Plugin URI: https://github.com/SuperSonicSites/supersonic-core
  * Description: Site-core plugin for functionality that should survive theme changes. Ships the verified theme auto-update layer.
- * Version: 0.1.14
+ * Version: 0.1.8
  * Requires at least: 7.0
  * Tested up to: 7.0
  * Requires PHP: 8.0
@@ -15,7 +15,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-define('SUPERSONIC_SITE_CORE_VERSION', '0.1.6');
+define('SUPERSONIC_SITE_CORE_VERSION', '0.1.8');
 define('SUPERSONIC_SITE_CORE_DIR', plugin_dir_path(__FILE__));
 
 require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-theme-updater.php';
