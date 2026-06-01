@@ -94,6 +94,47 @@ For each section pattern:
 - use approved shadow presets when shadows are needed
 - avoid arbitrary one-off shadow values
 
+## Editor Control Contracts
+
+Patterns must be built around the editor controls they actually support. A
+visible Gutenberg control is a promise: if an editor can reasonably expect the
+control to affect the pattern, the pattern structure must make the effect clear.
+
+Control ownership:
+
+- outer section group owns background color and vertical section spacing
+- inner layout group owns readable width and horizontal positioning
+- text blocks own text alignment and typography presets
+- buttons block owns button-group justification and button spacing
+- individual buttons own button labels, URLs, width, and button colors
+- media blocks own replacement, crop/aspect intent, and alt text
+- card groups own card surface, border, radius, shadow, and internal padding
+
+Foreground behavior:
+
+- section background changes must be paired with a readable foreground strategy
+- section text color should affect normal readable copy unless child blocks
+  intentionally own their own color
+- button colors are a separate contract and should not inherit section text
+  color in a way that harms contrast
+- inline text links and button links are separate color contracts
+- group typography is not a reliable primary control when child text blocks use
+  explicit font-size presets
+
+Category behavior:
+
+- hero patterns must make left, center, and right content positioning visibly
+  available through an inner constrained content group or through separate
+  approved variants
+- media split patterns should use explicit image/text ordering variants instead
+  of generic section justification
+- card and grid patterns should keep section-level controls separate from
+  card-level controls
+- CTA patterns must be checked on light and dark backgrounds for text, inline
+  links, and button readability
+- header and footer patterns follow template-part and navigation contracts before
+  generic section contracts
+
 ## Page Heading Rule
 
 The default page template stays layout-neutral so it does not force the same title treatment onto every website.

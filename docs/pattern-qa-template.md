@@ -43,6 +43,22 @@ Briefly describe where this pattern should be used and what job it does.
 - Shadow preset:
 - Motion tokens, if applicable:
 
+## Editor Control Contract
+
+- Pattern category contract:
+- Section background color works:
+- Section text color affects normal readable copy, or intentional child overrides are documented:
+- Dark background plus light text remains readable:
+- Light background plus dark text remains readable:
+- Inline link color works, if inline links are present:
+- Button color controls work separately from section text color, if buttons are present:
+- Group typography is not relied on where child text blocks own preset sizes:
+- Text typography controls work at the intended text blocks:
+- Left/center/right positioning works, if the pattern category promises it:
+- Media replacement and crop/aspect behavior work, if media is present:
+- Card-level controls remain local to cards, if cards are present:
+- Controls that appear but are intentionally not part of the contract are documented:
+
 ## Editor Check
 
 - Native blocks only:

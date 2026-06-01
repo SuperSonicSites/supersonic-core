@@ -210,6 +210,23 @@ function parseBlockAttrs(attrsText) {
   }
 }
 
+function collectBlockComments(content) {
+  const blockPattern = /<!--\s*wp:([\w/-]+)(?:\s+(\{[\s\S]*?\}))?\s*\/?-->/g;
+  const blocks = [];
+  let match;
+
+  while ((match = blockPattern.exec(content)) !== null) {
+    const rawName = match[1];
+    blocks.push({
+      name: rawName.includes('/') ? rawName : `core/${rawName}`,
+      attrs: parseBlockAttrs(match[2]),
+      index: match.index
+    });
+  }
+
+  return blocks;
+}
+
 function countLevelOneBlocks(content) {
   const blockPattern = /<!--\s*wp:(heading|post-title)(?:\s+(\{[\s\S]*?\}))?\s*\/?-->/g;
   let count = 0;
@@ -557,6 +574,69 @@ async function validatePatternHorizontalSpacing() {
   }
 }
 
+function isReadableTextBlock(block) {
+  return [
+    'core/heading',
+    'core/list',
+    'core/paragraph',
+    'core/quote'
+  ].includes(block.name);
+}
+
+function blockOwnsTextColor(block) {
+  return Boolean(block.attrs.textColor || block.attrs.style?.color?.text);
+}
+
+function sectionPromisesTextColor(block) {
+  return Boolean(block?.attrs?.textColor || block?.attrs?.style?.color?.text);
+}
+
+function hasInnerConstrainedContentGroup(blocks) {
+  return blocks.some((block) =>
+    block.name === 'core/group' &&
+    block.attrs.align !== 'full' &&
+    block.attrs.layout?.type === 'constrained' &&
+    block.attrs.layout?.contentSize === '760px'
+  );
+}
+
+async function validateEditorControlContracts() {
+  const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+  let colorContractViolations = 0;
+
+  for (const file of patternFiles) {
+    const content = await readText(file);
+    const header = parsePatternHeader(content);
+    const blocks = collectBlockComments(content);
+
+    if (header.Categories === 'supersonic-heroes') {
+      if (hasInnerConstrainedContentGroup(blocks)) {
+        pass(`${file} has an inner constrained group for visible hero content positioning`);
+      } else {
+        fail(`${file} must include a 760px inner constrained group so hero left/center/right positioning is visible`);
+      }
+    }
+
+    const sectionGroup = blocks.find((block) => block.name === 'core/group' && block.attrs.align === 'full') ??
+      blocks.find((block) => block.name === 'core/group');
+
+    if (sectionPromisesTextColor(sectionGroup)) {
+      const readableTextBlocks = blocks.filter(isReadableTextBlock);
+      const allReadableTextOverridesSectionColor = readableTextBlocks.length > 0 &&
+        readableTextBlocks.every(blockOwnsTextColor);
+
+      if (allReadableTextOverridesSectionColor) {
+        colorContractViolations += 1;
+        fail(`${file} sets section text color but every readable text block overrides it`);
+      }
+    }
+  }
+
+  if (colorContractViolations === 0) {
+    pass('No section text color contracts are fully masked by child text colors');
+  }
+}
+
 async function validatePackages() {
   const themePatternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
   const packagedThemePatterns = themePatternFiles.map((file) =>
@@ -643,6 +723,7 @@ await validatePatternLibraryPolicy();
 await validateH1Policy();
 await validatePluginSecurityPolicy();
 await validatePatternHorizontalSpacing();
+await validateEditorControlContracts();
 await validatePatternRegistryChecks();
 await validatePackages();
 
