@@ -67,6 +67,28 @@ try {
     const filePath = path.join(outputDir, `${label}-${viewport.name}.png`);
     const target = page.locator(selector).first();
     await target.waitFor({ state: 'visible', timeout: 10000 });
+    await page.addStyleTag({
+      content: `
+        iframe[src*="tidio"],
+        iframe[src*="tawk"],
+        iframe[src*="intercom"],
+        iframe[src*="crisp"],
+        iframe[title*="chat" i],
+        [id*="tidio" i],
+        [class*="tidio" i],
+        [id*="tawk" i],
+        [class*="tawk" i],
+        [id*="intercom" i],
+        [class*="intercom" i],
+        [id*="crisp" i],
+        [class*="crisp" i],
+        [aria-label*="chat" i],
+        [title*="chat" i] {
+          display: none !important;
+          visibility: hidden !important;
+        }
+      `
+    });
     await page.waitForTimeout(500);
     await target.screenshot({ path: filePath });
     await page.close();

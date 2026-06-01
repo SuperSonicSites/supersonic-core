@@ -778,6 +778,14 @@ function sectionPromisesTextColor(block) {
   return Boolean(block?.attrs?.textColor || block?.attrs?.style?.color?.text);
 }
 
+function isNestedBackgroundPanel(block, sectionGroup) {
+  if (block.name !== 'core/group' || block === sectionGroup) {
+    return false;
+  }
+
+  return Boolean(block.attrs.backgroundColor || block.attrs.style?.color?.background);
+}
+
 function isSupportedJustification(value) {
   return ['left', 'center', 'right'].includes(value);
 }
@@ -836,6 +844,15 @@ async function validateEditorControlContracts() {
     }
 
     const sectionGroup = getSectionGroup(blocks);
+    const nestedBackgroundPanels = blocks.filter((block) =>
+      isNestedBackgroundPanel(block, sectionGroup) &&
+      hasDescendant(block, isReadableTextBlock) &&
+      !sectionPromisesTextColor(block)
+    );
+    for (const block of nestedBackgroundPanels) {
+      fail(`${file} uses a nested background card/panel without explicit readable text color`);
+    }
+
     const readableSectionBlocks = blocks.filter((block) => shouldInheritSectionTextColor(block, sectionGroup));
     const locallyColoredReadableBlocks = readableSectionBlocks.filter(blockOwnsTextColor);
 

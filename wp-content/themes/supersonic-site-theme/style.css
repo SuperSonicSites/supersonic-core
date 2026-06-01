@@ -34,6 +34,15 @@ Text Domain: supersonic-site-theme
 
 .supersonic-brand-lockup .wp-block-site-title {
 	margin: 0;
+	min-width: 0;
+}
+
+.supersonic-brand-lockup .wp-block-site-title,
+.supersonic-brand-lockup .wp-block-site-title a {
+	font-size: var(--wp--preset--font-size--body);
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+	word-break: normal;
 }
 
 .supersonic-pattern-image {
@@ -45,10 +54,3 @@ Text Domain: supersonic-site-theme
 	width: 100%;
 }
 
-.supersonic-site-footer .wp-block-site-title,
-.supersonic-site-footer .wp-block-site-title a {
-	font-size: var(--wp--preset--font-size--body);
-	line-height: 1.25;
-	overflow-wrap: anywhere;
-	word-break: normal;
-}
