@@ -29,8 +29,8 @@ documentation links resolve.
 | Hero: Fullscreen Image | `supersonic-site-theme/hero-fullscreen-image` | Supersonic Heroes | Source ready, needs staging QA | Fullscreen image hero with editable H1 and overlay controls. |
 | Section: Page Intro | `supersonic-site-theme/section-page-intro` | Supersonic Intros | Source ready, needs staging QA | Compact page intro with one editable H1. |
 | Section: Text | `supersonic-site-theme/section-text` | Supersonic Intros | Source ready, needs staging QA | Narrow editorial text section. |
-| Section: Text + Image | `supersonic-site-theme/section-text-image` | Supersonic Media | Source ready, needs staging QA | Two-column copy, CTA buttons, and visual placeholder; image stacks first on mobile. |
-| Section: Image + Text | `supersonic-site-theme/section-image-text` | Supersonic Media | Source ready, needs staging QA | Reverse two-column visual and copy section with CTA buttons; image stacks first on mobile. |
+| Section: Text + Image | `supersonic-site-theme/section-text-image` | Supersonic Media | Approved in theme v0.1.31 | Two-column copy, CTA buttons, and visual placeholder; image stacks first on mobile. |
+| Section: Image + Text | `supersonic-site-theme/section-image-text` | Supersonic Media | Approved in theme v0.1.31 | Reverse two-column visual and copy section with CTA buttons; image stacks first on mobile. |
 | Section: Media Feature | `supersonic-site-theme/section-media-feature` | Supersonic Media | Source ready, needs staging QA | Large media placeholder with supporting text. |
 | Section: Feature Grid | `supersonic-site-theme/section-feature-grid` | Supersonic Cards | Source ready, needs staging QA | Three benefit cards with approved shadow preset. |
 | Section: Service Cards | `supersonic-site-theme/section-service-cards` | Supersonic Cards | Source ready, needs staging QA | Three linked service cards. |
