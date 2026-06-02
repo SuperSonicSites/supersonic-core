@@ -5,6 +5,48 @@ description: Use when reviewing a Supersonic pattern or section visually on Host
 
 # Visual QA Skill
 
+Also follow `docs/agent-quality-standard.md`.
+
+## Discovery
+
+Start by discovering the QA scope from repo facts: latest report, package
+version, pattern registry entry, affected source file, staging readiness, and
+available QA page status. Do not ask the user for a target that the latest
+report, registry, or user request already identifies.
+
+## Contract
+
+Define the reviewed target, selector, viewport set, expected layout behavior,
+editor-control claims, and interactive states before capturing screenshots.
+For a pattern, include the control contract card from `pattern-builder`.
+
+## Proof Gates
+
+- Use cache-busted staging URLs for final screenshots and browser assertions.
+- Capture desktop, tablet, and mobile screenshots of the reviewed target.
+- On `qa-pattern-*` pages, target the reviewed pattern under `main`.
+- Assert the target is visible with non-zero dimensions.
+- Assert no horizontal overflow and no console/page errors.
+- Capture required interaction states: header/nav open and closed, desktop hover
+  panels, mobile/tablet overlays, accordions, details blocks, and any other
+  stateful UI.
+- Run `npm run pattern:proof` when a staging URL and selector are available.
+- Update the report with a `Proof Summary`.
+
+## Failure Policy
+
+If proof is incomplete, report `needs-revision` instead of approval. Missing
+desktop/tablet/mobile screenshots, missing interaction-state evidence, wrong
+selector targeting, console errors, overflow, or a staging version mismatch all
+block approval.
+
+## Report
+
+Include scope, target selector, cache-busted URL, screenshots, static/staging
+checks, interaction evidence, issues, fixes, manual-only gaps, and approval
+status. For pattern reviews, update `data/pattern-certifications.json` and pass
+`npm run pattern:registry:check`.
+
 A self-contained runbook for screenshot-based visual QA on Hostinger staging.
 Follow these steps in order — do not re-derive the process or re-read the whole doc set.
 

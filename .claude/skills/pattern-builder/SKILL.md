@@ -13,11 +13,38 @@ Use this skill when creating or changing one WordPress block pattern.
 - Use native WordPress blocks first.
 - Use design tokens from `DESIGN_SYSTEM.md` and theme settings.
 - Define the editor-control contract before writing markup.
+- Follow `docs/agent-quality-standard.md`.
 - Do not create custom blocks unless approved.
 - Do not change global tokens unless approved.
 - Do not add third-party plugins.
 
-## Control Ownership Contract
+## Discovery
+
+Before changing markup, inspect the current pattern file, category peers,
+`docs/gutenberg-authoring-standard.md`, `DESIGN_SYSTEM.md`,
+`docs/design-tokens-standard.md`, `data/pattern-certifications.json`, and the
+theme `CLAUDE.md`. Check `git status --short` and preserve unrelated local work.
+
+Do not ask the user to restate facts that are already in source, reports, or the
+registry. Ask only for real product/design tradeoffs such as whether a section
+should be fixed-position by design or support an editor-facing alignment
+control.
+
+## Contract
+
+Write a control contract card before editing:
+
+```text
+Pattern:
+Category:
+Selected block:
+Promised controls:
+Owning block for each control:
+Expected proof:
+Manual-only gaps:
+```
+
+### Control Ownership Contract
 
 Every pattern must make clear which block owns each editor control. Do not rely
 on a parent-level control if child blocks override it or if the pattern layout
@@ -89,6 +116,36 @@ When improving an existing pattern, preserve its visual intent while making the
 editor controls truthful. Fix source markup before treating screenshots as
 approval evidence. For category batches, certify each pattern independently even
 when the source changes ship together.
+
+## Proof Gates
+
+- Static proof: run `npm run validate` and fix failures before approval.
+- Registry proof: update `data/pattern-certifications.json` when certifying and
+  run `npm run pattern:registry:check`.
+- Staging proof: use cache-busted staging URLs for final screenshots.
+- Selector proof: when using a `qa-pattern-*` page, target the reviewed pattern
+  under `main`, not site chrome or the full page unless the full component is the
+  target.
+- Visual proof: capture desktop, tablet, and mobile screenshots.
+- Interaction proof: capture hover/click/open/closed states for headers,
+  navigation, accordions, overlays, and any interactive pattern.
+- Editor-control proof: verify section color, readable text color, link color,
+  button color, spacing, typography, radius/shadow, media replacement, and any
+  promised justification controls.
+
+## Failure Policy
+
+Fail closed. Do not mark a pattern approved when a promised editor control is
+masked, screenshots are missing, staging is on the wrong version, browser checks
+show console errors or horizontal overflow, or interaction-state evidence is
+missing for an interactive component. Use `needs-revision` and name the missing
+proof.
+
+## Report
+
+Every pattern report must include scope, the control contract card, a `Proof
+Summary`, screenshots, static checks, staging checks, interaction checks when
+relevant, issues/fixes, manual-only gaps, and approval status.
 
 ## Workflow
 

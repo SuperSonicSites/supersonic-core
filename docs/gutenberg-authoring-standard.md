@@ -6,6 +6,10 @@ All visual website output must remain editable and maintainable in the WordPress
 
 Do not use Custom HTML blocks for layout or design work.
 
+Also follow `docs/agent-quality-standard.md`: define the editor-control
+contract before acting, prove critical claims, and fail closed when proof is
+missing.
+
 ## Build Order
 
 Use this order unless the user explicitly approves an exception:
@@ -109,6 +113,18 @@ Local surface exception:
 Patterns must be built around the editor controls they actually support. A
 visible Gutenberg control is a promise: if an editor can reasonably expect the
 control to affect the pattern, the pattern structure must make the effect clear.
+
+Every pattern build or remediation must include this card before editing:
+
+```text
+Pattern:
+Category:
+Selected block:
+Promised controls:
+Owning block for each control:
+Expected proof:
+Manual-only gaps:
+```
 
 Control ownership:
 
@@ -231,3 +247,13 @@ Every visual pattern, template, or block must be reviewed on Hostinger staging w
 - editor-control contract check for section background/text color, text-block
   typography, button colors, media replacement, local card styling, and any
   promised hero positioning
+- cache-busted final staging URL
+- selector proof that a QA page capture targets the reviewed pattern under
+  `main`
+- interaction-state proof for header, footer, navigation, accordion, overlay,
+  hover, click, open, and closed behavior where relevant
+- report `Proof Summary` covering static proof, staging proof, visual proof,
+  interaction proof, and manual-only gaps
+
+If any required proof is missing, the status is `needs-revision`, not
+`approved`.

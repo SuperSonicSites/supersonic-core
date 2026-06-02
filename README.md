@@ -28,6 +28,7 @@ Default visual decisions are governed by `docs/design-tokens-standard.md` and im
 
 Theme and pattern changes are certified with `docs/workflows/theme-pattern-certification.md`.
 Environment and secret handling is defined in `docs/environment-and-secrets.md`.
+Agent behavior and proof gates are defined in `docs/agent-quality-standard.md`.
 
 ## Operating Model
 
@@ -90,19 +91,25 @@ wp-content/plugins/              small site-core plugin skeleton
 ## Tooling
 
 ```text
-npm run package       Build WordPress upload zips from source
-npm run package:determinism
-npm run validate      Run static framework checks
-npm run rest:check    Check staging REST availability
-npm run rest:certify  Read-only staging certification summary
-npm run certify:staging -- <theme-version> <plugin-version>  Verify active staging versions
-npm run rest:qa-pages List staging-only qa-pattern pages
-npm run rest:qa-page:dry-run -- <pattern-slug>
-npm run rest:qa-page:trash-dry-run -- <page-id>
-npm run rest:dry-run  Validate a planned staging REST write without sending it
-npm run pattern:registry:check      Validate pattern certification registry and evidence
-npm run test:updater-parser         Test exact GitHub Release asset parsing
-npm run screenshot    Capture desktop/tablet/mobile screenshots when Playwright is installed
+npm run package                     Build WordPress theme and plugin upload zips from source
+npm run package:determinism         Verify package builds are deterministic (no hash drift)
+npm run validate                    Run static framework checks (token usage, pattern structure)
+npm run agents:check                Validate repo-local skills, commands, and proof docs
+npm run pattern:proof -- --url <url> --selector "main <selector>"   Browser proof for a staged pattern
+npm run rest:check                  Verify staging REST API is reachable
+npm run rest:certify                Read-only staging certification summary
+npm run certify:staging             Alias for rest:certify
+npm run rest:qa-pages               List all staging-only qa-pattern pages
+npm run rest:qa-page:dry-run -- <slug>        Preview a QA page creation without sending it
+npm run rest:qa-page:trash-dry-run -- <id>    Preview a QA page deletion without sending it
+npm run rest:qa-page:create -- <slug>         Create a temporary QA page on staging
+npm run rest:qa-page:trash -- <id>            Delete a temporary QA page from staging
+npm run rest:dry-run                Validate a planned staging REST write without sending it
+npm run pattern:registry:check      Validate pattern-certifications.json and screenshot evidence
+npm run test:updater-parser         Test exact GitHub Release asset parsing (PHP CLI)
+npm run version:check               Check if version bumps are needed
+npm run version:bump                Increment version in package.json and theme/plugin headers
+npm run screenshot                  Capture desktop/tablet/mobile screenshots via Playwright
 ```
 
 ## Recommended First Build Step

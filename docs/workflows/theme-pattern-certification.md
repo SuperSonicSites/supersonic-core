@@ -1,6 +1,7 @@
 # Theme And Pattern Certification Workflow
 
 Use this workflow before approving a new theme version or pattern increment.
+Also follow `docs/agent-quality-standard.md`.
 
 ## Purpose
 
@@ -25,6 +26,9 @@ This workflow applies to:
 - Live REST writes require explicit approval and a dry-run first.
 - Published `qa-pattern-*` pages are allowed on staging for live hosted screenshots.
 - QA page live writes must target a `staging.*` host and must never target production.
+- Final proof uses cache-busted staging URLs.
+- Reports require a `Proof Summary`.
+- Missing proof fails closed as `needs-revision`.
 - Commit only after staging review passes.
 
 ## Preflight
@@ -89,6 +93,18 @@ Open `wp-admin` manually and confirm:
 ## Token Editability Check
 
 For every pattern under review, confirm the content can be maintained without leaving the block editor.
+
+Before editing or certifying, define the pattern control contract card:
+
+```text
+Pattern:
+Category:
+Selected block:
+Promised controls:
+Owning block for each control:
+Expected proof:
+Manual-only gaps:
+```
 
 Minimum per-pattern checks:
 
@@ -198,7 +214,14 @@ Use:
 npm run screenshot -- --url <staging-url> --selector "<section-selector>" --label <label> --out screenshots/after/<review-folder>
 ```
 
-For QA pages, target the reviewed component selector rather than the whole page whenever possible.
+For final proof, prefer:
+
+```text
+npm run pattern:proof -- --url <staging-url> --selector "main <section-selector>" --label <label> --out screenshots/after/<review-folder>
+```
+
+For QA pages, target the reviewed component selector under `main` rather than
+the whole page whenever possible. Use a cache-busted URL for final captures.
 
 Review:
 
@@ -210,6 +233,16 @@ Review:
 - horizontal overflow
 - console errors
 - header/footer behavior when relevant
+- target visibility and non-zero dimensions
+- interaction states when relevant
+
+Interactive components need explicit state evidence:
+
+- header/navigation closed state
+- desktop hover/focus dropdown or mega-panel state
+- tablet/mobile open overlay state
+- accordion/details open and closed states
+- focus/keyboard state where relevant
 
 ## Report
 
@@ -219,16 +252,36 @@ Create a report in:
 docs/reports/
 ```
 
+## Proof Summary
+
+Every certification report must include this section:
+
+```text
+## Proof Summary
+
+- Static proof:
+- Staging proof:
+- Visual proof:
+- Interaction proof:
+- Editor-control proof:
+- Manual-only gaps:
+```
+
 The report must include:
 
 - scope reviewed
+- contract
+- `Proof Summary`
 - QA page title, slug, URL, and cleanup status, if one was used
 - active theme/plugin version
 - checks run
 - screenshots captured
+- cache-busted URL and selector
+- interaction-state evidence, if relevant
 - editor check result
 - issues found
 - fixes made
+- manual-only gaps
 - remaining risks
 - approval status
 
@@ -250,9 +303,11 @@ The registry must pass before marking a pattern approved.
 
 Commit only after:
 
+- `npm run agents:check` passes
 - static validation passes
 - staging certification passes
 - screenshots are reviewed
+- required interaction states are captured
 - editor check passes
 - report is written
 - pattern registry is updated

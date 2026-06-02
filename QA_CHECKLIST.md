@@ -2,6 +2,9 @@
 
 Use this checklist for staged review before changes are approved.
 
+Also follow `docs/agent-quality-standard.md`. QA approval is proof-first:
+missing evidence means `needs-revision`, not `approved`.
+
 ## Compatibility Checks
 
 Before packaging, staging review, or visual QA:
@@ -15,6 +18,10 @@ Before packaging, staging review, or visual QA:
 ## Screenshot Review
 
 Every visual change requires screenshots for the specific section or pattern changed.
+
+Final screenshots should use cache-busted staging URLs. On `qa-pattern-*` pages,
+the selector should target the reviewed component under `main`; do not approve a
+capture of unrelated page chrome when the pattern itself was the target.
 
 Capture:
 
@@ -39,6 +46,16 @@ Review:
 - mobile stacking
 - tablet layout
 - desktop layout
+- target is visible with non-zero dimensions
+- no console or page errors
+
+Interactive visual changes require state evidence:
+
+- closed and open states for headers, navigation, overlays, accordions, and
+  details blocks
+- desktop hover/focus states for dropdowns and mega panels
+- tablet and mobile overlay states where menus collapse
+- focus and keyboard states where interaction is keyboard reachable
 
 ## Token Editability Review
 
@@ -75,6 +92,7 @@ Confirm:
 - header/footer template parts mount patterns instead of duplicating markup
 - navigation CSS is scoped to `.supersonic-site-header`
 - shadows use approved theme presets only
+- reports include a `Proof Summary`
 - FAQ patterns that need schema use `rank-math/faq-block`
 - Rank Math SEO and its Schema module are active before FAQ schema QA
 
@@ -91,6 +109,7 @@ For new visual patterns, template parts, and approved custom blocks:
 - REST creation had a dry-run first
 - REST cleanup had a dry-run first
 - screenshots target the reviewed component, not unrelated page chrome
+- final screenshot URLs are cache-busted
 - QA page is trashed/deleted after approval unless intentionally kept in the staging pattern lab
 
 ## Pattern Approval Criteria
@@ -114,6 +133,8 @@ A pattern is approved only when it:
 - has readable text
 - has accessible buttons and links
 - uses appropriate image cropping
+- has a report `Proof Summary` with static proof, staging proof, visual proof,
+  interaction proof when relevant, and manual-only gaps
 
 ## Accessibility Checks
 
@@ -159,9 +180,16 @@ Check:
 Every QA report should include:
 
 - scope reviewed
+- contract
+- proof summary
 - screenshots captured
+- cache-busted URL and selector
 - pattern registry status, when reviewing a theme pattern
+- static checks run
+- staging/browser checks run, if relevant
+- interaction-state evidence, if relevant
 - issues found
 - fixes made
+- manual-only gaps
 - remaining risks
 - approval status

@@ -152,6 +152,38 @@ Each pattern must:
 - preserve readable text
 - use accessible buttons and links
 
+## Pattern Control Contracts
+
+Every pattern must define which block owns each editor control before it is
+built or changed. QA approval must include proof that the promised controls are
+visible and truthful.
+
+Global defaults:
+
+- the outer section rides the theme 5% gutter and 1440px desktop container
+- the outer section owns background color and vertical section spacing
+- normal heading, paragraph, list, and quote text should inherit explicit
+  section or local-surface text color unless a child override is intentional
+- buttons own their normal color contract locally; button labels inherit an
+  ancestor text color only when the button has no local text color
+- typography belongs on text blocks, not on group wrappers
+- plain inner wrappers do not add horizontal padding; only real local surfaces
+  such as cards, CTA panels, form panels, and media/card surfaces may use
+  tokenized interior padding
+
+Category defaults:
+
+- Heroes may promise visible left, center, and right positioning. If they do,
+  the selected block must actually move the content rail.
+- Media split sections use explicit image-left/text-right and
+  text-left/image-right variants instead of generic group justification.
+- Cards own local card surface, border, radius, shadow, padding, and local text
+  choices.
+- CTAs need light/dark contrast checks for headings, body copy, inline links,
+  and buttons.
+- Header and footer patterns follow template-part and navigation contracts
+  before generic section rules.
+
 FAQ sections that need schema should use the approved Rank Math FAQ block. The theme must not add duplicate FAQ JSON-LD.
 
 ## Pattern Library Policy

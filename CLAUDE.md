@@ -67,6 +67,25 @@ Any live REST or staging write also follows `docs/workflows/theme-pattern-certif
 
 These repo skills in `.claude/skills/` are canonical; prefer them over similarly named global skills (use this repo's `visual-qa` and `pattern-builder`, not generic look-alikes).
 
+## Agent Quality Standard
+
+All repo-local agents and commands must follow `docs/agent-quality-standard.md`.
+
+Default behavior:
+
+- discover repo facts before asking the user
+- ask only for real product, design, security, deployment, or approval tradeoffs
+- define the contract before acting
+- prove critical claims with static checks, staging/browser checks, screenshots,
+  reports, or clearly named manual-only gaps
+- fail closed when proof is missing
+- preserve unrelated local work
+
+Pattern work must include a control contract card before editing. Visual QA and
+certification reports must include a `Proof Summary`. Header, footer,
+navigation, accordion, overlay, and hover/click behavior needs interaction-state
+evidence before approval.
+
 ## Gutenberg Authoring & Build Order
 
 Build in this order; only move down the list when the levels above genuinely cannot solve the need cleanly:

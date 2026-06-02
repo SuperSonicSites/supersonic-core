@@ -205,6 +205,14 @@ async function validateCssGuardrails() {
   } else {
     fail('pattern contract CSS must be enqueued on the front end and loaded in the editor');
   }
+
+  const navigationCssPath = 'wp-content/themes/supersonic-site-theme/assets/css/navigation.css';
+  const navigationCss = await readText(navigationCssPath);
+  if (hasUnscopedHeaderBreakpointCss(navigationCss)) {
+    fail(`${navigationCssPath} must not change every header in the 600px-1023px breakpoint; scope variant behavior to a header variant class`);
+  } else {
+    pass(`${navigationCssPath} keeps 600px-1023px header variant behavior scoped`);
+  }
 }
 
 async function validateJsonFile(relativePath) {
@@ -395,6 +403,8 @@ async function validatePackageScripts() {
   const requiredScripts = [
     'package',
     'validate',
+    'agents:check',
+    'pattern:proof',
     'package:determinism',
     'rest:check',
     'rest:certify',
@@ -413,6 +423,77 @@ async function validatePackageScripts() {
       pass(`package.json defines npm run ${script}`);
     } else {
       fail(`package.json missing npm run ${script}`);
+    }
+  }
+}
+
+function parseSemver(value) {
+  return String(value ?? '')
+    .split('.')
+    .map((part) => Number.parseInt(part, 10))
+    .map((part) => Number.isFinite(part) ? part : 0);
+}
+
+function semverGte(left, right) {
+  const leftParts = parseSemver(left);
+  const rightParts = parseSemver(right);
+  for (let index = 0; index < Math.max(leftParts.length, rightParts.length); index += 1) {
+    const leftValue = leftParts[index] ?? 0;
+    const rightValue = rightParts[index] ?? 0;
+    if (leftValue > rightValue) {
+      return true;
+    }
+    if (leftValue < rightValue) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function hasProofSummary(content) {
+  return /(^|\n)##\s+Proof Summary\b/i.test(content);
+}
+
+function hasInteractionEvidence(content) {
+  const lower = content.toLowerCase();
+  return lower.includes('interaction proof') ||
+    lower.includes('interaction-state') ||
+    (lower.includes('closed state') && (lower.includes('open overlay') || lower.includes('hover')));
+}
+
+function hasUnscopedHeaderBreakpointCss(content) {
+  const mediaBlocks = [...content.matchAll(/@media\s*\(min-width:\s*600px\)\s*and\s*\(max-width:\s*1023px\)\s*\{([\s\S]*?)\n\}/g)];
+  return mediaBlocks.some((block) =>
+    /\.supersonic-site-header\b/.test(block[1]) &&
+    !/\.supersonic-site-header--[\w-]+\b/.test(block[1])
+  );
+}
+
+async function validateCertificationProofReports() {
+  const registry = JSON.parse(await readText('data/pattern-certifications.json'));
+  for (const entry of registry.patterns ?? []) {
+    if (entry.status !== 'approved' || !semverGte(entry.certifiedThemeVersion, '0.1.29')) {
+      continue;
+    }
+
+    if (!entry.reportPath || !(await exists(entry.reportPath))) {
+      fail(`${entry.slug} approved at ${entry.certifiedThemeVersion} must have an accessible certification report`);
+      continue;
+    }
+
+    const report = await readText(entry.reportPath);
+    if (hasProofSummary(report)) {
+      pass(`${entry.reportPath} includes a Proof Summary for ${entry.slug}`);
+    } else {
+      fail(`${entry.reportPath} must include a Proof Summary before ${entry.slug} can stay approved`);
+    }
+
+    if (entry.category === 'supersonic-headers' || entry.category === 'supersonic-footers') {
+      if (hasInteractionEvidence(report)) {
+        pass(`${entry.reportPath} includes interaction-state evidence for ${entry.slug}`);
+      } else {
+        fail(`${entry.reportPath} must include interaction-state evidence for ${entry.slug}`);
+      }
     }
   }
 }
@@ -1087,6 +1168,7 @@ await validatePatternHorizontalSpacing();
 await validateEditorControlContracts();
 await validateCategoryContracts();
 await validatePatternRegistryChecks();
+await validateCertificationProofReports();
 await validatePackages();
 
 for (const check of checks) {

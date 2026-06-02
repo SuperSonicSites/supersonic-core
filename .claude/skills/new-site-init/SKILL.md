@@ -10,6 +10,7 @@ description: Use when starting or initializing a new single-site WordPress websi
 Initialize a new single-site WordPress website build from this framework before coding begins.
 
 Use this skill to turn missing project context into practical repo documentation, a phased build plan, and clear approval gates.
+Also follow `docs/agent-quality-standard.md`.
 
 This workflow reflects the Supersonic operating model:
 
@@ -25,6 +26,40 @@ Claude only needs staging REST access for V1 work:
 - `WP_STAGING_URL`
 - `WP_REST_USER`
 - `WP_REST_APP_PASSWORD`
+
+## Discovery
+
+Inspect the repo, current project docs, intake schema/data, scoped instructions,
+and `git status --short` before interviewing the user. Ask only for site facts,
+brand decisions, approvals, or business tradeoffs that are not already captured
+in repo files.
+
+## Contract
+
+Define the init contract before editing docs: project identity, required docs,
+known facts to preserve, open questions, approval gates, no-coding boundary, and
+the phased build plan expected at handoff.
+
+## Proof Gates
+
+- Prove required files/folders were inspected or list what is missing.
+- Prove generated docs preserve known repo facts and place unknowns in `Open
+  Questions`.
+- Prove production, credential, REST, plugin, custom-block, and token approval
+  gates remain visible.
+- Prove no coding/build work started before approval.
+
+## Failure Policy
+
+Fail closed when project facts are missing, approval gates are unclear, or docs
+would overwrite specific existing context without reason. Stop before coding
+until the user approves the build plan.
+
+## Report
+
+Include inspected files, docs created or updated, preserved facts, open
+questions, proof summary, phased plan, assumptions, approval requested, and the
+next recommended step.
 
 ## When To Use
 

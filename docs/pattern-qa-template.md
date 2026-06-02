@@ -28,6 +28,16 @@ Use this template for each pattern review.
 - Certified theme version:
 - Report path:
 
+## Proof Summary
+
+- Static proof:
+- Staging proof:
+- Visual proof:
+- Interaction proof:
+- Editor-control proof:
+- Manual-only gaps:
+- Fail-closed status if any proof is missing:
+
 ## Intent
 
 Briefly describe where this pattern should be used and what job it does.
@@ -46,6 +56,10 @@ Briefly describe where this pattern should be used and what job it does.
 
 ## Editor Control Contract
 
+- Selected block:
+- Promised controls:
+- Owning block for each control:
+- Expected proof:
 - Pattern category contract:
 - Section background color works:
 - Section text color affects normal readable copy, or intentional child overrides are documented:
@@ -85,6 +99,8 @@ Briefly describe where this pattern should be used and what job it does.
 
 ## Screenshots
 
+- Cache-busted URL:
+- Selector:
 - Desktop:
 - Tablet:
 - Mobile:

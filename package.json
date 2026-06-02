@@ -8,6 +8,8 @@
     "package": "node tools/package-wordpress-assets.mjs",
     "package:determinism": "node tools/check-package-determinism.mjs",
     "validate": "node tools/validate-framework.mjs",
+    "agents:check": "node tools/validate-agent-quality.mjs",
+    "pattern:proof": "node tools/pattern-proof.mjs",
     "rest:certify": "node tools/staging-rest.mjs certify",
     "rest:check": "node tools/staging-rest.mjs check",
     "rest:pages": "node tools/staging-rest.mjs pages",

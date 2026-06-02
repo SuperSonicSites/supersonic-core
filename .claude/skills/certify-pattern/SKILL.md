@@ -8,6 +8,7 @@ description: Use when certifying, packaging, or uploading a Supersonic theme ver
 Use this skill to certify one small visual system change at a time before packaging, upload, or a theme/plugin version bump.
 
 It is the operational wrapper around `docs/workflows/theme-pattern-certification.md`. That workflow doc is the source of truth; this skill is the run order.
+Also follow `docs/agent-quality-standard.md`.
 
 ## When To Use
 
@@ -27,6 +28,45 @@ Do not use this skill to author a brand-new pattern — use `pattern-builder` fo
 - Live REST writes require explicit approval and a dry-run first.
 - Published `qa-pattern-*` pages are allowed on staging for live hosted screenshot QA and must never be migrated to production.
 - Commit only after staging review passes.
+
+## Discovery
+
+Inspect package/theme/plugin versions, the changed source files, matching
+pattern registry entries, latest reports, staging read-only status, and current
+Git state before certifying. Do not ask for information that repo source or
+read-only staging checks can provide.
+
+## Contract
+
+Define the exact certification target, expected active versions, affected
+patterns, editor-control contract, required screenshots, interaction states,
+registry updates, and package checks before approving.
+
+## Proof Gates
+
+- Run `npm run validate`, `npm run package`, `npm run package:determinism`, and
+  `npm run pattern:registry:check`.
+- Run read-only staging checks before treating screenshots as final.
+- Use cache-busted staging URLs for final captures.
+- Use `npm run pattern:proof` for pattern targets when a staging URL and
+  selector are available.
+- Confirm desktop, tablet, and mobile screenshots target the reviewed component.
+- Confirm headers, footers, navigation, accordions, overlays, and similar
+  interactive components have open/closed or hover/click evidence.
+- Require a report `Proof Summary`.
+
+## Failure Policy
+
+Do not certify when validation fails, staging versions mismatch, screenshots are
+missing, the selector captured the wrong target, interaction evidence is missing,
+or editor-control proof is incomplete. Mark the target `needs-revision` and name
+the missing proof.
+
+## Report
+
+The certification report must include scope, contract, `Proof Summary`, QA page
+status, registry status, active versions, checks, screenshots, editor result,
+issues/fixes, manual-only gaps, remaining risks, and approval status.
 
 ## Workflow
 

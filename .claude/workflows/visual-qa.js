@@ -1,10 +1,10 @@
 export const meta = {
   name: 'visual-qa',
-  description: 'Repo-agnostic visual QA: discover scope, create a temp QA page per pattern, capture 3 breakpoints, review, trash the page, adversarially verify, synthesize a report. Implements .claude/skills/visual-qa/SKILL.md.',
+  description: 'Repo-agnostic proof-first visual QA: discover scope, create a temp QA page per pattern, run browser proof plus screenshots, review, trash the page, adversarially verify, synthesize a report with Proof Summary. Implements .claude/skills/visual-qa/SKILL.md.',
   whenToUse: 'Run after a theme/pattern change to QA the current release on staging. Works on any site cloned from supersonic-core — discovers version, theme, targets, and staging at runtime. Defaults to a safe DRY-RUN (source-only, no staging writes). Pass args {live:true} to create/capture/trash temporary qa-pattern pages, and {targets:["hero-simple",...]} to restrict scope.',
   phases: [
     { title: 'Discover', detail: 'version, latest report, theme patterns, staging up', model: 'haiku' },
-    { title: 'Review', detail: 'per pattern: create QA page, capture 3 breakpoints, review, trash page', model: 'sonnet' },
+    { title: 'Review', detail: 'per pattern: create QA page, run pattern:proof, review screenshots/interactions, trash page', model: 'sonnet' },
     { title: 'Verify', detail: 'one agent per finding: refute against source', model: 'opus' },
     { title: 'Synthesize', detail: 'dedupe, prioritize, write the report', model: 'opus' },
   ],
@@ -40,7 +40,7 @@ const DISCOVER_SCHEMA = {
 
 const REVIEW_SCHEMA = {
   type: 'object',
-  required: ['target', 'pageLifecycle', 'screenshots', 'findings'],
+  required: ['target', 'pageLifecycle', 'screenshots', 'proofSummary', 'findings'],
   properties: {
     target: { type: 'string' },
     pageLifecycle: {
@@ -55,6 +55,17 @@ const REVIEW_SCHEMA = {
       },
     },
     screenshots: { type: 'array', items: { type: 'string' } },
+    proofSummary: {
+      type: 'object',
+      required: ['staticProof', 'stagingProof', 'visualProof', 'interactionProof', 'manualOnlyGaps'],
+      properties: {
+        staticProof: { type: 'string' },
+        stagingProof: { type: 'string' },
+        visualProof: { type: 'string' },
+        interactionProof: { type: 'string' },
+        manualOnlyGaps: { type: 'string' },
+      },
+    },
     findings: {
       type: 'array',
       items: {
@@ -191,8 +202,8 @@ ${dryRunOnly
    npm run rest:qa-page:create -- confirm ${t.patternSlug}
    Parse the JSON result for "id" and "link" (it may say "reused" if the page already existed — that is fine). Record id and url in pageLifecycle. If create fails, set created=false, note the error, skip capture, and still attempt nothing to trash.
 2. CAPTURE all three breakpoints in one run (desktop 1440 / tablet 768 / mobile 390 are automatic):
-   npm run screenshot -- --url "<link from step 1>" --selector "main" --label "${t.name}" --out "screenshots/after/${reviewFolder}"
-   If it errors with a Playwright error, run \`npm install\` once and retry. The QA page renders the pattern as the main content plus theme header/footer; review the pattern, noting chrome only if it interferes.
+   npm run pattern:proof -- --url "<link from step 1>" --selector "main" --label "${t.name}" --out "screenshots/after/${reviewFolder}"
+   If it errors with a Playwright error, run \`npm install\` once and retry. The proof command cache-busts the URL, asserts target visibility, checks horizontal overflow, checks console/page errors, and writes desktop/tablet/mobile screenshots. The QA page renders the pattern as the main content plus theme header/footer; review the pattern, noting chrome only if it interferes. For headers, navigation, overlays, accordions, hover menus, and other stateful UI, add or separately capture interaction-state proof.
 3. READ each captured PNG.
 4. REVIEW against QA_CHECKLIST.md (Screenshot Review + Token Editability) and DESIGN_SYSTEM.md: token-based spacing (one section spacing token), no horizontal overflow, 5% gutter + 1440px max width, typography scale, readability, alignment, hierarchy, image cropping, CTA visibility, mobile stacking, tablet layout, approved shadow presets only (soft/medium), consistency with the design system. Cross-check against these known-open items if relevant: ${JSON.stringify(scope.knownOpenFindings || [])}.
 5. TRASH the temp page to clean up (REQUIRED):
@@ -201,13 +212,13 @@ ${dryRunOnly
 
 For each issue give it a stable id "${t.name}-N", a severity, the breakpoint, concrete evidence (what you saw in which screenshot, or "source-only" in dry-run), and suspectedSource (pattern file + line/token). If clean, return an empty findings array. Do not write scratch files into the repo.
 
-Return the review JSON (include screenshot paths and the pageLifecycle object).${FINAL}`,
+Return the review JSON (include screenshot paths, proofSummary, and the pageLifecycle object).${FINAL}`,
     { schema: REVIEW_SCHEMA, model: 'sonnet', phase: 'Review', label: `review:${t.name}` }
   ),
   // Stage 3: verify each finding — Opus
   (review, t) => {
     if (!review || !review.findings || review.findings.length === 0) {
-      return { target: t.name, lifecycle: review?.pageLifecycle, screenshots: review?.screenshots || [], verified: [] }
+      return { target: t.name, lifecycle: review?.pageLifecycle, screenshots: review?.screenshots || [], proofSummary: review?.proofSummary, verified: [] }
     }
     return parallel(
       review.findings.map((f) => () =>
@@ -223,7 +234,7 @@ Open the pattern file (${t.file}) and any token definitions in theme.json / DESI
           { schema: VERDICT_SCHEMA, model: 'opus', phase: 'Verify', label: `verify:${f.id}` }
         ).then((v) => ({ ...f, ...(v || { verdict: 'false-positive', reasoning: 'verifier returned null', sourceConfirmed: false }) }))
       )
-    ).then((verified) => ({ target: t.name, lifecycle: review.pageLifecycle, screenshots: review.screenshots, verified: verified.filter(Boolean) }))
+    ).then((verified) => ({ target: t.name, lifecycle: review.pageLifecycle, screenshots: review.screenshots, proofSummary: review.proofSummary, verified: verified.filter(Boolean) }))
   }
 )
 
@@ -255,6 +266,8 @@ Context:
 - targets: ${scope.targets.length}; with real captures: ${captured.length}
 - QA pages possibly not trashed: ${JSON.stringify(leakedPages.map((r) => ({ target: r.target, pageId: r.lifecycle?.pageId })))}
 - screenshots captured: ${JSON.stringify(allShots)}
+- proof summaries: ${JSON.stringify(clean.map((r) => ({ target: r.target, proofSummary: r.proofSummary })))}
+The report must include a Proof Summary, cache-busted URL/selector evidence where available, interaction-state evidence where relevant, screenshots, manual-only gaps, and fail-closed approval status when proof is incomplete.
 - CONFIRMED findings (verdict=real): ${JSON.stringify(real)}
 - DISMISSED (verdict=false-positive — list as "considered and dismissed" so future runs do not re-flag): ${JSON.stringify(dismissed)}
 
