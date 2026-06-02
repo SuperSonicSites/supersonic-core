@@ -307,7 +307,7 @@ by the site-core plugin / Rank Math / the SEO pass (theme = presentation, plugin
 - **[SD-2]** Local pages: ensure consistent NAP (name, address, phone) in the
   footer/contact, opening hours, and a map/area-served — the content a
   most-specific `LocalBusiness` subtype needs.
-- **[SD-3]** Do **not** plan `HowTo` for rich results (deprecated Sept 2023) and
+- **[SD-3]** Do **not** plan `HowTo` for rich results (deprecated 2023) and
   do **not** rely on `FAQPage` for rich results (Google retiring FAQ rich
   results through 2026). Build steps and FAQs as semantic HTML; in this
   framework FAQ schema, when needed, is owned by the approved `rank-math/faq-block`
