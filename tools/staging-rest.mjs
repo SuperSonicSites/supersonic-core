@@ -295,6 +295,15 @@ async function dryRun() {
   console.log('Live staging writes require explicit user approval and a separate implementation step.');
 }
 
+async function readContentPayload(contentPath) {
+  const payloadText = await readFile(path.resolve(root, contentPath), 'utf8');
+  const payload = JSON.parse(payloadText);
+  if (typeof payload.content !== 'string' || payload.content.trim().length === 0) {
+    throw new Error(`--content payload ${contentPath} must have a non-empty string "content" field.`);
+  }
+  return payload.content;
+}
+
 async function qaPageDryRun() {
   const env = await loadEnv();
   const baseUrl = requireStagingUrl(env);
@@ -317,9 +326,7 @@ async function qaPageDryRun() {
   let content = patternSlug ? `<!-- wp:pattern {"slug":"${patternSlug}"} /-->` : null;
 
   if (contentPath) {
-    const payloadText = await readFile(path.resolve(root, contentPath), 'utf8');
-    const payload = JSON.parse(payloadText);
-    content = payload.content;
+    content = await readContentPayload(contentPath);
   }
 
   const payload = {
@@ -330,13 +337,13 @@ async function qaPageDryRun() {
   };
 
   console.log('QA page dry-run only. No request was sent.');
-  console.log(`Method: POST`);
+  console.log(`Method: POST (create, or update existing slug when used with --content)`);
   console.log(`URL: ${baseUrl}/wp-json/wp/v2/pages`);
   console.log(`Purpose: temporary staging-only pattern QA page`);
   console.log(`Payload: ${JSON.stringify(payload, null, 2)}`);
   console.log(`Screenshot URL: ${baseUrl}/${pageSlug}/`);
   console.log(`Screenshot command: npm run screenshot -- --url "${baseUrl}/${pageSlug}/" --selector "main" --label "${pageSlug}" --out "screenshots/after/${pageSlug}"`);
-  console.log('Live QA page creation requires explicit approval.');
+  console.log('Live QA page creation/update requires explicit approval.');
 }
 
 async function qaPageTrashDryRun() {
@@ -370,18 +377,22 @@ async function qaPageCreate() {
   const status = explicitStatus ?? npmStatus ?? 'publish';
   const patternPosition = npmStatus ? 1 : 0;
   const patternSlug = getArg('--pattern', positional[patternPosition]);
+  const contentPath = getArg('--content', patternSlug ? undefined : positional[patternPosition]);
 
   if (!auth) {
     throw new Error('WP_REST_USER and WP_REST_APP_PASSWORD are required for QA page creation.');
   }
-  if (!patternSlug) {
-    throw new Error('Provide --pattern theme/pattern-slug for QA page creation.');
+  if (!patternSlug && !contentPath) {
+    throw new Error('Provide --pattern theme/pattern-slug or --content path/to/payload.json for QA page creation.');
   }
 
-  const patternName = patternSlug.split('/').pop();
+  const patternName = patternSlug ? patternSlug.split('/').pop() : path.basename(contentPath, path.extname(contentPath));
   const pageTitle = title ?? `QA - Pattern - ${patternName}`;
   const pageSlug = `qa-pattern-${slugify(patternName)}`;
-  const content = `<!-- wp:pattern {"slug":"${patternSlug}"} /-->`;
+  let content = patternSlug ? `<!-- wp:pattern {"slug":"${patternSlug}"} /-->` : null;
+  if (contentPath) {
+    content = await readContentPayload(contentPath);
+  }
 
   if (!confirmed) {
     console.log('REFUSED: live QA page creation needs confirm. Run qa-page-dry-run first for approval, then re-run with confirm.');
@@ -391,10 +402,29 @@ async function qaPageCreate() {
 
   assertStagingHost(baseUrl);
 
-  // Idempotent: reuse an existing qa-pattern page instead of duplicating it.
+  const pagePayload = { status, title: pageTitle, slug: pageSlug, content };
+
+  // Idempotent for pattern references; --content updates existing pages so
+  // screenshots cannot accidentally prove stale layout markup.
   const existing = await readJson(`${baseUrl}/wp-json/wp/v2/pages?slug=${pageSlug}&status=any&context=edit`, { Authorization: auth });
+  if (!existing.response.ok || !Array.isArray(existing.data)) {
+    throw new Error(`Existing QA page lookup failed (${existing.response.status}): ${JSON.stringify(existing.data)}`);
+  }
   if (Array.isArray(existing.data) && existing.data.length > 0) {
     const page = existing.data[0];
+    if (contentPath) {
+      const update = await fetch(`${baseUrl}/wp-json/wp/v2/pages/${page.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: auth },
+        body: JSON.stringify(pagePayload)
+      });
+      const updatedPage = await update.json();
+      if (!update.ok) {
+        throw new Error(`QA page update failed (${update.status}): ${JSON.stringify(updatedPage)}`);
+      }
+      console.log(JSON.stringify({ updated: true, id: updatedPage.id, slug: updatedPage.slug, link: updatedPage.link, status: updatedPage.status }, null, 2));
+      return;
+    }
     console.log(JSON.stringify({ reused: true, id: page.id, slug: page.slug, link: page.link, status: page.status }, null, 2));
     return;
   }
@@ -402,7 +432,7 @@ async function qaPageCreate() {
   const res = await fetch(`${baseUrl}/wp-json/wp/v2/pages`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: auth },
-    body: JSON.stringify({ status, title: pageTitle, slug: pageSlug, content })
+    body: JSON.stringify(pagePayload)
   });
   const page = await res.json();
   if (!res.ok) {
@@ -443,7 +473,7 @@ async function qaPageTrash() {
 }
 
 if (!['check', 'certify', 'pages', 'qa-pages', 'dry-run', 'qa-page-dry-run', 'qa-page-trash-dry-run', 'qa-page-create', 'qa-page-trash'].includes(command)) {
-  console.error('Usage: node tools/staging-rest.mjs <check|certify|pages|qa-pages|dry-run|qa-page-dry-run|qa-page-trash-dry-run|qa-page-create|qa-page-trash> [theme-version plugin-version] [confirm] [status] [theme/pattern] [page-id] [--theme X.Y.Z] [--plugin X.Y.Z] [--pattern theme/pattern] [--id page-id] [--confirm] [--status publish] [--method POST] [--route /wp-json/wp/v2/pages] [--payload data/page-json/example.json]');
+  console.error('Usage: node tools/staging-rest.mjs <check|certify|pages|qa-pages|dry-run|qa-page-dry-run|qa-page-trash-dry-run|qa-page-create|qa-page-trash> [theme-version plugin-version] [confirm] [status] [theme/pattern] [page-id] [--theme X.Y.Z] [--plugin X.Y.Z] [--pattern theme/pattern] [--content data/page-json/example.json] [--id page-id] [--confirm] [--status publish] [--method POST] [--route /wp-json/wp/v2/pages] [--payload data/page-json/example.json]');
   process.exit(1);
 }
 

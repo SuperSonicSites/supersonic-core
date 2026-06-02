@@ -56,6 +56,8 @@ Then route by task. **Invoke the matching skill first** — each skill is the op
 |------|-------------------|--------------------------|
 | Start / initialize a new site build | `new-site-init` | repo docs it generates |
 | Build or change one pattern or section | `pattern-builder` | `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, theme `CLAUDE.md` |
+| Compose or assemble a full page layout from patterns | `layout-architect` | `docs/layout-standard.md`, `PAGE_MAP.md`, `BRAND.md`, `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `DESIGN_SYSTEM.md` |
+| Review / grade / QA a composed page layout | `layout-review` | `docs/layout-standard.md`, `QA_CHECKLIST.md` |
 | Visual / responsive screenshot review | `visual-qa` | `QA_CHECKLIST.md` |
 | Accessibility review | `accessibility-review` | `QA_CHECKLIST.md` |
 | On-page SEO audit | `seo-auditor` | `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `PAGE_MAP.md`, `BRAND.md` |

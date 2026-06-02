@@ -163,6 +163,7 @@ Core WordPress shadow presets are disabled, but Supersonic provides a small appr
 | --- | --- | --- |
 | `soft` | `0 8px 24px rgb(17 17 17 / 0.08)` | Subtle dropdowns, light image lift, low-emphasis cards |
 | `medium` | `0 16px 40px rgb(17 17 17 / 0.12)` | Featured images or cards that need stronger separation |
+| `strong` | `0 24px 56px rgb(17 17 17 / 0.16)` | High-emphasis elevation: popovers, featured/spotlight cards |
 
 Rules:
 
@@ -170,6 +171,24 @@ Rules:
 - Use approved shadow presets when an element needs depth.
 - Do not use one-off shadow values in CSS or patterns.
 - Add a new shadow preset only when a project has a clear visual reason.
+
+## Gradients
+
+Custom gradients are disabled; Supersonic provides a small approved gradient set
+for richer section backgrounds. Use them sparingly and keep readable text on the
+same group.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `surface-rise` | `linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%)` | Gentle base→surface depth on neutral sections |
+| `accent-veil` | `linear-gradient(135deg, #1f6feb 0%, #1a56c4 100%)` | Accent emphasis bands (hero/CTA); keep `accent-contrast` text |
+| `muted-soft` | `linear-gradient(180deg, #ffffff 0%, #f1f3f5 100%)` | Subtle base→muted depth |
+
+Rules:
+
+- Use approved gradient presets only; custom gradients stay disabled.
+- Keep AA contrast and set readable text on the same group for dark/accent bands.
+- Prefer flat token bands for segmentation; gradients are accents, not defaults.
 
 ## Page Heading Rule
 

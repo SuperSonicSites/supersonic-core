@@ -1,0 +1,323 @@
+<!--
+SAMPLE / FIXTURE — composed Service-archetype page content (goes inside <main>;
+header/footer come from the active template). Generic mock content, no real
+business. NOT a theme pattern; not scanned by npm run validate. Background
+sequence: base -> surface -> base -> muted -> surface -> contrast -> surface ->
+base -> accent. Exactly one H1 (hero). Generate the staging payload with:
+  node tools/make-sample-service-payload.mjs
+-->
+
+<!-- wp:group {"metadata":{"name":"Hero: Simple"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
+	<!-- wp:heading {"level":1,"fontSize":"heading-1"} -->
+	<h1 class="wp-block-heading has-heading-1-font-size">Commercial HVAC maintenance that prevents downtime</h1>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph {"fontSize":"large"} -->
+	<p class="has-large-font-size">Scheduled service and fast emergency repair for facilities teams that cannot afford a failed system.</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:buttons -->
+	<div class="wp-block-buttons">
+		<!-- wp:button -->
+		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/contact">Request a quote</a></div>
+		<!-- /wp:button -->
+		<!-- wp:button {"className":"is-style-outline"} -->
+		<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="tel:+15550100143">Call (555) 010-0143</a></div>
+		<!-- /wp:button -->
+	</div>
+	<!-- /wp:buttons -->
+	<!-- wp:image {"width":"1600px","height":"900px","sizeSlug":"large","style":{"border":{"radius":"var(--wp--custom--radius--medium)"}}} -->
+	<figure class="wp-block-image size-large is-resized has-custom-border"><img src="https://placehold.co/1600x900/1f6feb/ffffff?text=HVAC+Service" alt="Technician servicing a rooftop HVAC unit" width="1600" height="900" style="border-radius:var(--wp--custom--radius--medium)"/></figure>
+	<!-- /wp:image -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Page Intro"},"align":"full","backgroundColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:heading {"fontSize":"heading-2"} -->
+	<h2 class="wp-block-heading has-heading-2-font-size">Built for facilities that run on uptime</h2>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph -->
+	<p>If a rooftop unit fails, you need a partner who already knows your equipment. We pair scheduled maintenance with <a href="/services/emergency-hvac">emergency repair service</a> so small issues never become shutdowns.</p>
+	<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Text + Image"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:columns {"verticalAlignment":"center","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|xl","left":"var:preset|spacing|xl"}}}} -->
+	<div class="wp-block-columns are-vertically-aligned-center">
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center">
+			<!-- wp:heading {"fontSize":"heading-2"} -->
+			<h2 class="wp-block-heading has-heading-2-font-size">A plan that adapts to your equipment</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph -->
+			<p>We document every unit on your site, set a service cadence that matches its load, and flag parts before they fail. You get one schedule, one contact, and no surprises.</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:buttons -->
+			<div class="wp-block-buttons">
+				<!-- wp:button {"className":"is-style-outline"} -->
+				<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/services/maintenance-plans">See all maintenance plans</a></div>
+				<!-- /wp:button -->
+			</div>
+			<!-- /wp:buttons -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center">
+			<!-- wp:image {"width":"800px","height":"600px","sizeSlug":"large","style":{"border":{"radius":"var(--wp--custom--radius--medium)"}}} -->
+			<figure class="wp-block-image size-large is-resized has-custom-border"><img src="https://placehold.co/800x600/f7f8fa/4b5563?text=On-site+Visit" alt="Field technician inspecting an air handler" width="800" height="600" style="border-radius:var(--wp--custom--radius--medium)"/></figure>
+			<!-- /wp:image -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Process Steps"},"align":"full","backgroundColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+	<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Three steps to a serviced system</h2>
+	<!-- /wp:heading -->
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
+			<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>01</strong></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:heading {"level":3} -->
+			<h3 class="wp-block-heading">Book an assessment</h3>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph -->
+			<p>We inventory your equipment and review service history on site.</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
+			<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>02</strong></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:heading {"level":3} -->
+			<h3 class="wp-block-heading">Get a cadence</h3>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph -->
+			<p>We propose a service schedule and a flat monthly plan for your sign-off.</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
+			<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>03</strong></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:heading {"level":3} -->
+			<h3 class="wp-block-heading">Stay ahead</h3>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph -->
+			<p>We service on schedule, log every visit, and respond fast when you call.</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Feature Grid"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<div class="wp-block-group">
+		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Why facilities teams choose us</h2>
+		<!-- /wp:heading -->
+	</div>
+	<!-- /wp:group -->
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">2-hour emergency response</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">A technician is dispatched within two hours for plan customers, day or night.</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">Licensed, insured techs</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Every visit is performed by a certified technician with documented compliance.</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">One transparent invoice</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Flat monthly pricing with itemized visits — no per-call surprises.</p>
+				<!-- /wp:paragraph -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Testimonial"},"align":"full","backgroundColor":"contrast","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-base-color has-contrast-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:image {"width":"96px","height":"96px","className":"is-style-rounded"} -->
+	<figure class="wp-block-image is-resized is-style-rounded"><img src="https://placehold.co/96x96/111111/ffffff?text=DM" alt="Portrait of facilities manager Dana M." width="96" height="96"/></figure>
+	<!-- /wp:image -->
+	<!-- wp:quote -->
+	<blockquote class="wp-block-quote">
+		<!-- wp:paragraph {"fontSize":"large"} -->
+		<p class="has-large-font-size">They caught a failing compressor weeks before it would have shut down our data floor. We have not had an unplanned outage since.</p>
+		<!-- /wp:paragraph -->
+		<cite>Dana M., Facilities Manager</cite>
+	</blockquote>
+	<!-- /wp:quote -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Pricing Cards"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<div class="wp-block-group">
+		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Maintenance plans</h2>
+		<!-- /wp:heading -->
+	</div>
+	<!-- /wp:group -->
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">Essential</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"fontSize":"heading-3"} -->
+				<p class="has-heading-3-font-size"><strong>$199</strong>/mo</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Quarterly service for a single rooftop unit.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button {"className":"is-style-outline","width":100} -->
+					<div class="wp-block-button is-style-outline has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="/contact">Choose Essential</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)","color":"var:preset|color|accent","width":"2px"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background has-border-color" style="border-color:var(--wp--preset--color--accent);border-width:2px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
+				<p class="has-accent-color has-text-color has-small-font-size"><strong>MOST POPULAR</strong></p>
+				<!-- /wp:paragraph -->
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">Proactive</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"fontSize":"heading-3"} -->
+				<p class="has-heading-3-font-size"><strong>$449</strong>/mo</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Monthly service, priority dispatch, and parts forecasting.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button {"width":100} -->
+					<div class="wp-block-button has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="/contact">Choose Proactive</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">Enterprise</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"fontSize":"heading-3"} -->
+				<p class="has-heading-3-font-size"><strong>Custom</strong></p>
+				<!-- /wp:paragraph -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Multi-site coverage with a dedicated account team.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons">
+					<!-- wp:button {"className":"is-style-outline","width":100} -->
+					<div class="wp-block-button is-style-outline has-custom-width wp-block-button__width-100"><a class="wp-block-button__link wp-element-button" href="/contact">Talk to sales</a></div>
+					<!-- /wp:button -->
+				</div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: FAQ by Rank Math"},"align":"full","backgroundColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+	<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Frequently asked questions</h2>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph {"align":"center"} -->
+	<p class="has-text-align-center">Answers for facilities teams comparing maintenance coverage.</p>
+	<!-- /wp:paragraph -->
+
+	<!-- wp:rank-math/faq-block {"listStyle":"","titleWrapper":"h3","questions":[{"id":"sample-service-faq-1","title":"How fast is emergency response?","content":"<p>Plan customers get a technician dispatched within two hours, 24/7.</p>","visible":true},{"id":"sample-service-faq-2","title":"Do you service equipment you did not install?","content":"<p>Yes. We start with a full assessment and document every unit on your site.</p>","visible":true},{"id":"sample-service-faq-3","title":"Can we change plans later?","content":"<p>Plans are month-to-month. Scale coverage up or down as your sites change.</p>","visible":true}]} /-->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"CTA: Band"},"align":"full","backgroundColor":"accent","textColor":"accent-contrast","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-accent-contrast-color has-accent-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
+	<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+	<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Ready to prevent your next breakdown?</h2>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph {"align":"center"} -->
+	<p class="has-text-align-center">Book a free assessment and get a maintenance plan tailored to your equipment.</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+	<div class="wp-block-buttons">
+		<!-- wp:button {"backgroundColor":"base","textColor":"contrast"} -->
+		<div class="wp-block-button"><a class="wp-block-button__link has-contrast-color has-base-background-color has-text-color has-background wp-element-button" href="/contact">Request a quote</a></div>
+		<!-- /wp:button -->
+	</div>
+	<!-- /wp:buttons -->
+</div>
+<!-- /wp:group -->

@@ -100,9 +100,9 @@ npm run rest:check                  Verify staging REST API is reachable
 npm run rest:certify                Read-only staging certification summary
 npm run certify:staging             Alias for rest:certify
 npm run rest:qa-pages               List all staging-only qa-pattern pages
-npm run rest:qa-page:dry-run -- <slug>        Preview a QA page creation without sending it
+npm run rest:qa-page:dry-run -- <slug|--content path> Preview a QA page creation/update without sending it
 npm run rest:qa-page:trash-dry-run -- <id>    Preview a QA page deletion without sending it
-npm run rest:qa-page:create -- <slug>         Create a temporary QA page on staging
+npm run rest:qa-page:create -- <slug|--content path>  Create or update a temporary QA page on staging
 npm run rest:qa-page:trash -- <id>            Delete a temporary QA page from staging
 npm run rest:dry-run                Validate a planned staging REST write without sending it
 npm run pattern:registry:check      Validate pattern-certifications.json and screenshot evidence

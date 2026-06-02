@@ -60,6 +60,23 @@
           "name": "Accent Contrast",
           "slug": "accent-contrast"
         }
+      ],
+      "gradients": [
+        {
+          "name": "Surface Rise",
+          "gradient": "linear-gradient(180deg, #ffffff 0%, #f7f8fa 100%)",
+          "slug": "surface-rise"
+        },
+        {
+          "name": "Accent Veil",
+          "gradient": "linear-gradient(135deg, #1f6feb 0%, #1a56c4 100%)",
+          "slug": "accent-veil"
+        },
+        {
+          "name": "Muted Soft",
+          "gradient": "linear-gradient(180deg, #ffffff 0%, #f1f3f5 100%)",
+          "slug": "muted-soft"
+        }
       ]
     },
     "custom": {
@@ -96,6 +113,11 @@
           "name": "Medium",
           "shadow": "0 16px 40px rgb(17 17 17 / 0.12)",
           "slug": "medium"
+        },
+        {
+          "name": "Strong",
+          "shadow": "0 24px 56px rgb(17 17 17 / 0.16)",
+          "slug": "strong"
         }
       ]
     },

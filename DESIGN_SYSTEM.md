@@ -77,8 +77,9 @@ Do not add one-off colors in patterns. Add new palette colors only when a projec
 - Full-width media may use no radius
 - Prefer borders and spacing over shadows
 - Core WordPress shadow presets are disabled by default
-- Approved Supersonic shadow presets are available for images, cards, dropdowns, and featured elements
-- Do not use arbitrary shadow values
+- Approved Supersonic shadow presets: `soft`, `medium`, `strong` (images, cards, dropdowns, featured/spotlight elements)
+- Approved Supersonic gradient presets: `surface-rise`, `accent-veil`, `muted-soft` (custom gradients disabled; keep readable text on accent/dark bands)
+- Do not use arbitrary shadow or gradient values
 
 ## Page Heading Rule
 

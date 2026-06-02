@@ -16,6 +16,18 @@
 	margin-right: 0;
 }
 
+/*
+ * Stacked full-width section bands butt together. Vertical rhythm comes from
+ * each section's own section-* padding, so the default block-gap must not leave
+ * a base-colored margin (a white seam) between two adjacent colored bands. This
+ * seam is invisible when a pattern is reviewed alone and only appears once
+ * sections are stacked, so layout review owns it (docs/layout-standard.md
+ * SPACE-7).
+ */
+.supersonic-section-page > .wp-block-post-content > * + * {
+	margin-block-start: 0;
+}
+
 .has-text-color .wp-block-button__link:not(.has-text-color) {
 	color: inherit;
 }

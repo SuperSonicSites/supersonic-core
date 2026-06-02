@@ -117,6 +117,14 @@ editor controls truthful. Fix source markup before treating screenshots as
 approval evidence. For category batches, certify each pattern independently even
 when the source changes ship together.
 
+Some defects are invisible in single-pattern QA and only appear once sections are
+**stacked** — e.g. a base-colored seam between two colored bands, or a default
+margin that fights the neighboring section (`docs/layout-standard.md` `SPACE-7`).
+These are caught by `layout-review` on a composed page and arrive here as
+**block-level fix requests** (pattern markup, CSS, or token). Fix the root cause
+at the block/theme level so every page that stacks those blocks benefits, rather
+than patching a single page.
+
 ## Proof Gates
 
 - Static proof: run `npm run validate` and fix failures before approval.

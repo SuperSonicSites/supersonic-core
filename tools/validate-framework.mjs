@@ -88,10 +88,12 @@ async function validateDesignTokens() {
     const fontSlugs = new Set(parsed.settings?.typography?.fontSizes?.map((size) => size.slug) ?? []);
     const colorSlugs = new Set(parsed.settings?.color?.palette?.map((color) => color.slug) ?? []);
     const shadowSlugs = new Set(parsed.settings?.shadow?.presets?.map((shadow) => shadow.slug) ?? []);
+    const gradientSlugs = new Set(parsed.settings?.color?.gradients?.map((gradient) => gradient.slug) ?? []);
     const requiredSpacing = ['gutter', 'section-none', 'section-small', 'section-medium', 'section-large'];
     const requiredFonts = ['small', 'body', 'large', 'heading-3', 'heading-2', 'heading-1', 'display'];
     const requiredColors = ['base', 'contrast', 'contrast-subtle', 'surface', 'muted', 'border', 'accent', 'accent-contrast'];
-    const requiredShadows = ['soft', 'medium'];
+    const requiredShadows = ['soft', 'medium', 'strong'];
+    const requiredGradients = ['surface-rise', 'accent-veil', 'muted-soft'];
 
     if (parsed.settings?.layout?.contentSize === '1440px' && parsed.settings?.layout?.wideSize === '1440px') {
       pass('theme layout defaults to 1440px content and wide width');
@@ -140,6 +142,14 @@ async function validateDesignTokens() {
       }
     }
 
+    for (const slug of requiredGradients) {
+      if (gradientSlugs.has(slug)) {
+        pass(`gradient token exists: ${slug}`);
+      } else {
+        fail(`missing gradient token: ${slug}`);
+      }
+    }
+
     if (parsed.settings?.typography?.customFontSize === false) {
       pass('custom font sizes are disabled');
     } else {
@@ -156,6 +166,18 @@ async function validateDesignTokens() {
       pass('custom colors are disabled');
     } else {
       fail('custom colors should be disabled');
+    }
+
+    if (parsed.settings?.color?.customGradient === false) {
+      pass('custom gradients are disabled');
+    } else {
+      fail('custom gradients should be disabled');
+    }
+
+    if (parsed.settings?.color?.defaultGradients === false) {
+      pass('default WordPress gradients are disabled');
+    } else {
+      fail('default WordPress gradients should be disabled');
     }
 
     if (parsed.settings?.shadow?.defaultPresets === false) {
@@ -744,7 +766,9 @@ function isLocalSurfaceGroup(block, sectionGroup) {
   const style = block.attrs.style ?? {};
   return Boolean(
     block.attrs.backgroundColor ||
+    block.attrs.gradient ||
     style.color?.background ||
+    style.color?.gradient ||
     style.border?.color ||
     style.border?.radius ||
     style.border?.width ||
@@ -876,7 +900,12 @@ function isNestedBackgroundPanel(block, sectionGroup) {
     return false;
   }
 
-  return Boolean(block.attrs.backgroundColor || block.attrs.style?.color?.background);
+  return Boolean(
+    block.attrs.backgroundColor ||
+    block.attrs.gradient ||
+    block.attrs.style?.color?.background ||
+    block.attrs.style?.color?.gradient
+  );
 }
 
 function hasBorderColorStyle(block) {

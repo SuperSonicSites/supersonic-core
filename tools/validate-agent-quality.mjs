@@ -28,7 +28,15 @@ async function readText(relativePath) {
 
 async function listMarkdownFiles(relativePath) {
   const absolutePath = path.join(root, relativePath);
-  const entries = await readdir(absolutePath, { withFileTypes: true });
+  let entries;
+  try {
+    entries = await readdir(absolutePath, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
+    throw error;
+  }
   const files = [];
 
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
@@ -57,6 +65,24 @@ function hasUnscopedHeaderCss(content) {
   return mediaBlocks.some((block) =>
     /\.supersonic-site-header\b/.test(block[1]) &&
     !/\.supersonic-site-header--mega\b/.test(block[1])
+  );
+}
+
+function claimsApprovedLayout(content) {
+  return (
+    /(^|\n)\s*-\s*\*\*Band:\*\*\s*`?strong`?\b/i.test(content) ||
+    /(^|\n)\s*-\s*\*\*Approval status:\*\*\s*(?:`?approved`?|pass)\b/i.test(content) ||
+    /(^|\n)\s*Approval status:\s*(?:`?approved`?|pass)\b/i.test(content)
+  );
+}
+
+function hasIncompleteLayoutProof(content) {
+  return (
+    /Visual proof:\s*PARTIAL\b/i.test(content) ||
+    /Visual proof:\s*PENDING\b/i.test(content) ||
+    /Staging proof:\s*(?:PARTIAL|PENDING|DEFERRED|BLOCKED)\b/i.test(content) ||
+    /pending\s+(?:re-?stage|staging|theme deploy|visual reconfirm|recapture)/i.test(content) ||
+    /Manual-only gaps:\s*(?!\s*(?:none|n\/a|no required gaps)\b)[^\n]+/i.test(content)
   );
 }
 
@@ -250,6 +276,19 @@ async function validateDocs() {
   }
 }
 
+async function validateLayoutReports() {
+  const files = (await listMarkdownFiles('docs/layouts')).filter((file) => file.endsWith('-review.md'));
+
+  for (const file of files) {
+    const content = await readText(file);
+    if (claimsApprovedLayout(content) && hasIncompleteLayoutProof(content)) {
+      fail(`${file} must not claim strong/approved while proof is partial, pending, or has required manual-only gaps`);
+    } else {
+      pass(`${file} has fail-closed layout approval status`);
+    }
+  }
+}
+
 async function validatePackageScripts() {
   const packageJson = JSON.parse(await readText('package.json'));
   for (const script of ['agents:check', 'pattern:proof']) {
@@ -299,11 +338,39 @@ function runRegressionFixtures() {
   } else {
     fail('regression fixture failed: header CSS scope detector is not strict');
   }
+
+  const approvedButPartialLayout = `
+# Layout Review
+
+- **Band:** \`strong\`
+
+## Proof Summary
+
+- Visual proof: PARTIAL - recapture pending.
+- Manual-only gaps: re-stage and screenshot.
+`;
+  const pendingLayout = `
+# Layout Review
+
+- **Band:** \`needs-revision\`
+
+## Proof Summary
+
+- Visual proof: PENDING - recapture pending.
+- Manual-only gaps: re-stage and screenshot.
+`;
+
+  if (claimsApprovedLayout(approvedButPartialLayout) && hasIncompleteLayoutProof(approvedButPartialLayout) && !claimsApprovedLayout(pendingLayout)) {
+    pass('regression fixture: strong layout report with partial proof fails');
+  } else {
+    fail('regression fixture failed: layout approval guard is not strict');
+  }
 }
 
 await validateSkills();
 await validateCommands();
 await validateDocs();
+await validateLayoutReports();
 await validatePackageScripts();
 await validateWorkflows();
 runRegressionFixtures();
