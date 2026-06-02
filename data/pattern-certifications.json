@@ -21,6 +21,16 @@
       "lastReviewedAt": "2026-06-01"
     },
     {
+      "slug": "supersonic-site-theme/header-mega",
+      "title": "Header: Mega",
+      "category": "supersonic-headers",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/header-mega.php",
+      "qaPageSlug": "qa-pattern-header-mega",
+      "status": "source-ready",
+      "screenshots": {},
+      "knownIssues": []
+    },
+    {
       "slug": "supersonic-site-theme/footer-simple",
       "title": "Footer: Simple",
       "category": "supersonic-footers",

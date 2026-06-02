@@ -22,6 +22,7 @@ documentation links resolve.
 | Pattern | Slug | Category | Status | Notes |
 | --- | --- | --- | --- | --- |
 | Header: Simple | `supersonic-site-theme/header-simple` | Supersonic Headers | Source ready, needs staging QA | Default modular header pattern mounted by the header template part. |
+| Header: Mega | `supersonic-site-theme/header-mega` | Supersonic Headers | Source ready, needs staging QA | Multi-column link mega menu; native navigation blocks + scoped CSS, collapses to the hamburger overlay at the 1024px tablet boundary. |
 | Footer: Simple | `supersonic-site-theme/footer-simple` | Supersonic Footers | Source ready, needs staging QA | Default modular footer pattern mounted by the footer template part. |
 | Hero: Simple | `supersonic-site-theme/hero-simple` | Supersonic Heroes | Source ready, needs staging QA | Left-aligned page hero with editable H1. |
 | Hero: Centered | `supersonic-site-theme/hero-centered` | Supersonic Heroes | Source ready, needs staging QA | Centered page hero with editable H1. |

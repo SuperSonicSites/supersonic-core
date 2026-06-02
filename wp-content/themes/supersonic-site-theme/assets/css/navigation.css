@@ -3,8 +3,8 @@
  *
  * Structure, color, and type come from theme.json. This file owns only
  * interaction states and animation, expressed through theme design tokens
- * generated from theme.json. No layout widths and no horizontal padding live
- * here; the header rides the same 5% gutter as the rest of the site.
+ * generated from theme.json. The header shell rides the same 5% gutter as the
+ * rest of the site; dropdown panel sizing stays inside scoped navigation rules.
  */
 
 /* ---- Header chrome -------------------------------------------------------- */
@@ -138,6 +138,137 @@
 
 	.supersonic-site-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container {
 		padding-left: var(--wp--preset--spacing--m);
+	}
+}
+
+/* ---- Collapse early: hold the hamburger overlay from 600px to 1023px -------
+ * Core's navigation block reveals the inline horizontal menu at min-width:600px.
+ * The mega-header variant keeps the menu and mega panel collapsed into the
+ * animated hamburger overlay until the tablet/desktop boundary (1024px). These
+ * rules re-assert the collapsed baseline across the 600-1023 band and defer the
+ * inline menu to >=1024px. Core uses !important on its 600px reveal rules, so
+ * these overrides match it.
+ */
+@media (min-width: 600px) and (max-width: 1023px) {
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container-open {
+		display: flex !important;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container:not(.is-menu-open) {
+		display: none !important;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open {
+		display: flex !important;
+		position: fixed !important;
+		inset: 0;
+		z-index: 100000;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-close {
+		display: flex !important;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+		align-items: flex-start;
+		justify-content: flex-start;
+		padding-top: var(--wp--preset--spacing--xl);
+		padding-right: 5%;
+		padding-bottom: var(--wp--preset--spacing--xl);
+		padding-left: 5%;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container,
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item {
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content {
+		font-size: var(--wp--preset--font-size--large);
+		line-height: 1.2;
+		text-align: left;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__submenu-container {
+		padding-left: var(--wp--preset--spacing--m);
+	}
+}
+
+/* ---- Desktop mega panel: wide multi-column link menu (>=1024px) ------------
+ * Opt-in via the top-level submenu's `supersonic-mega` class so ordinary header
+ * submenus keep their default flyout. The top-level submenu container becomes a
+ * grid panel; the nested submenus inside it render inline as static columns, and
+ * each nested label is an inert group heading with a divider above its links.
+ * The fade/slide reveal is inherited from the base submenu rules above (the mega
+ * container is itself a .wp-block-navigation__submenu-container), so it is not
+ * redeclared here.
+ */
+@media (min-width: 1024px) {
+	.supersonic-site-header--mega .supersonic-mega > .wp-block-navigation__submenu-container {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+		gap: var(--wp--preset--spacing--l);
+		left: auto;
+		right: 0;
+		top: 100%;
+		width: max-content;
+		max-width: min(
+			var(--wp--custom--layout--max-width, 1440px),
+			calc(100vw - (2 * var(--wp--custom--layout--gutter, 5%)))
+		);
+		padding: var(--wp--preset--spacing--l);
+		border: 1px solid var(--wp--preset--color--border);
+		border-radius: var(--wp--custom--radius--medium, 8px);
+		box-shadow: var(--wp--preset--shadow--soft);
+		background-color: var(--wp--preset--color--surface);
+	}
+
+	/* Each nested submenu is one column, laid out in flow rather than as a flyout. */
+	.supersonic-site-header--mega .supersonic-mega > .wp-block-navigation__submenu-container > .wp-block-navigation-submenu {
+		position: static;
+	}
+
+	/* Force the nested submenu's own container open, in-flow, and unstyled. */
+	.supersonic-site-header--mega .supersonic-mega .wp-block-navigation-submenu .wp-block-navigation__submenu-container {
+		position: static !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
+		left: auto;
+		top: auto;
+		min-width: 0;
+		width: 100%;
+		padding: 0;
+		border: 0;
+		box-shadow: none;
+		background: transparent;
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--xs);
+	}
+
+	/* Column heading: the nested submenu label as an inert group label with a
+	   divider above its links. It is structural, not a destination. */
+	.supersonic-site-header--mega .supersonic-mega > .wp-block-navigation__submenu-container > .wp-block-navigation-submenu > .wp-block-navigation-item__content {
+		padding-bottom: var(--wp--preset--spacing--xs);
+		margin-bottom: var(--wp--preset--spacing--xs);
+		border-bottom: 1px solid var(--wp--preset--color--border);
+		font-size: var(--wp--preset--font-size--small, inherit);
+		font-weight: 600;
+		opacity: 0.7;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	/* The heading is inert, so suppress its animated underline. */
+	.supersonic-site-header--mega .supersonic-mega > .wp-block-navigation__submenu-container > .wp-block-navigation-submenu > .wp-block-navigation-item__content::after {
+		content: none;
+	}
+
+	/* Neutralize the chevron/expand affordance on the static columns. */
+	.supersonic-site-header--mega .supersonic-mega .wp-block-navigation-submenu .wp-block-navigation__submenu-icon {
+		display: none;
 	}
 }
 

@@ -111,7 +111,7 @@ The site header and navigation are a first-class system primitive, not a pattern
 - Desktop links use an animated accent underline and an active-state indicator.
 - On mobile, navigation collapses to a hamburger that opens the customizable WordPress 7.0 overlay, animated with a fade/slide and staggered menu items.
 - All navigation motion uses the shared transition tokens and is disabled under `prefers-reduced-motion`.
-- Mega-menu support is a planned theme-owned custom block built on the Interactivity API; it is a separate approved increment and is not part of the base navbar.
+- Mega-menu support ships as a native sibling header pattern (`header-mega`): a wide multi-column link panel built from native `core/navigation` blocks (a top-level `supersonic-mega` submenu containing nested submenus styled as static columns) plus scoped CSS. It collapses into the hamburger overlay at the 1024px tablet boundary. The base navbar (`header-simple`) is unchanged. A richer Interactivity-API custom-block mega menu (for non-link content such as cards, images, and featured CTAs) remains a possible future increment requiring separate approval.
 
 ## Grids
 
