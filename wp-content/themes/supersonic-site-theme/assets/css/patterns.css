@@ -74,3 +74,15 @@
 		order: 0;
 	}
 }
+
+/*
+ * Multi-up bands (stats, feature/card/service grids, pricing, process steps,
+ * testimonials, comparison, footer columns) hold their horizontal layout at
+ * tablet via is-not-stacked-on-mobile (opting out of core's 781px stack), but
+ * still collapse to a single column on phones. See docs/layout-standard.md.
+ */
+@media (max-width: 600px) {
+	.wp-block-columns.is-not-stacked-on-mobile > .wp-block-column {
+		flex-basis: 100% !important;
+	}
+}

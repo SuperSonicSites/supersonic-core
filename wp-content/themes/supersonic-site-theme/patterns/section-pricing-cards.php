@@ -20,12 +20,15 @@
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
-	<div class="wp-block-columns">
+	<!-- wp:columns {"isStackedOnMobile":false,"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
+	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:paragraph {"fontSize":"small"} -->
+				<p class="has-small-font-size">&nbsp;</p>
+				<!-- /wp:paragraph -->
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Starter</h3>
 				<!-- /wp:heading -->
@@ -75,6 +78,9 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:paragraph {"fontSize":"small"} -->
+				<p class="has-small-font-size">&nbsp;</p>
+				<!-- /wp:paragraph -->
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Scale</h3>
 				<!-- /wp:heading -->

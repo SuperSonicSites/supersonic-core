@@ -13,8 +13,8 @@
 	<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Highlights</h2>
 	<!-- /wp:heading -->
 
-	<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
-	<div class="wp-block-columns">
+	<!-- wp:columns {"isStackedOnMobile":false,"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
+	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"surface","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|m","right":"var:preset|spacing|m","bottom":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->

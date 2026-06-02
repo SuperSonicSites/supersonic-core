@@ -10,8 +10,8 @@
 ?>
 <!-- wp:group {"align":"full","className":"supersonic-site-footer","backgroundColor":"muted","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"},"blockGap":"var:preset|spacing|l"}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull supersonic-site-footer has-muted-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
-	<!-- wp:columns -->
-	<div class="wp-block-columns">
+	<!-- wp:columns {"isStackedOnMobile":false} -->
+	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:group {"className":"supersonic-brand-lockup","style":{"spacing":{"blockGap":"var:preset|spacing|s"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->

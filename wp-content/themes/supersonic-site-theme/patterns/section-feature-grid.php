@@ -21,8 +21,8 @@
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
-	<div class="wp-block-columns">
+	<!-- wp:columns {"isStackedOnMobile":false,"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
+	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->

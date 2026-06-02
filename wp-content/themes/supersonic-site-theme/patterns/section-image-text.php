@@ -4,7 +4,7 @@
  * Slug: supersonic-site-theme/section-image-text
  * Categories: supersonic-media
  * Keywords: image, feature, reverse, cta
- * Description: Two-column section with an editable visual area on the left, copy on the right, and action buttons.
+ * Description: Two-column section with an editable visual area on the left, copy on the right, and a call-to-action button.
  */
 ?>
 <!-- wp:group {"metadata":{"name":"Section: Image + Text"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->

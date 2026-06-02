@@ -20,8 +20,8 @@
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:columns {"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
-	<div class="wp-block-columns">
+	<!-- wp:columns {"isStackedOnMobile":false,"style":{"spacing":{"blockGap":"var:preset|spacing|m"}}} -->
+	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-2"} -->
