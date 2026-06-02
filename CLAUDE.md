@@ -80,6 +80,11 @@ Default behavior:
   reports, or clearly named manual-only gaps
 - fail closed when proof is missing
 - preserve unrelated local work
+- delegate execution to a focused coder sub-agent only when the contract is fully
+  defined, and verify the returned work against the proof gates before accepting it
+
+See the `Delegation` section in `docs/agent-quality-standard.md` for the
+orchestrator/coder split.
 
 Pattern work must include a control contract card before editing. Visual QA and
 certification reports must include a `Proof Summary`. Header, footer,
