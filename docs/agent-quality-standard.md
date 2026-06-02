@@ -17,6 +17,22 @@ changes.
 - Preserve unrelated local work and stage only intentional changes.
 - Keep Git as the source of truth.
 
+## Delegation
+
+An orchestrator may delegate execution to a focused coder sub-agent when the
+contract is fully defined. Keep the split clean:
+
+- The orchestrator owns judgment: the contract, the proof gates, and the final
+  accept or reject decision.
+- The coder receives only the contract plus the affected files, works in its own
+  context, and returns a diff with proof.
+- The orchestrator verifies the returned work against the proof gates before
+  accepting it. Unverified delegated work is not proof.
+
+Delegate only when the contract is precise enough that the coder needs no
+further product, design, security, or approval judgment. Otherwise resolve the
+contract first.
+
 ## New Skill Creation
 
 Every new repo-local skill in `.claude/skills/<skill-name>/SKILL.md` must use
@@ -66,6 +82,19 @@ Fail closed when...
 
 Include...
 ```
+
+## Command Shape
+
+Repo-local commands in `.claude/commands/*.md` follow a lighter procedural shape
+than skills:
+
+- YAML frontmatter contains a non-empty `description`.
+- The body is a short numbered procedure, not the skill section set.
+- Each command references `docs/agent-quality-standard.md` and uses explicit
+  `contract`, `proof`, and `fail closed` language.
+
+Commands are validated for these terms; they do not require the skill
+`Discovery / Contract / Proof Gates / Failure Policy / Report` headings.
 
 ## Discovery
 

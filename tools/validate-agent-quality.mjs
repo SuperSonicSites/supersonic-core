@@ -6,6 +6,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const results = [];
 
+const requiredSections = [
+  '## Discovery',
+  '## Contract',
+  '## Proof Gates',
+  '## Failure Policy',
+  '## Report'
+];
+
 function pass(message) {
   results.push({ status: 'pass', message });
 }
@@ -72,15 +80,21 @@ function parseFrontmatter(content) {
   return fields;
 }
 
+function sectionBody(content, heading) {
+  const sectionName = heading.replace(/^##\s+/, '');
+  const headingRegex = new RegExp('(^|\\n)##\\s+' + sectionName + '\\b');
+  const match = headingRegex.exec(content);
+  if (!match) {
+    return '';
+  }
+  const afterHeading = content.slice(match.index + match[0].length);
+  const nextHeading = afterHeading.search(/(^|\n)##\s+/);
+  const body = nextHeading === -1 ? afterHeading : afterHeading.slice(0, nextHeading);
+  return body;
+}
+
 async function validateSkills() {
   const files = await listMarkdownFiles('.claude/skills');
-  const requiredSections = [
-    '## Discovery',
-    '## Contract',
-    '## Proof Gates',
-    '## Failure Policy',
-    '## Report'
-  ];
 
   for (const file of files) {
     const content = await readText(file);
@@ -120,6 +134,12 @@ async function validateSkills() {
       const headingRegex = new RegExp('(^|\\n)##\\s+' + sectionName + '\\b');
       if (headingRegex.test(content)) {
         pass(`${file} includes ${section}`);
+        const body = sectionBody(content, section);
+        if (body.trim().length > 0) {
+          pass(`${file} ${section} has content`);
+        } else {
+          fail(`${file} ${section} must not be empty`);
+        }
       } else {
         fail(`${file} missing ${section}`);
       }
@@ -139,6 +159,14 @@ async function validateCommands() {
 
   for (const file of files) {
     const content = await readText(file);
+    const frontmatter = parseFrontmatter(content);
+    const descriptionField = frontmatter?.find((field) => field.name === 'description');
+    if (frontmatter && descriptionField && descriptionField.value.trim().length > 0) {
+      pass(`${file} has a non-empty description`);
+    } else {
+      fail(`${file} must have YAML frontmatter with a non-empty description`);
+    }
+
     for (const term of requiredTerms) {
       if (includesAll(content, [term])) {
         pass(`${file} includes ${term}`);
@@ -175,6 +203,23 @@ async function validateDocs() {
     pass('docs/agent-quality-standard.md defines the new skill methodology');
   } else {
     fail('docs/agent-quality-standard.md must define the new skill methodology');
+  }
+
+  const templateBlockMatch = standard.match(/##\s+Skill Methodology Template[\s\S]*?```markdown\r?\n([\s\S]*?)\r?\n```/);
+  if (!templateBlockMatch) {
+    fail('docs/agent-quality-standard.md is missing the Skill Methodology Template code block');
+  } else {
+    const templateBlock = templateBlockMatch[1];
+    const templateHeadings = [...templateBlock.matchAll(/^##\s+(.+)$/gm)].map((m) => `## ${m[1].trim()}`);
+    const templateSet = new Set(templateHeadings);
+    const enforcedSet = new Set(requiredSections);
+    const missing = requiredSections.filter((s) => !templateSet.has(s));
+    const extra = templateHeadings.filter((s) => !enforcedSet.has(s));
+    if (missing.length === 0 && extra.length === 0) {
+      pass('docs/agent-quality-standard.md skill template matches enforced sections');
+    } else {
+      fail(`docs/agent-quality-standard.md skill template sections drifted from enforced set: missing [${missing.join(', ')}], extra [${extra.join(', ')}]`);
+    }
   }
 
   for (const file of [
