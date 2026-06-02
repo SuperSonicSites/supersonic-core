@@ -179,6 +179,7 @@ async function validateCommands() {
 
 async function validateDocs() {
   const requiredDocs = [
+    'AGENTS.md',
     'CLAUDE.md',
     'README.md',
     'QA_CHECKLIST.md',
@@ -199,6 +200,19 @@ async function validateDocs() {
   }
 
   const standard = await readText('docs/agent-quality-standard.md');
+  const agents = await readText('AGENTS.md');
+  if (includesAll(agents, ['## Codex Delegation Rules', 'docs/agent-quality-standard.md', 'orchestrator', 'proof gates', 'fail'])) {
+    pass('AGENTS.md defines Codex delegation rules');
+  } else {
+    fail('AGENTS.md must define Codex delegation rules that reference the quality standard and proof gates');
+  }
+
+  if (includesAll(standard, ['AGENTS.md', 'Codex', 'orchestrator', 'proof gates'])) {
+    pass('docs/agent-quality-standard.md links Codex delegation to AGENTS.md');
+  } else {
+    fail('docs/agent-quality-standard.md must link Codex delegation to AGENTS.md');
+  }
+
   if (includesAll(standard, ['## New Skill Creation', '## Skill Methodology Template'])) {
     pass('docs/agent-quality-standard.md defines the new skill methodology');
   } else {

@@ -33,6 +33,12 @@ Delegate only when the contract is precise enough that the coder needs no
 further product, design, security, or approval judgment. Otherwise resolve the
 contract first.
 
+For Codex, `AGENTS.md` is the always-loaded delegation entry point. Codex should
+act as the orchestrator unless a focused implementation sub-agent is explicitly
+available. If no sub-agent is available, Codex must still keep the phases
+separate: finish discovery and contract thinking, execute the contracted change,
+then verify the diff against the proof gates before accepting it.
+
 ## New Skill Creation
 
 Every new repo-local skill in `.claude/skills/<skill-name>/SKILL.md` must use

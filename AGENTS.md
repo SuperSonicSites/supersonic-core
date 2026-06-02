@@ -40,5 +40,39 @@ When working in these areas, also read the local instruction file:
 Follow the approval gates, staging-only REST rules, screenshot QA rules,
 WordPress compatibility checks, and definition of done from `CLAUDE.md`.
 
+Follow `docs/agent-quality-standard.md` for discovery, contract, proof gates,
+failure policy, reporting, and delegation.
+
+## Codex Delegation Rules
+
+Codex acts as the orchestrator by default.
+
+The orchestrator owns:
+
+- repo discovery
+- task routing to the right repo-local skill
+- contract definition
+- approval-gate decisions
+- proof-gate selection
+- final accept/reject judgment
+- final user report
+
+Codex may delegate execution to a focused implementation sub-agent only after
+the contract is fully defined. The executor receives the contract, affected
+files, constraints, and required checks. It should not make product, design,
+security, deployment, or approval decisions.
+
+If Codex-native sub-agent tooling is unavailable, Codex must simulate the same
+split in one thread:
+
+1. finish discovery and contract thinking first
+2. execute only the contracted change
+3. inspect the diff
+4. run the required proof gates
+5. accept, reject, or revise based on evidence
+
+Delegated or self-executed work is not accepted until Codex verifies it against
+the proof gates. Missing proof fails closed.
+
 Do not deploy to production. Do not run live REST writes without explicit
 approval. Keep Git as the source of truth.
