@@ -28,6 +28,8 @@ Possible future post types, only if needed:
 - Locations
 - FAQs
 
+When Init keyword research reveals repeated entities (multiple services, locations, or FAQs), `seo-strategist` may flag a candidate structured type here for review. Flagging is not approval — creating a custom post type still requires the Human Approval Gate.
+
 Custom post types belong in `wp-content/plugins/supersonic-site-core/`, not the theme.
 
 ## Taxonomies

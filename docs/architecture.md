@@ -31,6 +31,27 @@ Supersonic Core separates the work into four layers:
 - `data/site-intake.schema.json` defines the expected structure.
 - Secrets and credentials never belong in intake files.
 
+## SEO Research Model
+
+- `seo-strategist` is the first research agent in Init. It runs autonomously from
+  `data/site-intake.json` (it never re-interviews the user) and the Ubersuggest
+  MCP. `new-site-init` must capture every input it needs, including
+  `seo.competitors`.
+- It executes **inside the Init stage**, after the `new-site-init` interview and
+  draft docs and before the single build-plan approval gate, so its SEO-informed
+  sitemap and priorities shape the plan the user approves. Init order:
+  interview/draft docs -> `seo-strategist` -> build-plan approval -> build.
+- It owns the authoritative SEO metadata — keywords, slugs, titles, meta
+  descriptions, heading outlines, internal links, and the schema plan — and
+  writes per-page briefs to `data/seo-briefs.json` (contract:
+  `data/seo-briefs.schema.json`, validated by `npm run seo:briefs:check`).
+- The briefs feed `layout-architect` (page structure) and the writer (body copy
+  only). The plugin / Rank Math emits the JSON-LD from the schema plan; this agent
+  never emits or injects it. `seo-auditor` validates the realized page.
+- Model policy: the orchestrator runs the architecture/clustering reasoning on
+  Opus, authors titles/meta on Sonnet, and delegates bulk Ubersuggest pulls and
+  JSON assembly to Haiku (see the Model Policy in the `seo-strategist` skill).
+
 ## Design Token Model
 
 - `docs/design-tokens-standard.md` defines the human-readable visual rules.

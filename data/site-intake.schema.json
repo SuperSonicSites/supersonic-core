@@ -117,7 +117,7 @@
     "seo": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["primaryTopics", "locations", "schemaOpportunities"],
+      "required": ["primaryTopics", "locations", "competitors", "schemaOpportunities"],
       "properties": {
         "primaryTopics": {
           "type": "array",
@@ -125,6 +125,11 @@
         },
         "locations": {
           "type": "array",
+          "items": { "type": "string" }
+        },
+        "competitors": {
+          "type": "array",
+          "description": "Known competitor domains or names from the interview. seo-strategist derives more from SERP analysis when this is empty.",
           "items": { "type": "string" }
         },
         "schemaOpportunities": {

@@ -28,6 +28,11 @@ answers:
   CTAs, internal-link plan), `CONTENT_MODEL.md` (what content exists),
   `SEO_STRATEGY.md` (keywords, intents, internal-linking rules, schema
   opportunities), `DESIGN_SYSTEM.md` (token palette).
+- `data/seo-briefs.json` when present — the `seo-strategist` brief for this page:
+  authoritative `seo_title`/`meta_description`, the H1/heading outline, the
+  internal-link matrix, and the structured-data plan. Realize this structure; do
+  not rewrite the SEO metadata (titles/meta/schema are owned upstream by
+  `seo-strategist`).
 - `docs/layout-standard.md` (archetypes + rules), `docs/gutenberg-authoring-standard.md`,
   `docs/design-tokens-standard.md`.
 - The theme `/patterns` folder and `data/pattern-certifications.json` — the

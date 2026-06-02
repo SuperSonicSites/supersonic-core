@@ -27,6 +27,7 @@ When a task matches one of these workflows, read the matching
 - `certify-pattern`
 - `deployment-review`
 - `new-site-init`
+- `seo-strategist`
 
 ## Scoped Instructions
 

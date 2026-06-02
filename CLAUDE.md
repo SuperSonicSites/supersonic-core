@@ -55,6 +55,7 @@ Then route by task. **Invoke the matching skill first** — each skill is the op
 | Task | Invoke this skill | Reference docs for depth |
 |------|-------------------|--------------------------|
 | Start / initialize a new site build | `new-site-init` | repo docs it generates |
+| Research site SEO architecture & keywords at Init (Ubersuggest MCP) | `seo-strategist` | `SEO_STRATEGY.md`, `PAGE_MAP.md`, `CONTENT_MODEL.md`, `data/seo-briefs.schema.json` |
 | Build or change one pattern or section | `pattern-builder` | `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, theme `CLAUDE.md` |
 | Compose or assemble a full page layout from patterns | `layout-architect` | `docs/layout-standard.md`, `PAGE_MAP.md`, `BRAND.md`, `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `DESIGN_SYSTEM.md` |
 | Review / grade / QA a composed page layout | `layout-review` | `docs/layout-standard.md`, `QA_CHECKLIST.md` |

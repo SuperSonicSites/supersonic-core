@@ -39,6 +39,7 @@
   "seo": {
     "primaryTopics": ["primary service"],
     "locations": ["service area"],
+    "competitors": ["competitor-one.com", "competitor-two.com"],
     "schemaOpportunities": ["Organization", "Service"]
   },
   "contentModel": {

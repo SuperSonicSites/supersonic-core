@@ -4,6 +4,8 @@ This file defines the planned pages, navigation, and reusable CTAs.
 
 For `supersonic-core`, keep this as a starter template. For a cloned site repo, replace it with the real page plan.
 
+During Init, `seo-strategist` sets each page's slug (lowercase, hyphen-separated, 5 words or fewer, mapped to one primary keyword) and SEO priority from Ubersuggest research. The authoritative per-page briefs — intent, headings, internal links, and schema plan — live in `data/seo-briefs.json`.
+
 ## Primary Navigation
 
 | Page | Slug | Purpose | Primary CTA | SEO Priority |

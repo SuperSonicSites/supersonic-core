@@ -126,7 +126,7 @@ For questions with reasonable defaults, suggest the default and ask the user to 
 4. Brand voice: Should the voice feel more professional, warm, premium, direct, technical, local, playful, or something else?
 5. Design direction: Are there existing brand colors, fonts, logos, imagery, or reference sites to follow or avoid?
 6. Required pages: Which pages are required for launch, and which can wait?
-7. SEO priorities: What services, locations, keywords, or search intents matter most?
+7. SEO priorities: What services, locations, keywords, or search intents matter most, and who are the main online competitors (sites that currently outrank you or that you want to beat)? Capture competitors in `seo.competitors`.
 8. Content model: Is native pages/posts enough, or will the site need structured content such as services, testimonials, projects, team, FAQs, or locations?
 9. Forms / integrations: What forms, booking tools, CRMs, email tools, analytics, or tracking need to exist on staging or production?
 10. Staging / production / backups: What are the staging URL, production URL for documentation, and Updraft backup expectations?
@@ -173,13 +173,14 @@ Use this baseline:
 
 ```text
 Phase 1: Project memory and repo setup
+Phase 1.5: SEO research and content architecture (run seo-strategist)
 Phase 2: Design system and theme.json
 Phase 3: Theme skeleton
 Phase 4: Plugin skeleton
 Phase 5: First pattern only
 Phase 6: Screenshot QA
 Phase 7: Page assembly
-Phase 8: SEO/content pass
+Phase 8: SEO/content pass (writer fills seo-strategist briefs)
 Phase 9: Security/deploy review
 Phase 10: Production launch checklist
 ```
@@ -190,6 +191,30 @@ For each phase, include:
 - files or environment touched
 - approval needs
 - screenshot or QA requirement, if visual
+
+## SEO Research Handoff
+
+The Init stage runs as a sequence with one approval gate at the end: (1) this
+skill's interview and draft docs, (2) the `seo-strategist` research pass, (3) the
+build-plan approval. After the interview produces `data/site-intake.json` and the
+draft docs — but **before** the build plan is finalized for approval — route to
+the `seo-strategist` skill, the first research agent in Init. Its SEO-informed
+sitemap, page priorities, and briefs become part of the plan the user approves.
+It uses the Ubersuggest MCP to fill
+`SEO_STRATEGY.md` and `PAGE_MAP.md` with real keyword, intent, and slug data and
+writes per-page content briefs to `data/seo-briefs.json`. Those briefs are the
+authoritative source of titles, meta descriptions, slugs, heading outlines,
+internal links, and schema plans. They feed `layout-architect` (Phase 7, page
+structure) and the writer (Phase 8, body copy). The writer does not author SEO
+titles, meta descriptions, or schema. Validate with `npm run seo:briefs:check`.
+
+`seo-strategist` runs **fully autonomously** from `data/site-intake.json` and
+does not re-interview the user, so the interview above must capture everything it
+needs: `client` (business, market, service area, offer), `audience`, `brand`
+voice, `goals`, the planned `pages`, and the `seo` block — `primaryTopics`,
+`locations`, `competitors`, and `schemaOpportunities`. If any of these is
+missing, `seo-strategist` fails closed and routes the gap back here rather than
+prompting.
 
 ## Approval Gates
 

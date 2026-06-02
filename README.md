@@ -106,6 +106,7 @@ npm run rest:qa-page:create -- <slug|--content path>  Create or update a tempora
 npm run rest:qa-page:trash -- <id>            Delete a temporary QA page from staging
 npm run rest:dry-run                Validate a planned staging REST write without sending it
 npm run pattern:registry:check      Validate pattern-certifications.json and screenshot evidence
+npm run seo:briefs:check            Validate data/seo-briefs.json keyword, slug, and metadata rules
 npm run test:updater-parser         Test exact GitHub Release asset parsing (PHP CLI)
 npm run version:check               Check if version bumps are needed
 npm run version:bump                Increment version in package.json and theme/plugin headers
