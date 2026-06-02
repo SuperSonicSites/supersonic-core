@@ -114,6 +114,20 @@
 .supersonic-site-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item:nth-child(5) { animation-delay: 260ms; }
 .supersonic-site-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item:nth-child(n+6) { animation-delay: 300ms; }
 
+@media (max-width: 1023px) {
+	.supersonic-site-header--mega > .wp-block-group {
+		flex-wrap: nowrap;
+	}
+
+	.supersonic-site-header--mega .supersonic-brand-lockup {
+		flex: 1 1 auto;
+	}
+
+	.supersonic-site-header--mega .wp-block-navigation {
+		flex: 0 0 auto;
+	}
+}
+
 @media (max-width: 599px) {
 	.supersonic-site-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
 		align-items: flex-start;
@@ -229,6 +243,10 @@
 
 	/* Each nested submenu is one column, laid out in flow rather than as a flyout. */
 	.supersonic-site-header--mega .supersonic-mega > .wp-block-navigation__submenu-container > .wp-block-navigation-submenu {
+		align-items: flex-start;
+		display: flex;
+		flex-direction: column;
+		gap: var(--wp--preset--spacing--xs);
 		position: static;
 	}
 
