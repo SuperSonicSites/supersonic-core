@@ -25,6 +25,7 @@ documentation links resolve.
 | Footer: Simple | `supersonic-site-theme/footer-simple` | Supersonic Footers | Source ready, needs staging QA | Default modular footer pattern mounted by the footer template part. |
 | Hero: Simple | `supersonic-site-theme/hero-simple` | Supersonic Heroes | Source ready, needs staging QA | Left-aligned page hero with editable H1. |
 | Hero: Centered | `supersonic-site-theme/hero-centered` | Supersonic Heroes | Source ready, needs staging QA | Centered page hero with editable H1. |
+| Hero: Fullscreen Image | `supersonic-site-theme/hero-fullscreen-image` | Supersonic Heroes | Source ready, needs staging QA | Fullscreen image hero with editable H1 and overlay controls. |
 | Section: Page Intro | `supersonic-site-theme/section-page-intro` | Supersonic Intros | Source ready, needs staging QA | Compact page intro with one editable H1. |
 | Section: Text | `supersonic-site-theme/section-text` | Supersonic Intros | Source ready, needs staging QA | Narrow editorial text section. |
 | Section: Text + Image | `supersonic-site-theme/section-text-image` | Supersonic Media | Source ready, needs staging QA | Two-column copy and visual placeholder. |
