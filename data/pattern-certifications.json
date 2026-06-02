@@ -26,9 +26,17 @@
       "category": "supersonic-headers",
       "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/header-mega.php",
       "qaPageSlug": "qa-pattern-header-mega",
-      "status": "source-ready",
-      "screenshots": {},
-      "knownIssues": []
+      "qaPageUrl": "https://staging.yukonrealestateconnection.ca/qa-pattern-header-mega/",
+      "status": "approved",
+      "certifiedThemeVersion": "0.1.29",
+      "reportPath": "docs/reports/0.1.29-header-mega-qa.md",
+      "screenshots": {
+        "desktop": "screenshots/after/0.1.29-header-mega-qa/header-mega-desktop.png",
+        "tablet": "screenshots/after/0.1.29-header-mega-qa/header-mega-tablet.png",
+        "mobile": "screenshots/after/0.1.29-header-mega-qa/header-mega-mobile.png"
+      },
+      "knownIssues": [],
+      "lastReviewedAt": "2026-06-02"
     },
     {
       "slug": "supersonic-site-theme/footer-simple",
