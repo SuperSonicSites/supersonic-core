@@ -101,13 +101,17 @@ Severity convention for review: **blocker** (fails approval), **major**,
   density onto a landing or home page.
 - **[SPACE-7]** Adjacent full-width section bands **butt together** — no
   base-colored margin or seam between two colored bands. Vertical rhythm comes
-  from each section's own `section-*` padding, never from inter-section
+  from each part/section's own padding, never from inter-section
   margin/block-gap. A base-colored seam between, e.g., a `muted` band and a
-  `surface` band is a defect. **This defect is invisible when a pattern is
-  reviewed alone and only appears once sections are stacked**, so it is caught at
-  layout review (composed), not single-pattern QA, and its root-cause fix belongs
-  at the block/theme level — `layout-review` files the fix request to
-  `pattern-builder` (see Proof & Review).
+  `surface` band is a defect. The theme's root block-gap produces this seam at
+  **two layout levels**, both of which must be zeroed: (1) the page wrapper —
+  between the `.wp-site-blocks` siblings `header` / `main` / `footer` (the seams
+  at the very top and bottom of the page), and (2) inside `main` — between the
+  stacked section patterns (`.wp-block-post-content` children). **This defect is
+  invisible when a pattern is reviewed alone and only appears once sections are
+  stacked**, so it is caught at layout review (composed), not single-pattern QA,
+  and its root-cause fix belongs at the block/theme level — `layout-review` files
+  the fix request to `pattern-builder` (see Proof & Review).
 
 ## 4. Alignment, Justification & Measure — `ALIGN`
 

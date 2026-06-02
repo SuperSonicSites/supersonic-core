@@ -17,13 +17,17 @@
 }
 
 /*
- * Stacked full-width section bands butt together. Vertical rhythm comes from
- * each section's own section-* padding, so the default block-gap must not leave
- * a base-colored margin (a white seam) between two adjacent colored bands. This
- * seam is invisible when a pattern is reviewed alone and only appears once
- * sections are stacked, so layout review owns it (docs/layout-standard.md
- * SPACE-7).
+ * Full-bleed sections butt together — no base-colored seam between bands.
+ * Vertical rhythm comes from each part/section's own padding, so the theme's
+ * root block-gap (m) must not leave a margin between siblings. That block-gap
+ * lands at TWO layout levels, both of which show a white band wherever adjacent
+ * bands are colored (docs/layout-standard.md SPACE-7):
+ *   1. .wp-site-blocks children        -> header / main / footer (page top + bottom seams)
+ *   2. .wp-block-post-content children -> stacked section patterns inside <main>
+ * These seams are invisible when a pattern is reviewed alone and only appear
+ * once sections are stacked, so layout review owns them.
  */
+.wp-site-blocks > *,
 .supersonic-section-page > .wp-block-post-content > * + * {
 	margin-block-start: 0;
 }
