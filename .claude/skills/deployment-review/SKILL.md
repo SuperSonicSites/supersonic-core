@@ -1,6 +1,6 @@
 ---
 name: deployment-review
-description: Use before a production deployment handoff, including requests like "deploy readiness check", "run the deploy checklist", "are we ready to launch", "verify backups and screenshots before deploy", or "prepare a handoff for the site owner". Reviews readiness only and never deploys; production is pushed manually by the site owner.
+description: Use when reviewing deployment readiness before a production handoff, including requests like "deploy readiness check", "run the deploy checklist", "are we ready to launch", "verify backups and screenshots before deploy", or "prepare a handoff for the site owner". Reviews readiness only and never deploys; production is pushed manually by the site owner.
 ---
 
 # Deployment Review Skill

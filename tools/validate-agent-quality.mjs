@@ -52,6 +52,22 @@ function hasUnscopedHeaderCss(content) {
   );
 }
 
+function parseFrontmatter(content) {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) {
+    return null;
+  }
+
+  const fields = [];
+  for (const line of match[1].split(/\r?\n/)) {
+    const field = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (field) {
+      fields.push({ name: field[1], value: field[2] });
+    }
+  }
+  return fields;
+}
+
 async function validateSkills() {
   const files = await listMarkdownFiles('.claude/skills');
   const requiredSections = [
@@ -64,6 +80,29 @@ async function validateSkills() {
 
   for (const file of files) {
     const content = await readText(file);
+    const frontmatter = parseFrontmatter(content);
+    const fieldNames = new Set(frontmatter?.map((field) => field.name) ?? []);
+
+    if (frontmatter && fieldNames.has('name') && fieldNames.has('description')) {
+      pass(`${file} has required skill frontmatter`);
+    } else {
+      fail(`${file} must start with YAML frontmatter containing name and description`);
+    }
+
+    const extraFields = [...fieldNames].filter((field) => !['name', 'description'].includes(field));
+    if (extraFields.length === 0) {
+      pass(`${file} frontmatter stays limited to name and description`);
+    } else {
+      fail(`${file} frontmatter must not include extra fields: ${extraFields.join(', ')}`);
+    }
+
+    const description = frontmatter?.find((field) => field.name === 'description')?.value ?? '';
+    if (description.toLowerCase().includes('use when')) {
+      pass(`${file} description declares use context`);
+    } else {
+      fail(`${file} description must include clear "Use when" trigger language`);
+    }
+
     for (const section of requiredSections) {
       if (content.includes(section)) {
         pass(`${file} includes ${section}`);
@@ -115,6 +154,13 @@ async function validateDocs() {
     } else {
       fail(`${file} must include proof language`);
     }
+  }
+
+  const standard = await readText('docs/agent-quality-standard.md');
+  if (includesAll(standard, ['## New Skill Creation', '## Skill Methodology Template'])) {
+    pass('docs/agent-quality-standard.md defines the new skill methodology');
+  } else {
+    fail('docs/agent-quality-standard.md must define the new skill methodology');
   }
 
   for (const file of [

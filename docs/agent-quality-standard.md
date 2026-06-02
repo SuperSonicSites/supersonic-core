@@ -17,6 +17,56 @@ changes.
 - Preserve unrelated local work and stage only intentional changes.
 - Keep Git as the source of truth.
 
+## New Skill Creation
+
+Every new repo-local skill in `.claude/skills/<skill-name>/SKILL.md` must use
+the same methodology as existing skills.
+
+Required skill shape:
+
+- YAML frontmatter contains only `name` and `description`.
+- `description` starts with the trigger context, using clear "Use when..."
+  language so the skill is selected at the right time.
+- Body stays concise and procedural.
+- The skill references `docs/agent-quality-standard.md`.
+- The skill includes `## Discovery`, `## Contract`, `## Proof Gates`,
+  `## Failure Policy`, and `## Report`.
+- Scripts, references, and assets are added only when they make the skill more
+  reliable or token-efficient.
+- New scripts bundled with a skill are tested.
+- Complex or high-risk skills are forward-tested when it is practical.
+
+## Skill Methodology Template
+
+Use this body shape for new repo-local skills:
+
+```markdown
+# [Skill Name]
+
+Use this skill when...
+Also follow `docs/agent-quality-standard.md`.
+
+## Discovery
+
+Inspect...
+
+## Contract
+
+Define...
+
+## Proof Gates
+
+- Prove...
+
+## Failure Policy
+
+Fail closed when...
+
+## Report
+
+Include...
+```
+
 ## Discovery
 
 Every task starts with the smallest useful discovery pass:
