@@ -1,0 +1,281 @@
+<!--
+SAMPLE / FIXTURE — composed Home-archetype page content for a mock plumbing
+service business ("Rapid Flow Plumbing"). Goes inside <main>; header/footer come
+from the active template. Generic mock content, no real business. NOT a theme
+pattern; not scanned by npm run validate. Background sequence:
+base -> surface -> base -> surface -> contrast -> base -> accent. Exactly one H1
+(hero). Generate the staging payload with:
+  node tools/make-sample-service-payload.mjs --src docs/layouts/plumbing-home-page.html --out data/page-json/plumbing-home-page.json
+-->
+
+<!-- wp:group {"metadata":{"name":"Hero: Simple"},"align":"full","backgroundColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
+	<!-- wp:heading {"level":1,"fontSize":"heading-1"} -->
+	<h1 class="wp-block-heading has-heading-1-font-size">Fast, reliable plumbing — day or night</h1>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph {"fontSize":"large"} -->
+	<p class="has-large-font-size">Licensed plumbers for drains, water heaters, and emergencies across the metro. Upfront pricing and same-day service.</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:buttons -->
+	<div class="wp-block-buttons">
+		<!-- wp:button -->
+		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/contact">Book a plumber</a></div>
+		<!-- /wp:button -->
+		<!-- wp:button {"className":"is-style-outline"} -->
+		<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="tel:+15550107246">Call (555) 010-7246</a></div>
+		<!-- /wp:button -->
+	</div>
+	<!-- /wp:buttons -->
+	<!-- wp:image {"width":"1600px","height":"900px","sizeSlug":"large","style":{"border":{"radius":"var(--wp--custom--radius--medium)"}}} -->
+	<figure class="wp-block-image size-large is-resized has-custom-border"><img src="https://placehold.co/1600x900/1f6feb/ffffff?text=Rapid+Flow+Plumbing" alt="Plumber repairing pipes under a kitchen sink" width="1600" height="900" style="border-radius:var(--wp--custom--radius--medium)"/></figure>
+	<!-- /wp:image -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Logo Row"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:paragraph {"align":"center","textColor":"contrast-subtle","fontSize":"small"} -->
+	<p class="has-text-align-center has-contrast-subtle-color has-text-color has-small-font-size">Trusted by homeowners and property managers across the metro</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:columns {"verticalAlignment":"center","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|l"}}}} -->
+	<div class="wp-block-columns are-vertically-aligned-center">
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center"><!-- wp:image {"width":"180px","height":"60px","sizeSlug":"large"} -->
+		<figure class="wp-block-image size-large is-resized"><img src="https://placehold.co/180x60/f1f3f5/4b5563?text=Licensed" alt="State-licensed contractor badge" width="180" height="60"/></figure>
+		<!-- /wp:image --></div>
+		<!-- /wp:column -->
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center"><!-- wp:image {"width":"180px","height":"60px","sizeSlug":"large"} -->
+		<figure class="wp-block-image size-large is-resized"><img src="https://placehold.co/180x60/f1f3f5/4b5563?text=Insured" alt="Fully insured business badge" width="180" height="60"/></figure>
+		<!-- /wp:image --></div>
+		<!-- /wp:column -->
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center"><!-- wp:image {"width":"180px","height":"60px","sizeSlug":"large"} -->
+		<figure class="wp-block-image size-large is-resized"><img src="https://placehold.co/180x60/f1f3f5/4b5563?text=BBB+A%2B" alt="BBB A-plus accreditation badge" width="180" height="60"/></figure>
+		<!-- /wp:image --></div>
+		<!-- /wp:column -->
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center"><!-- wp:image {"width":"180px","height":"60px","sizeSlug":"large"} -->
+		<figure class="wp-block-image size-large is-resized"><img src="https://placehold.co/180x60/f1f3f5/4b5563?text=24%2F7" alt="24/7 availability badge" width="180" height="60"/></figure>
+		<!-- /wp:image --></div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Service Cards"},"align":"full","backgroundColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<div class="wp-block-group">
+		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">What we fix</h2>
+		<!-- /wp:heading -->
+	</div>
+	<!-- /wp:group -->
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","style":{"border":{"color":"var:preset|color|border","width":"1px","radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-text-color has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">Drain &amp; sewer cleaning</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Slow or backed-up drains cleared fast, with camera inspection to find the root cause.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-outline"} -->
+				<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/services/drain-cleaning">Drain cleaning details</a></div>
+				<!-- /wp:button --></div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","style":{"border":{"color":"var:preset|color|border","width":"1px","radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-text-color has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">Water heater repair &amp; install</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">No hot water? We repair, replace, and install tank and tankless systems the same day.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-outline"} -->
+				<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/services/water-heaters">Water heater details</a></div>
+				<!-- /wp:button --></div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","style":{"border":{"color":"var:preset|color|border","width":"1px","radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-text-color has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:heading {"level":3} -->
+				<h3 class="wp-block-heading">24/7 emergency plumbing</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
+				<p class="has-contrast-subtle-color has-text-color">Burst pipe or major leak? We answer around the clock and can be on site today.</p>
+				<!-- /wp:paragraph -->
+				<!-- wp:buttons -->
+				<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-outline"} -->
+				<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/services/emergency-plumbing">Emergency service details</a></div>
+				<!-- /wp:button --></div>
+				<!-- /wp:buttons -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Text + Image"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:columns {"verticalAlignment":"center","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|xl","left":"var:preset|spacing|xl"}}}} -->
+	<div class="wp-block-columns are-vertically-aligned-center">
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center">
+			<!-- wp:heading {"fontSize":"heading-2"} -->
+			<h2 class="wp-block-heading has-heading-2-font-size">Why homeowners call Rapid Flow</h2>
+			<!-- /wp:heading -->
+			<!-- wp:paragraph -->
+			<p>Flat-rate quotes before we start, clean work areas, and a one-year workmanship guarantee. You always know who is coming and what it costs.</p>
+			<!-- /wp:paragraph -->
+			<!-- wp:buttons -->
+			<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-outline"} -->
+			<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="/about">More about our team</a></div>
+			<!-- /wp:button --></div>
+			<!-- /wp:buttons -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column {"verticalAlignment":"center"} -->
+		<div class="wp-block-column is-vertically-aligned-center">
+			<!-- wp:image {"width":"800px","height":"600px","sizeSlug":"large","style":{"border":{"radius":"var(--wp--custom--radius--medium)"}}} -->
+			<figure class="wp-block-image size-large is-resized has-custom-border"><img src="https://placehold.co/800x600/f7f8fa/4b5563?text=Our+Team" alt="Uniformed plumber greeting a homeowner at the door" width="800" height="600" style="border-radius:var(--wp--custom--radius--medium)"/></figure>
+			<!-- /wp:image -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Stat Band"},"align":"full","backgroundColor":"contrast","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-color has-contrast-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-1"} -->
+			<p class="has-text-align-center has-accent-color has-text-color has-heading-1-font-size"><strong>15+</strong></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"align":"center"} -->
+			<p class="has-text-align-center">years serving the metro</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-1"} -->
+			<p class="has-text-align-center has-accent-color has-text-color has-heading-1-font-size"><strong>12,000+</strong></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"align":"center"} -->
+			<p class="has-text-align-center">jobs completed</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-1"} -->
+			<p class="has-text-align-center has-accent-color has-text-color has-heading-1-font-size"><strong>60 min</strong></p>
+			<!-- /wp:paragraph -->
+			<!-- wp:paragraph {"align":"center"} -->
+			<p class="has-text-align-center">average emergency response</p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"Section: Testimonial Grid"},"align":"full","backgroundColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<div class="wp-block-group">
+		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">What customers say</h2>
+		<!-- /wp:heading -->
+	</div>
+	<!-- /wp:group -->
+	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|m","left":"var:preset|spacing|m"}}}} -->
+	<div class="wp-block-columns">
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"surface","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-surface-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:quote -->
+				<blockquote class="wp-block-quote"><!-- wp:paragraph -->
+				<p>They cleared our main line at 11pm and charged exactly what they quoted. Lifesavers.</p>
+				<!-- /wp:paragraph --><cite>Priya N., homeowner</cite></blockquote>
+				<!-- /wp:quote -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"surface","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-surface-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:quote -->
+				<blockquote class="wp-block-quote"><!-- wp:paragraph -->
+				<p>New water heater installed the same morning I called. Clean, fast, and friendly.</p>
+				<!-- /wp:paragraph --><cite>Marcus T., property manager</cite></blockquote>
+				<!-- /wp:quote -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"textColor":"contrast","backgroundColor":"surface","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
+			<div class="wp-block-group has-contrast-color has-surface-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
+				<!-- wp:quote -->
+				<blockquote class="wp-block-quote"><!-- wp:paragraph -->
+				<p>Honest quote, no upsell, and they left the kitchen cleaner than they found it.</p>
+				<!-- /wp:paragraph --><cite>Dana R., homeowner</cite></blockquote>
+				<!-- /wp:quote -->
+			</div>
+			<!-- /wp:group -->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:group {"metadata":{"name":"CTA: Band"},"align":"full","backgroundColor":"accent","textColor":"accent-contrast","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-accent-contrast-color has-accent-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
+	<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
+	<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Got a plumbing problem?</h2>
+	<!-- /wp:heading -->
+	<!-- wp:paragraph {"align":"center"} -->
+	<p class="has-text-align-center">We answer 24/7 and can usually be on site the same day. Get an upfront quote now.</p>
+	<!-- /wp:paragraph -->
+	<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+	<div class="wp-block-buttons">
+		<!-- wp:button {"backgroundColor":"base","textColor":"contrast"} -->
+		<div class="wp-block-button"><a class="wp-block-button__link has-contrast-color has-base-background-color has-text-color has-background wp-element-button" href="/contact">Book a plumber</a></div>
+		<!-- /wp:button -->
+	</div>
+	<!-- /wp:buttons -->
+</div>
+<!-- /wp:group -->
