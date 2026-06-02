@@ -82,6 +82,15 @@
  * still collapse to a single column on phones. See docs/layout-standard.md.
  */
 @media (max-width: 600px) {
+	/*
+	 * is-not-stacked-on-mobile also forces flex-wrap:nowrap, which would keep the
+	 * columns on one cramped row even at full basis. Re-allow wrapping so the
+	 * full-width columns actually stack on phones.
+	 */
+	.wp-block-columns.is-not-stacked-on-mobile {
+		flex-wrap: wrap !important;
+	}
+
 	.wp-block-columns.is-not-stacked-on-mobile > .wp-block-column {
 		flex-basis: 100% !important;
 	}
