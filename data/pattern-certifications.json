@@ -85,12 +85,12 @@
       "certifiedThemeVersion": "0.1.26",
       "reportPath": "docs/reports/0.1.26-pattern-certification.md",
       "screenshots": {
-        "desktop": "screenshots/after/0.1.26-pattern-certification/hero-fullscreen-image-desktop.png",
-        "tablet": "screenshots/after/0.1.26-pattern-certification/hero-fullscreen-image-tablet.png",
-        "mobile": "screenshots/after/0.1.26-pattern-certification/hero-fullscreen-image-mobile.png"
+        "desktop": "screenshots/after/0.1.26-qa/hero-fullscreen-image-desktop.png",
+        "tablet": "screenshots/after/0.1.26-qa/hero-fullscreen-image-tablet.png",
+        "mobile": "screenshots/after/0.1.26-qa/hero-fullscreen-image-mobile.png"
       },
       "knownIssues": [],
-      "lastReviewedAt": "2026-06-01"
+      "lastReviewedAt": "2026-06-02"
     },
     {
       "slug": "supersonic-site-theme/section-page-intro",
