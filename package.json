@@ -1,6 +1,6 @@
 {
   "name": "supersonic-core",
-  "version": "0.1.30",
+  "version": "0.1.29",
   "private": true,
   "description": "AI-driven single-site WordPress framework source of truth.",
   "type": "module",
