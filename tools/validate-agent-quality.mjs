@@ -60,9 +60,13 @@ function parseFrontmatter(content) {
 
   const fields = [];
   for (const line of match[1].split(/\r?\n/)) {
+    // Only treat a line as a new field if it starts at column zero (no leading whitespace).
+    // Indented continuation lines are appended to the previous field's value.
     const field = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
     if (field) {
       fields.push({ name: field[1], value: field[2] });
+    } else if (/^[ \t]/.test(line) && fields.length > 0) {
+      fields[fields.length - 1].value += ' ' + line.trim();
     }
   }
   return fields;
@@ -97,14 +101,24 @@ async function validateSkills() {
     }
 
     const description = frontmatter?.find((field) => field.name === 'description')?.value ?? '';
-    if (description.toLowerCase().includes('use when')) {
+    if (description.trimStart().toLowerCase().startsWith('use when')) {
       pass(`${file} description declares use context`);
     } else {
       fail(`${file} description must include clear "Use when" trigger language`);
     }
 
+    const frontmatterName = frontmatter?.find((field) => field.name === 'name')?.value ?? '';
+    const dir = path.basename(path.dirname(path.join(root, file)));
+    if (frontmatterName === dir) {
+      pass(`${file} frontmatter name matches its directory`);
+    } else {
+      fail(`${file} frontmatter name "${frontmatterName}" must match directory "${dir}"`);
+    }
+
     for (const section of requiredSections) {
-      if (content.includes(section)) {
+      const sectionName = section.replace(/^##\s+/, '');
+      const headingRegex = new RegExp('(^|\\n)##\\s+' + sectionName + '\\b');
+      if (headingRegex.test(content)) {
         pass(`${file} includes ${section}`);
       } else {
         fail(`${file} missing ${section}`);
