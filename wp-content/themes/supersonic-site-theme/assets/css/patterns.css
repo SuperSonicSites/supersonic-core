@@ -60,3 +60,13 @@
 	display: block;
 	width: 100%;
 }
+
+@media (max-width: 781px) {
+	.supersonic-media-split:not(.is-not-stacked-on-mobile) > .supersonic-media-split__media {
+		order: -1;
+	}
+
+	.supersonic-media-split:not(.is-not-stacked-on-mobile) > .supersonic-media-split__content {
+		order: 0;
+	}
+}
