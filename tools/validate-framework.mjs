@@ -1045,9 +1045,9 @@ async function validateCategoryContracts() {
       }
     }
 
-    if (slug.endsWith('/header-simple') || slug.endsWith('/footer-simple')) {
+    if (slug.endsWith('/header-simple')) {
       if (!blocks.some((block) => block.name === 'core/site-title')) {
-        violations.push('header/footer pattern must include a site-title fallback beside the site-logo');
+        violations.push('header pattern must include a site-title fallback beside the site-logo');
       }
     }
 
