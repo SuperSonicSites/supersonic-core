@@ -28,12 +28,12 @@
 			<div class="wp-block-column is-vertically-aligned-center">
 				<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"right"},"style":{"spacing":{"blockGap":"var:preset|spacing|s"}}} -->
 				<div class="wp-block-buttons">
-					<!-- wp:button {"backgroundColor":"base","textColor":"contrast"} -->
-					<div class="wp-block-button"><a class="wp-block-button__link has-contrast-color has-base-background-color has-text-color has-background wp-element-button" href="#">Book a call</a></div>
+					<!-- wp:button -->
+					<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Book a call</a></div>
 					<!-- /wp:button -->
 
-					<!-- wp:button {"className":"is-style-outline","textColor":"base"} -->
-					<div class="wp-block-button is-style-outline"><a class="wp-block-button__link has-base-color has-text-color wp-element-button" href="#">View work</a></div>
+					<!-- wp:button {"className":"is-style-outline"} -->
+					<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="#">View work</a></div>
 					<!-- /wp:button -->
 				</div>
 				<!-- /wp:buttons -->

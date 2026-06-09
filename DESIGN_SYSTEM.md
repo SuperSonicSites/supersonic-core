@@ -94,12 +94,19 @@ The default page template does not force a page title above every page.
 
 Buttons should be clear, accessible, and easy to tap.
 
+Two variants, both controlled centrally from the theme:
+
+- **Primary** (solid accent fill) — `styles.elements.button` in `theme.json`. The default `wp:button` with no color attributes. Edit it once in Site Editor → Styles → Blocks → Button.
+- **Secondary** (outline / ghost) — `styles.blocks.core/button` `variations.outline` in `theme.json`. Authored as `is-style-outline` (the core **Default / Outline** toggle in the block toolbar). Edit it once in the same Styles panel.
+
 Rules:
 
 - Use consistent button styles.
 - Use action-oriented labels.
 - Avoid tiny tap targets.
 - Do not use multiple competing primary buttons in the same section.
+- **Do not hardcode button colors** (`backgroundColor` / `textColor` / `has-*-color` classes) in patterns. Hardcoding opts a button out of central theme control. Drop a bare primary or an `is-style-outline` secondary onto the band and let the theme color it.
+- **On dark bands** (sections painted `accent` or `contrast` background), the on-dark button contract in `assets/css/patterns.css` inverts buttons by context: the solid primary becomes a light button with dark text, and the outline follows the band's light text via `currentColor`. No per-button color needed — recoloring the theme button still flows through these CTAs. If a new dark section background is introduced, add its `has-*-background-color` class to that contract's scope.
 
 ## Navigation
 

@@ -32,8 +32,43 @@
 	margin-block-start: 0;
 }
 
+/*
+ * On-dark button contract.
+ *
+ * Buttons are styled centrally in theme.json: the solid PRIMARY comes from
+ * styles.elements.button (accent fill, light text); the OUTLINE secondary comes
+ * from styles.blocks.core/button variations.outline (accent border + accent
+ * text). Both read well on light bands but would be low-contrast — or, on the
+ * accent band itself, invisible — when placed on a dark/accent section.
+ *
+ * Rather than hardcode inverted colors per button (which opts those buttons out
+ * of central theme control), patterns drop bare buttons onto dark bands and this
+ * contract inverts them by CONTEXT. Recoloring the theme button still flows
+ * through everywhere; only the dark-context inversion is fixed here.
+ *
+ * Scope: any container painted with a dark theme background. Keep this list in
+ * sync with the dark section backgrounds patterns are allowed to use.
+ */
+
+/*
+ * Baseline contract: a button label with no local text color inherits the
+ * band's explicit text color. This is the general framework rule; the on-dark
+ * primary/outline rules below layer specific inversion on top of it.
+ */
 .has-text-color .wp-block-button__link:not(.has-text-color) {
 	color: inherit;
+}
+
+/* Solid PRIMARY inverts to a light button with dark text. */
+:where(.has-accent-background-color, .has-contrast-background-color) .wp-block-button:not(.is-style-outline) .wp-block-button__link:not(.has-background) {
+	background-color: var(--wp--preset--color--base);
+	color: var(--wp--preset--color--contrast);
+}
+
+/* OUTLINE secondary follows the band's (light) text via currentColor. */
+:where(.has-accent-background-color, .has-contrast-background-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color) {
+	border-color: currentColor;
+	color: currentColor;
 }
 
 .supersonic-brand-lockup {
