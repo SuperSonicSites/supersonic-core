@@ -72,6 +72,19 @@
         "phrasesToAvoid": {
           "type": "array",
           "items": { "type": "string" }
+        },
+        "assets": {
+          "type": "object",
+          "description": "Existing brand asset files supplied by the client (logos, favicon). Paths are repo-relative or capture-relative.",
+          "additionalProperties": false,
+          "properties": {
+            "logoPaths": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "faviconPath": { "type": "string" },
+            "notes": { "type": "string" }
+          }
         }
       }
     },
@@ -216,6 +229,63 @@
     "openQuestions": {
       "type": "array",
       "items": { "type": "string" }
+    },
+    "legacySite": {
+      "type": "object",
+      "description": "Present when the build replaces an existing website. When isRedesign is true, the new-site-init Redesign Branch applies: capture the legacy site first, then curate data/redirects.csv before the build plan is approved.",
+      "additionalProperties": false,
+      "required": ["isRedesign"],
+      "properties": {
+        "isRedesign": {
+          "type": "boolean",
+          "description": "True when this build replaces an existing live website whose URLs, rankings, or assets must be considered."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Root URL of the legacy site to capture and audit."
+        },
+        "cms": {
+          "type": "string",
+          "description": "CMS or platform the legacy site runs on (for example WordPress, Wix, Squarespace, static HTML)."
+        },
+        "captureDir": {
+          "type": "string",
+          "description": "Repo directory holding the legacy capture output (inventory.json, pages, assets). Defaults to \"captured\"."
+        },
+        "keepUrls": {
+          "type": "array",
+          "description": "Legacy URLs that must keep their rankings: preserve the path on the new site or 301 it in data/redirects.csv.",
+          "items": { "type": "string" }
+        },
+        "knownTopPages": {
+          "type": "array",
+          "description": "Highest-value legacy pages from the client or analytics, used to prioritize redirect and content decisions.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string" },
+              "monthlySessions": { "type": "number" },
+              "rankingKeywords": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "assetsToReuse": {
+          "type": "array",
+          "description": "Legacy assets to carry over (logos, photos, testimonials, copy blocks, documents).",
+          "items": { "type": "string" }
+        },
+        "thingsThatMustNotBreak": {
+          "type": "array",
+          "description": "Hard constraints from the client: URLs, forms, integrations, embeds, or flows that must keep working after launch.",
+          "items": { "type": "string" }
+        }
+      }
     }
   }
 }

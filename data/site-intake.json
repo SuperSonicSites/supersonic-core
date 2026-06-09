@@ -62,6 +62,9 @@
   },
   "openQuestions": [
     "Run the new-site-init workflow to replace these placeholders."
-  ]
+  ],
+  "legacySite": {
+    "isRedesign": false
+  }
 }
 

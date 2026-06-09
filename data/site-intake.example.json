@@ -18,7 +18,12 @@
   "brand": {
     "voice": ["clear", "helpful", "confident"],
     "writingStyle": "Plain language with concrete benefits.",
-    "phrasesToAvoid": ["best-in-class", "revolutionary"]
+    "phrasesToAvoid": ["best-in-class", "revolutionary"],
+    "assets": {
+      "logoPaths": ["captured/assets/logo-horizontal.png", "captured/assets/logo-mark.svg"],
+      "faviconPath": "captured/assets/favicon.ico",
+      "notes": "Client wants the existing logo kept as-is; favicon may be regenerated from the logo mark."
+    }
   },
   "design": {
     "direction": "Clean, structured, and easy to scan.",
@@ -68,6 +73,40 @@
     "mustHave": ["Home page", "Contact flow", "Mobile QA"],
     "canWait": ["Advanced content types"]
   },
-  "openQuestions": []
+  "openQuestions": [],
+  "legacySite": {
+    "isRedesign": true,
+    "url": "https://www.example.com",
+    "cms": "WordPress (classic theme, page builder)",
+    "captureDir": "captured",
+    "keepUrls": ["/", "/services/", "/services/emergency-repair/", "/contact/"],
+    "knownTopPages": [
+      {
+        "url": "/services/emergency-repair/",
+        "monthlySessions": 1200,
+        "rankingKeywords": ["emergency repair example city", "24 hour repair near me"]
+      },
+      {
+        "url": "/",
+        "monthlySessions": 900,
+        "rankingKeywords": ["example company", "repair company example city"]
+      },
+      {
+        "url": "/blog/how-to-prevent-breakdowns/",
+        "monthlySessions": 350,
+        "rankingKeywords": ["how to prevent breakdowns"]
+      }
+    ],
+    "assetsToReuse": [
+      "logo and favicon",
+      "team and job-site photos in /wp-content/uploads",
+      "Google review quotes used on the old homepage"
+    ],
+    "thingsThatMustNotBreak": [
+      "rankings for /services/emergency-repair/",
+      "the phone number click-to-call links cited in local listings",
+      "the contact form lead notifications to the office inbox"
+    ]
+  }
 }
 
