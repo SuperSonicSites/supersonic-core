@@ -58,6 +58,38 @@ function supersonic_site_theme_setup() {
 
 add_filter('should_load_remote_block_patterns', '__return_false');
 
+add_action('init', 'supersonic_site_theme_register_year_shortcode');
+
+/**
+ * [supersonic_year] outputs the current four-digit year, localized to the site
+ * timezone. Used in the footer copyright line so it updates automatically.
+ */
+function supersonic_site_theme_register_year_shortcode() {
+	add_shortcode('supersonic_year', 'supersonic_site_theme_current_year');
+}
+
+function supersonic_site_theme_current_year() {
+	return esc_html(wp_date('Y'));
+}
+
+/**
+ * Resolve shortcodes inside rendered core/paragraph blocks.
+ *
+ * Template parts (header/footer) do not pass through the_content, so shortcodes
+ * placed in a footer paragraph would otherwise print literally. This lets the
+ * [supersonic_year] shortcode resolve in the footer copyright line while keeping
+ * the line editable as a normal paragraph in the block editor.
+ */
+add_filter('render_block_core/paragraph', 'supersonic_site_theme_do_paragraph_shortcodes');
+
+function supersonic_site_theme_do_paragraph_shortcodes($block_content) {
+	if (false === strpos($block_content, '[')) {
+		return $block_content;
+	}
+
+	return do_shortcode($block_content);
+}
+
 add_action('wp_enqueue_scripts', 'supersonic_site_theme_enqueue_styles');
 
 function supersonic_site_theme_enqueue_styles() {

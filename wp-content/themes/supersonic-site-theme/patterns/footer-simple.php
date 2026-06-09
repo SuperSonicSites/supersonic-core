@@ -17,7 +17,6 @@
 			<!-- wp:group {"className":"supersonic-brand-lockup","style":{"spacing":{"blockGap":"var:preset|spacing|s"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
 			<div class="wp-block-group supersonic-brand-lockup">
 				<!-- wp:site-logo {"width":120} /-->
-				<!-- wp:site-title /-->
 			</div>
 			<!-- /wp:group -->
 
@@ -60,8 +59,16 @@
 	<hr class="wp-block-separator has-alpha-channel-opacity"/>
 	<!-- /wp:separator -->
 
-	<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
-	<p class="has-text-align-center has-small-font-size">&copy; Your Company. Powered by Supersonic Site Theme.</p>
-	<!-- /wp:paragraph -->
+	<!-- wp:group {"className":"supersonic-footer-legal","style":{"spacing":{"blockGap":"var:preset|spacing|s"}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+	<div class="wp-block-group supersonic-footer-legal">
+		<!-- wp:paragraph {"fontSize":"small"} -->
+		<p class="has-small-font-size">&copy; [supersonic_year] . All rights reserved</p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:paragraph {"fontSize":"small"} -->
+		<p class="has-small-font-size">Handcrafted with &#10084;&#65039; by <a href="https://www.supersonicrealtors.com">Supersonic Realtors</a></p>
+		<!-- /wp:paragraph -->
+	</div>
+	<!-- /wp:group -->
 </div>
 <!-- /wp:group -->
