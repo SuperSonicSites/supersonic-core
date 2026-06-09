@@ -106,6 +106,28 @@ function supersonic_site_theme_enqueue_styles() {
 	}
 }
 
+/**
+ * Degrade gracefully when Rank Math is not active.
+ *
+ * The FAQ section pattern depends on the approved rank-math/faq-block. Theme
+ * pattern files auto-register on init (priority 10), so this late-priority
+ * init hook unregisters the pattern when Rank Math is absent instead of
+ * offering editors a pattern whose core block would render as missing.
+ */
+add_action('init', 'supersonic_site_theme_maybe_unregister_rankmath_faq_pattern', 20);
+
+function supersonic_site_theme_maybe_unregister_rankmath_faq_pattern() {
+	if (defined('RANK_MATH_VERSION')) {
+		return;
+	}
+
+	if (! function_exists('unregister_block_pattern')) {
+		return;
+	}
+
+	unregister_block_pattern('supersonic-site-theme/section-faq-rankmath');
+}
+
 add_action('init', 'supersonic_site_theme_register_pattern_categories');
 
 function supersonic_site_theme_register_pattern_categories() {

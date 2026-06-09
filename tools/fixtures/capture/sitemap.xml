@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://legacy.example.com/</loc>
+    <lastmod>2025-11-02</lastmod>
+  </url>
+  <url>
+    <loc>https://legacy.example.com/about-us/</loc>
+  </url>
+  <url>
+    <loc>https://legacy.example.com/services/roof-repair?utm_source=feed&amp;ref=sitemap</loc>
+  </url>
+</urlset>

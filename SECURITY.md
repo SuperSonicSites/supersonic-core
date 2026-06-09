@@ -64,6 +64,18 @@ Before adding a plugin, document:
 - rollback plan
 - approval status
 
+### Approved Third-Party Plugins
+
+#### Rank Math SEO (free)
+
+- Reason for plugin: single owner for all SEO output — meta titles/descriptions, Open Graph, JSON-LD schema, sitemaps, and 301 redirects. The theme and the site-core plugin emit none of these (see `SEO_STRATEGY.md`).
+- Alternatives considered: Yoast SEO (heavier upsell surface, weaker redirect import), custom schema/meta helpers in the site-core plugin (rejected: duplicates a solved problem and splits SEO ownership).
+- Maintenance status: actively maintained, large install base, regular releases tracking WordPress core.
+- Security history: past disclosed vulnerabilities were patched promptly; keep the plugin updated on staging before production sync.
+- Performance impact: low on the frontend; sitemap and schema generation are cached by the plugin.
+- Rollback plan: deactivate the plugin; redirects remain safe in Git (`data/redirects.csv` is the source of truth and can be re-imported), and Updraft backups restore plugin settings.
+- Approval status: approved, free tier only. Pro features or any other SEO plugin require a new approval.
+
 ## Custom Plugin Security
 
 Every custom plugin feature must follow these rules:

@@ -1,0 +1,27 @@
+{
+  "url": "https://legacy.example.com/about-us",
+  "status": 200,
+  "redirectedTo": null,
+  "fetchedAt": "2026-06-09T00:00:01.000Z",
+  "title": "About Us | Legacy Example",
+  "metaDescription": "",
+  "canonical": "https://legacy.example.com/about-us/",
+  "ogTitle": "",
+  "ogImage": "",
+  "robotsMeta": "",
+  "h1s": ["About Legacy Example", "Our Story"],
+  "headingsOutline": [
+    { "level": 1, "text": "About Legacy Example" },
+    { "level": 1, "text": "Our Story" },
+    { "level": 2, "text": "The team" }
+  ],
+  "mainText": "Family owned since 1989. Two generations of roofers serving Example City and the surrounding county.",
+  "images": [
+    { "src": "https://legacy.example.com/img/team.jpg", "alt": "", "naturalWidth": 1200, "naturalHeight": 800 }
+  ],
+  "links": [
+    "https://legacy.example.com/",
+    "https://legacy.example.com/contact/"
+  ],
+  "jsonLdTypes": []
+}

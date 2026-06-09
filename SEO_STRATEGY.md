@@ -6,6 +6,10 @@ For `supersonic-core`, this is a starter template. For a cloned site repo, repla
 
 This file is produced and maintained by the `seo-strategist` skill during Init, using the Ubersuggest MCP. The authoritative, machine-readable per-page briefs live in `data/seo-briefs.json` (contract: `data/seo-briefs.schema.json`); this file is the human-readable summary. SEO titles, meta descriptions, slugs, and schema plans are owned here by `seo-strategist` — not by the writer, who fills body copy only. Validate the briefs with `npm run seo:briefs:check`.
 
+## SEO Output Ownership
+
+Rank Math (free, approved in `SECURITY.md`) owns all SEO output on the live site: meta titles and descriptions, Open Graph tags, JSON-LD schema, XML sitemaps, and 301 redirects. The theme and the supersonic-site-core plugin emit none of these. `data/redirects.csv` is the Git source of truth for redirects; it flows into Rank Math via `tools/export-rankmath-redirects.mjs` and the Rank Math redirection importer.
+
 ## SEO Principles
 
 - Each important page needs a clear search intent.
@@ -73,5 +77,5 @@ Potential schema types, only when applicable:
 - FAQPage
 - BreadcrumbList
 
-`seo-strategist` records the per-page schema **plan** (type + required fields) in `data/seo-briefs.json`; it never emits JSON-LD. Emission belongs to the site-core plugin / Rank Math / SEO layer. Schema helpers belong in the site-core plugin if custom logic is needed.
+`seo-strategist` records the per-page schema **plan** (type + required fields) in `data/seo-briefs.json`; it never emits JSON-LD. Emission belongs to Rank Math (see SEO Output Ownership above) — not the theme and not the site-core plugin.
 

@@ -1,0 +1,33 @@
+{
+  "url": "https://legacy.example.com/",
+  "status": 200,
+  "redirectedTo": null,
+  "fetchedAt": "2026-06-09T00:00:00.000Z",
+  "title": "Legacy Example | Roofing Done Right",
+  "metaDescription": "Roof repair and replacement for Example City.",
+  "canonical": "https://legacy.example.com/",
+  "ogTitle": "Legacy Example",
+  "ogImage": "https://legacy.example.com/img/og-home.jpg",
+  "robotsMeta": "index, follow",
+  "h1s": ["Welcome to Legacy Example"],
+  "headingsOutline": [
+    { "level": 1, "text": "Welcome to Legacy Example" },
+    { "level": 2, "text": "What we do" },
+    { "level": 3, "text": "Roof repair" }
+  ],
+  "mainText": "We fix roofs fast and we fix them right.",
+  "images": [
+    { "src": "https://legacy.example.com/img/hero.jpg", "alt": "Crew repairing a roof", "naturalWidth": 1600, "naturalHeight": 900 },
+    { "src": "https://legacy.example.com/img/logo.svg", "alt": "Legacy Example logo", "naturalWidth": 200, "naturalHeight": 60 }
+  ],
+  "links": [
+    "https://legacy.example.com/about-us/",
+    "https://legacy.example.com/about-us?ref=home",
+    "https://www.legacy.example.com/services/roof-repair",
+    "https://facebook.com/legacyexample",
+    "mailto:info@legacy.example.com",
+    "tel:+15555550100",
+    "https://legacy.example.com/img/brochure.pdf"
+  ],
+  "jsonLdTypes": ["Organization", "WebSite", "Organization"]
+}

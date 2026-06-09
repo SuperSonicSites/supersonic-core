@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Section: Pricing Cards"},"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Choose a package</h2>
@@ -26,9 +26,9 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
-				<!-- wp:paragraph {"fontSize":"small"} -->
-				<p class="has-small-font-size">&nbsp;</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:group {"metadata":{"name":"Badge Slot"},"style":{"dimensions":{"minHeight":"var(--wp--preset--spacing--m)"}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group" style="min-height:var(--wp--preset--spacing--m)"></div>
+				<!-- /wp:group -->
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Starter</h3>
 				<!-- /wp:heading -->
@@ -52,9 +52,13 @@
 			<div class="wp-block-group has-border-color" style="border-color:var(--wp--preset--color--accent);border-width:2px;border-radius:var(--wp--custom--radius--medium);box-shadow:var(--wp--preset--shadow--medium)">
 				<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 				<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-				<p class="has-accent-color has-text-color has-small-font-size"><strong>Popular</strong></p>
-				<!-- /wp:paragraph -->
+				<!-- wp:group {"metadata":{"name":"Badge Slot"},"style":{"dimensions":{"minHeight":"var(--wp--preset--spacing--m)"}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group" style="min-height:var(--wp--preset--spacing--m)">
+					<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
+					<p class="has-accent-color has-text-color has-small-font-size"><strong>Popular</strong></p>
+					<!-- /wp:paragraph -->
+				</div>
+				<!-- /wp:group -->
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Growth</h3>
 				<!-- /wp:heading -->
@@ -78,9 +82,9 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
-				<!-- wp:paragraph {"fontSize":"small"} -->
-				<p class="has-small-font-size">&nbsp;</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:group {"metadata":{"name":"Badge Slot"},"style":{"dimensions":{"minHeight":"var(--wp--preset--spacing--m)"}},"layout":{"type":"default"}} -->
+				<div class="wp-block-group" style="min-height:var(--wp--preset--spacing--m)"></div>
+				<!-- /wp:group -->
 				<!-- wp:heading {"level":3} -->
 				<h3 class="wp-block-heading">Scale</h3>
 				<!-- /wp:heading -->

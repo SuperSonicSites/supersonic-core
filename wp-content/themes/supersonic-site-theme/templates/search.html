@@ -4,7 +4,11 @@
 <main class="wp-block-group supersonic-section-page">
 	<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-large)">
-		<!-- wp:query {"queryId":1,"query":{"perPage":10,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":true}} -->
+		<!-- wp:query-title {"type":"search","level":1,"fontSize":"heading-2"} /-->
+
+		<!-- wp:search {"label":"Search","showLabel":false,"placeholder":"Search this site","buttonText":"Search"} /-->
+
+		<!-- wp:query {"queryId":4,"query":{"perPage":10,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":true}} -->
 		<div class="wp-block-query">
 			<!-- wp:post-template {"style":{"spacing":{"blockGap":"var:preset|spacing|2-xl"}},"layout":{"type":"default"}} -->
 				<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|xs"}},"layout":{"type":"default"}} -->
@@ -28,7 +32,7 @@
 
 			<!-- wp:query-no-results -->
 				<!-- wp:paragraph -->
-				<p>Nothing has been published here yet. Check back soon.</p>
+				<p>No results found. Try a different search term, or browse from the navigation above.</p>
 				<!-- /wp:paragraph -->
 			<!-- /wp:query-no-results -->
 		</div>

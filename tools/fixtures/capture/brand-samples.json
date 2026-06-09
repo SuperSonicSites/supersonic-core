@@ -1,0 +1,21 @@
+[
+  [
+    { "selector": "body", "color": "rgb(51, 51, 51)", "backgroundColor": "rgb(255, 255, 255)", "fontFamily": "\"Inter\", sans-serif" },
+    { "selector": "header", "color": "rgb(51, 51, 51)", "backgroundColor": "rgb(255, 255, 255)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "footer", "color": "rgb(255, 255, 255)", "backgroundColor": "rgb(17, 17, 17)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "h1", "color": "rgb(17, 17, 17)", "backgroundColor": "rgba(0, 0, 0, 0)", "fontFamily": "\"Playfair Display\", serif" },
+    { "selector": "h2", "color": "rgb(17, 17, 17)", "backgroundColor": "rgba(0, 0, 0, 0)", "fontFamily": "\"Playfair Display\", serif" },
+    { "selector": "a", "color": "rgb(0, 102, 204)", "backgroundColor": "rgba(0, 0, 0, 0)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "button", "color": "rgb(255, 255, 255)", "backgroundColor": "rgb(0, 102, 204)", "fontFamily": "Inter, sans-serif" }
+  ],
+  [
+    { "selector": "body", "color": "rgb(51, 51, 51)", "backgroundColor": "rgb(255, 255, 255)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "header", "color": "rgb(51, 51, 51)", "backgroundColor": "rgb(255, 255, 255)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "footer", "color": "rgb(255, 255, 255)", "backgroundColor": "rgb(17, 17, 17)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "h1", "color": "rgb(17, 17, 17)", "backgroundColor": "rgba(0, 0, 0, 0)", "fontFamily": "\"Playfair Display\", serif" },
+    { "selector": "h2", "color": "rgb(17, 17, 17)", "backgroundColor": "rgba(0, 0, 0, 0)", "fontFamily": "\"Playfair Display\", serif" },
+    { "selector": "nav a", "color": "rgb(0, 102, 204)", "backgroundColor": "rgba(0, 0, 0, 0)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "button", "color": "rgb(255, 255, 255)", "backgroundColor": "rgb(0, 102, 204)", "fontFamily": "Inter, sans-serif" },
+    { "selector": "[class*=\"btn\"]", "color": "rgb(0, 102, 204)", "backgroundColor": "transparent", "fontFamily": "Inter, sans-serif" }
+  ]
+]

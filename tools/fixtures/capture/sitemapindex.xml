@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://legacy.example.com/page-sitemap.xml</loc>
+    <lastmod>2025-11-02T10:00:00+00:00</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc><![CDATA[https://legacy.example.com/post-sitemap.xml]]></loc>
+  </sitemap>
+</sitemapindex>

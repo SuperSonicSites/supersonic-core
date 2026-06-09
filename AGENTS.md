@@ -20,6 +20,8 @@ When a task matches one of these workflows, read the matching
 `.claude/skills/<skill-name>/SKILL.md` before acting:
 
 - `pattern-builder`
+- `layout-architect`
+- `layout-review`
 - `visual-qa`
 - `accessibility-review`
 - `seo-auditor`

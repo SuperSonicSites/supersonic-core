@@ -7,9 +7,9 @@
  * Description: A fullscreen hero with a background image, overlay, and centered text content.
  */
 ?>
-<!-- wp:cover {"metadata":{"name":"Hero: Fullscreen Image"},"url":"","id":0,"dimRatio":50,"align":"full","minHeight":"100vh","minHeightUnit":"vh","contentPosition":"center center","isDark":false,"style":{"spacing":{"padding":{"top":"var:preset|spacing|section-none","bottom":"var:preset|spacing|section-none"}}}} -->
-<div class="wp-block-cover alignfull" style="min-height:100vh;padding-top:var(--wp--preset--spacing--section-none);padding-bottom:var(--wp--preset--spacing--section-none)"><span aria-hidden="true" class="wp-block-cover__background has-background-dim"></span><div class="wp-block-cover__inner-container">
-	<!-- wp:group {"textAlign":"center","layout":{"type":"constrained","contentSize":"760px"}} -->
+<!-- wp:cover {"metadata":{"name":"Hero: Fullscreen Image"},"url":"","id":0,"dimRatio":50,"align":"full","minHeight":"100svh","minHeightUnit":"svh","contentPosition":"center center","isDark":false,"style":{"spacing":{"padding":{"top":"var:preset|spacing|section-none","bottom":"var:preset|spacing|section-none"}}}} -->
+<div class="wp-block-cover alignfull" style="min-height:100svh;padding-top:var(--wp--preset--spacing--section-none);padding-bottom:var(--wp--preset--spacing--section-none)"><span aria-hidden="true" class="wp-block-cover__background has-background-dim"></span><div class="wp-block-cover__inner-container">
+	<!-- wp:group {"textAlign":"center","layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group has-text-align-center">
 		<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"display"} -->
 		<h1 class="wp-block-heading has-text-align-center has-display-font-size">Fullscreen image hero</h1>

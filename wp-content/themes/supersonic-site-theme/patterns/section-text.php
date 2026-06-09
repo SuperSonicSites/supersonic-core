@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Section: Text"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-heading-2-font-size">A clear section heading</h2>

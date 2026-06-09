@@ -1,0 +1,18 @@
+{
+  "url": "https://legacy.example.com/old-contact",
+  "status": 200,
+  "redirectedTo": "https://legacy.example.com/contact",
+  "fetchedAt": "2026-06-09T00:00:02.000Z",
+  "title": "Contact | Legacy Example",
+  "metaDescription": "Get in touch.",
+  "canonical": "https://legacy.example.com/contact",
+  "ogTitle": "Contact",
+  "ogImage": "",
+  "robotsMeta": "noindex, follow",
+  "h1s": [],
+  "headingsOutline": [],
+  "mainText": "",
+  "images": [],
+  "links": [],
+  "jsonLdTypes": ["ContactPage"]
+}

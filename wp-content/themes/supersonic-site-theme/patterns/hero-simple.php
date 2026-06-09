@@ -7,7 +7,7 @@
  * Description: A simple editable hero section with a headline, lead text, and two buttons.
  */
 ?>
-<!-- wp:group {"metadata":{"name":"Hero: Simple"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"760px","justifyContent":"left"}} -->
+<!-- wp:group {"metadata":{"name":"Hero: Simple"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)","justifyContent":"left"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
 	<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
 	<p class="has-accent-color has-text-color has-small-font-size"><strong>Editable starter section</strong></p>

@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+
+# mixed-case directive on purpose: the parser must be case-insensitive
+sitemap: https://legacy.example.com/sitemap_index.xml
+Sitemap: https://legacy.example.com/news-sitemap.xml
+Crawl-delay: 5

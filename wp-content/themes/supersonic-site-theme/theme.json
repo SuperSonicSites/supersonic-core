@@ -5,7 +5,7 @@
     "appearanceTools": true,
     "useRootPaddingAwareAlignments": true,
     "layout": {
-      "contentSize": "1440px",
+      "contentSize": "1200px",
       "wideSize": "1440px"
     },
     "border": {
@@ -51,9 +51,19 @@
           "slug": "border"
         },
         {
-          "color": "#1f6feb",
+          "color": "#1a5fd0",
           "name": "Accent",
           "slug": "accent"
+        },
+        {
+          "color": "#174ea6",
+          "name": "Accent Hover",
+          "slug": "accent-hover"
+        },
+        {
+          "color": "#123c85",
+          "name": "Accent Strong",
+          "slug": "accent-strong"
         },
         {
           "color": "#ffffff",
@@ -69,7 +79,7 @@
         },
         {
           "name": "Accent Veil",
-          "gradient": "linear-gradient(135deg, #1f6feb 0%, #1a56c4 100%)",
+          "gradient": "linear-gradient(135deg, #1a5fd0 0%, #174ea6 100%)",
           "slug": "accent-veil"
         },
         {
@@ -80,7 +90,13 @@
       ]
     },
     "custom": {
+      "breakpoints": {
+        "small": "600px",
+        "medium": "781px",
+        "large": "1023px"
+      },
       "layout": {
+        "contentWidth": "1200px",
         "gutter": "5%",
         "maxWidth": "1440px",
         "narrowWidth": "760px"
@@ -302,27 +318,6 @@
             { "fontFamily": "Montserrat", "fontWeight": "700", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/montserrat-700.woff2"] },
             { "fontFamily": "Montserrat", "fontWeight": "800", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/montserrat-800.woff2"] }
           ]
-        },
-        {
-          "name": "Open Sans",
-          "slug": "open-sans",
-          "fontFamily": "\"Open Sans\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
-          "fontFace": [
-            { "fontFamily": "Open Sans", "fontWeight": "400", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/open-sans-400.woff2"] },
-            { "fontFamily": "Open Sans", "fontWeight": "600", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/open-sans-600.woff2"] },
-            { "fontFamily": "Open Sans", "fontWeight": "700", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/open-sans-700.woff2"] },
-            { "fontFamily": "Open Sans", "fontWeight": "800", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/open-sans-800.woff2"] }
-          ]
-        },
-        {
-          "name": "Cormorant Garamond",
-          "slug": "cormorant-garamond",
-          "fontFamily": "\"Cormorant Garamond\", Georgia, \"Times New Roman\", serif",
-          "fontFace": [
-            { "fontFamily": "Cormorant Garamond", "fontWeight": "400", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/cormorant-garamond-400.woff2"] },
-            { "fontFamily": "Cormorant Garamond", "fontWeight": "600", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/cormorant-garamond-600.woff2"] },
-            { "fontFamily": "Cormorant Garamond", "fontWeight": "700", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/cormorant-garamond-700.woff2"] }
-          ]
         }
       ]
     }
@@ -366,6 +361,12 @@
         "typography": {
           "fontWeight": "700",
           "lineHeight": "1"
+        },
+        ":hover": {
+          "color": {
+            "background": "var:preset|color|accent-hover",
+            "text": "var:preset|color|accent-contrast"
+          }
         }
       },
       "heading": {

@@ -1,0 +1,10 @@
+[
+  { "path": "/", "status": 200, "title": "Legacy Home" },
+  { "path": "/about-us/", "status": 200, "title": "About Us" },
+  { "path": "/company/roof-repair", "status": 200, "title": "Old Roofing Page" },
+  { "path": "/services/roof-repair", "status": 200, "title": "Roof Repair Services" },
+  { "path": "/water-heater-installation", "status": 200, "title": "Water Heater Installation Cost Guide" },
+  { "path": "/emergency-plumbing-repair", "status": 200, "title": "Emergency Plumbing Repair" },
+  { "path": "/old-promo", "status": 404, "title": "Spring Promo (gone)" },
+  { "path": "/legacy-blog/some-post", "status": 200, "title": "Totally Unrelated Ramblings" }
+]

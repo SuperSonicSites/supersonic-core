@@ -43,6 +43,9 @@ yarn-error.log*
 screenshots/tmp/
 tools/tmp/
 
+# Site capture output (tools/capture-site.mjs)
+captured/
+
 # Agent/workflow scratch (discovery dumps, temp file lists)
 .claude/discovery.json
 __files_list.txt

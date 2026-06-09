@@ -13,7 +13,7 @@
 	<figure class="wp-block-image size-large has-custom-border supersonic-pattern-image"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/pattern-placeholder.svg' ) ); ?>" alt="" style="border-radius:var(--wp--custom--radius--large);aspect-ratio:16/9;object-fit:cover"/></figure>
 	<!-- /wp:image -->
 
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Support the media with a clear message</h2>

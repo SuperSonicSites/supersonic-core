@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Hero: Centered"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group">
 		<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"small"} -->
 		<p class="has-text-align-center has-accent-color has-text-color has-small-font-size"><strong>Starter page hero</strong></p>

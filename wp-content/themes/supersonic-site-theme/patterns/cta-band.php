@@ -9,7 +9,7 @@
 ?>
 <!-- wp:group {"metadata":{"name":"CTA: Band"},"align":"full","backgroundColor":"accent","textColor":"accent-contrast","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-accent-contrast-color has-accent-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"textAlign":"center","fontSize":"heading-2"} -->
 		<h2 class="wp-block-heading has-text-align-center has-heading-2-font-size">Ready for the next step?</h2>

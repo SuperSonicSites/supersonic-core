@@ -48,6 +48,9 @@ the phased build plan expected at handoff.
 - Prove production, credential, REST, plugin, custom-block, and token approval
   gates remain visible.
 - Prove no coding/build work started before approval.
+- For redesigns: prove every legacy URL is dispositioned (kept / redirected /
+  intentionally 410) and that `data/redirects.csv` passes
+  `npm run redirects:check`.
 
 ## Failure Policy
 
@@ -96,6 +99,8 @@ Inspect the repo and read:
 16. `data/site-intake.example.json`
 17. `.claude/skills/`
 
+For redesigns (`legacySite.isRedesign` true), also read `data/redirects.csv` and `captured/inventory.json` — see the Redesign Branch below.
+
 If any required file or folder is missing, list it before interviewing the user.
 
 Also check `git status --short` before editing docs. Preserve unrelated user changes.
@@ -104,15 +109,64 @@ Also check `git status --short` before editing docs. Preserve unrelated user cha
 
 1. Inspect the repo structure and current docs.
 2. Identify missing, vague, or placeholder project context.
-3. Ask the first-round interview questions only.
-4. Wait for the user's answers.
-5. Generate or update project docs from the answers.
-6. Preserve useful existing decisions and avoid overwriting specific context without reason.
-7. Put unknowns in an `Open Questions` section instead of inventing details.
-8. Produce a phased build plan adapted to the repo's current state.
-9. Stop and ask for approval before any coding or build work begins.
+3. Determine whether this is a redesign (`legacySite.isRedesign` in the intake, or the user says the build replaces an existing site). If yes, follow the Redesign Branch below alongside these steps.
+4. Ask the first-round interview questions only (plus the redesign questions when the Redesign Branch applies).
+5. Wait for the user's answers.
+6. Generate or update project docs from the answers.
+7. Preserve useful existing decisions and avoid overwriting specific context without reason.
+8. Put unknowns in an `Open Questions` section instead of inventing details.
+9. Produce a phased build plan adapted to the repo's current state.
+10. Stop and ask for approval before any coding or build work begins.
 
 Do not ask for production credentials, SSH credentials, database credentials, hosting account access, private backup files, or unrelated secrets.
+
+## Redesign Branch
+
+This branch applies when `legacySite.isRedesign` is `true` in
+`data/site-intake.json`, or the user says the build replaces an existing live
+website. A redesign is not a blank-slate build: legacy URLs carry rankings,
+links, and citations that must be dispositioned deliberately.
+
+### Capture First (Fail Closed)
+
+`captured/inventory.json` must exist before planning. If it does not, stop and
+instruct the user to run:
+
+```text
+npm run capture:site -- --url <legacy-url>
+```
+
+Do not interview around the gap, guess the legacy URL set, or produce a build
+plan from memory of the old site. No capture, no plan.
+
+### Redesign Interview Questions
+
+Ask these in addition to the first-round questions (still respecting the 15-question cap by dropping questions the intake already answers):
+
+1. Which legacy URLs must keep their rankings or be preserved exactly? Capture in `legacySite.keepUrls`.
+2. What are the known top pages, and what traffic or ranking keywords do they carry (from analytics or Search Console)? Capture in `legacySite.knownTopPages`.
+3. Which legacy content migrates to the new site, and which is intentionally killed?
+4. Which legacy assets should be reused (logos, photos, testimonials, copy, documents)? Capture in `legacySite.assetsToReuse` and `brand.assets`.
+5. What must not break after launch (URLs, forms, integrations, embeds, phone links, lead notifications)? Capture in `legacySite.thingsThatMustNotBreak`.
+
+### Redirect Gate
+
+Before the build plan is approved:
+
+- Every legacy URL in `captured/inventory.json` must be dispositioned: kept
+  (same path on the new site), redirected (301 in `data/redirects.csv`), or
+  intentionally 410.
+- The curated `data/redirects.csv` must pass `npm run redirects:check`.
+
+This is a hard gate. Do not present the build plan for approval while either
+check fails. `data/redirects.csv` is the Git source of truth that flows into
+Rank Math (see `SEO_STRATEGY.md`); changing redirects later still requires
+explicit approval.
+
+### Redesign Proof
+
+The init report must include the proof line: every legacy URL dispositioned
+(kept / redirected / intentionally 410).
 
 ## First-Round Interview Questions
 
@@ -172,8 +226,10 @@ Produce a phased build plan after docs are updated. Adapt it to the repo's actua
 Use this baseline:
 
 ```text
+Phase 0 (redesigns only): Legacy capture and audit (capture:site -> captured/inventory.json)
 Phase 1: Project memory and repo setup
 Phase 1.5: SEO research and content architecture (run seo-strategist)
+Phase 1.6 (redesigns only): Redirect curation (disposition every legacy URL; data/redirects.csv passes redirects:check)
 Phase 2: Design system and theme.json
 Phase 3: Theme skeleton
 Phase 4: Plugin skeleton
@@ -182,8 +238,13 @@ Phase 6: Screenshot QA
 Phase 7: Page assembly
 Phase 8: SEO/content pass (writer fills seo-strategist briefs)
 Phase 9: Security/deploy review
-Phase 10: Production launch checklist
+Phase 10: Production launch checklist (redesigns: import redirects into Rank Math and verify keepUrls)
 ```
+
+For redesigns, Phase 0 and Phase 1.6 happen during Init itself: the capture
+must exist before planning, and the redirect gate must pass before the plan is
+presented for approval. List them in the plan so the disposition work stays
+visible in project memory.
 
 For each phase, include:
 

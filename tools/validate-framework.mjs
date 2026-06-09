@@ -80,6 +80,19 @@ async function validateThemeJson() {
   }
 }
 
+function relativeLuminance(hex) {
+  const value = hex.replace('#', '');
+  const [r, g, b] = [0, 2, 4]
+    .map((index) => Number.parseInt(value.slice(index, index + 2), 16) / 255)
+    .map((channel) => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(hexA, hexB) {
+  const [light, dark] = [relativeLuminance(hexA), relativeLuminance(hexB)].sort((a, b) => b - a);
+  return (light + 0.05) / (dark + 0.05);
+}
+
 async function validateDesignTokens() {
   try {
     const themeJson = await readText('wp-content/themes/supersonic-site-theme/theme.json');
@@ -91,14 +104,39 @@ async function validateDesignTokens() {
     const gradientSlugs = new Set(parsed.settings?.color?.gradients?.map((gradient) => gradient.slug) ?? []);
     const requiredSpacing = ['gutter', 'section-none', 'section-small', 'section-medium', 'section-large'];
     const requiredFonts = ['small', 'body', 'large', 'heading-3', 'heading-2', 'heading-1', 'display'];
-    const requiredColors = ['base', 'contrast', 'contrast-subtle', 'surface', 'muted', 'border', 'accent', 'accent-contrast'];
+    const requiredColors = ['base', 'contrast', 'contrast-subtle', 'surface', 'muted', 'border', 'accent', 'accent-hover', 'accent-strong', 'accent-contrast'];
     const requiredShadows = ['soft', 'medium', 'strong'];
     const requiredGradients = ['surface-rise', 'accent-veil', 'muted-soft'];
 
-    if (parsed.settings?.layout?.contentSize === '1440px' && parsed.settings?.layout?.wideSize === '1440px') {
-      pass('theme layout defaults to 1440px content and wide width');
+    if (parsed.settings?.layout?.contentSize === '1200px' && parsed.settings?.layout?.wideSize === '1440px') {
+      pass('theme layout splits 1200px content width from 1440px wide width');
     } else {
-      fail('theme layout should default contentSize and wideSize to 1440px');
+      fail('theme layout should set contentSize to 1200px and wideSize to 1440px');
+    }
+
+    const customLayout = parsed.settings?.custom?.layout ?? {};
+    if (
+      customLayout.contentWidth === '1200px' &&
+      customLayout.maxWidth === '1440px' &&
+      customLayout.narrowWidth === '760px'
+    ) {
+      pass('custom layout tokens align with the 1200/1440/760 width system');
+    } else {
+      fail('settings.custom.layout should keep contentWidth 1200px, maxWidth 1440px, narrowWidth 760px');
+    }
+
+    const breakpoints = parsed.settings?.custom?.breakpoints ?? {};
+    if (breakpoints.small === '600px' && breakpoints.medium === '781px' && breakpoints.large === '1023px') {
+      pass('custom breakpoint tokens document the 600/781/1023 breakpoints');
+    } else {
+      fail('settings.custom.breakpoints should document small 600px, medium 781px, large 1023px');
+    }
+
+    const buttonHover = parsed.styles?.elements?.button?.[':hover'];
+    if (buttonHover?.color?.background === 'var:preset|color|accent-hover') {
+      pass('button :hover uses the accent-hover token');
+    } else {
+      fail('styles.elements.button :hover should set background to the accent-hover token');
     }
 
     if (
@@ -190,6 +228,32 @@ async function validateDesignTokens() {
       pass('headings inherit explicit ancestor text color');
     } else {
       fail('heading text color should not be globally fixed because it masks section text color');
+    }
+
+    // Accent ramp contrast arithmetic: accent text/links must clear WCAG AA (4.5:1)
+    // on the light bands, and accent-contrast text must clear it on every accent step.
+    const paletteBySlug = new Map((parsed.settings?.color?.palette ?? []).map((color) => [color.slug, color.color]));
+    const accentPairs = [
+      ['accent', 'base'],
+      ['accent', 'surface'],
+      ['accent', 'muted'],
+      ['accent-contrast', 'accent'],
+      ['accent-contrast', 'accent-hover'],
+      ['accent-contrast', 'accent-strong']
+    ];
+    for (const [foreground, background] of accentPairs) {
+      const fgHex = paletteBySlug.get(foreground);
+      const bgHex = paletteBySlug.get(background);
+      if (!fgHex || !bgHex) {
+        fail(`contrast check skipped: missing palette color ${foreground} or ${background}`);
+        continue;
+      }
+      const ratio = contrastRatio(fgHex, bgHex);
+      if (ratio >= 4.5) {
+        pass(`${foreground} on ${background} clears 4.5:1 (${ratio.toFixed(2)}:1)`);
+      } else {
+        fail(`${foreground} on ${background} is ${ratio.toFixed(2)}:1 and must clear 4.5:1`);
+      }
     }
   } catch (error) {
     fail(`design token validation failed: ${error.message}`);
@@ -346,7 +410,8 @@ function hasDescendant(block, predicate) {
 }
 
 function countLevelOneBlocks(content) {
-  const blockPattern = /<!--\s*wp:(heading|post-title)(?:\s+(\{[\s\S]*?\}))?\s*\/?-->/g;
+  // query-title renders an H1 by default; templates must declare its level explicitly.
+  const blockPattern = /<!--\s*wp:(heading|post-title|query-title)(?:\s+(\{[\s\S]*?\}))?\s*\/?-->/g;
   let count = 0;
   let match;
 
@@ -564,11 +629,8 @@ async function validateSourceGuardrails() {
 
   const files = [
     'wp-content/themes/supersonic-site-theme/functions.php',
-    'wp-content/themes/supersonic-site-theme/templates/index.html',
-    'wp-content/themes/supersonic-site-theme/templates/page.html',
-    'wp-content/themes/supersonic-site-theme/templates/text-page.html',
-    'wp-content/themes/supersonic-site-theme/parts/header.html',
-    'wp-content/themes/supersonic-site-theme/parts/footer.html',
+    ...await collectFiles('wp-content/themes/supersonic-site-theme/templates', ['.html']),
+    ...await collectFiles('wp-content/themes/supersonic-site-theme/parts', ['.html']),
     // The plugin is the approved home for functionality (REST routes, etc.), so
     // these presentation guardrails scope to the theme only.
     ...await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html'])
@@ -589,11 +651,8 @@ async function validateBlockAllowList() {
   const allowedExternalBlocks = new Set(['rank-math/faq-block']);
   const files = [
     'wp-content/themes/supersonic-site-theme/functions.php',
-    'wp-content/themes/supersonic-site-theme/templates/index.html',
-    'wp-content/themes/supersonic-site-theme/templates/page.html',
-    'wp-content/themes/supersonic-site-theme/templates/text-page.html',
-    'wp-content/themes/supersonic-site-theme/parts/header.html',
-    'wp-content/themes/supersonic-site-theme/parts/footer.html',
+    ...await collectFiles('wp-content/themes/supersonic-site-theme/templates', ['.html']),
+    ...await collectFiles('wp-content/themes/supersonic-site-theme/parts', ['.html']),
     ...await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html'])
   ];
   const blockComment = /<!--\s*wp:([\w/-]+)/g;
@@ -637,8 +696,10 @@ async function validatePatternLibraryPolicy() {
 }
 
 async function validateH1Policy() {
+  // Layout-neutral templates render AI-built page layouts, which own the page H1.
   const layoutNeutralTemplates = [
     'wp-content/themes/supersonic-site-theme/templates/index.html',
+    'wp-content/themes/supersonic-site-theme/templates/home.html',
     'wp-content/themes/supersonic-site-theme/templates/page.html'
   ];
 
@@ -652,12 +713,23 @@ async function validateH1Policy() {
     }
   }
 
-  const textPage = 'wp-content/themes/supersonic-site-theme/templates/text-page.html';
-  const textPageContent = await readText(textPage);
-  if (countLogicalH1(textPageContent) === 1) {
-    pass(`${textPage} contains exactly one level-1 post title`);
-  } else {
-    fail(`${textPage} must contain exactly one level-1 post title`);
+  // Title-first templates (text-page precedent): system pages with no AI-built
+  // layout to supply the H1 own exactly one level-1 title themselves.
+  const titleFirstTemplates = [
+    'wp-content/themes/supersonic-site-theme/templates/text-page.html',
+    'wp-content/themes/supersonic-site-theme/templates/single.html',
+    'wp-content/themes/supersonic-site-theme/templates/archive.html',
+    'wp-content/themes/supersonic-site-theme/templates/search.html',
+    'wp-content/themes/supersonic-site-theme/templates/404.html'
+  ];
+
+  for (const file of titleFirstTemplates) {
+    const content = await readText(file);
+    if (countLogicalH1(content) === 1) {
+      pass(`${file} contains exactly one level-1 title`);
+    } else {
+      fail(`${file} must contain exactly one level-1 title`);
+    }
   }
 
   const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
@@ -682,8 +754,9 @@ async function validateH1Policy() {
 }
 
 async function validatePostContentWrappers() {
+  // Only page.html renders stacked section-pattern post content; index/home now
+  // render the blog Query Loop on a narrow rail instead of post content.
   const layoutNeutralTemplates = [
-    'wp-content/themes/supersonic-site-theme/templates/index.html',
     'wp-content/themes/supersonic-site-theme/templates/page.html'
   ];
 
@@ -748,6 +821,10 @@ async function validatePluginSecurityPolicy() {
     fail('deploy route must remain payload-free');
   }
 }
+
+// The single source of truth for text-rail width is the theme.json narrow-width
+// custom token; patterns must reference it instead of repeating the literal px value.
+const NARROW_WIDTH_VALUE = 'var(--wp--custom--layout--narrow-width)';
 
 function getSectionGroup(blocks) {
   return blocks.find((block) => block.name === 'core/group' && block.attrs.align === 'full') ??
@@ -816,7 +893,7 @@ async function validatePatternHorizontalSpacing() {
         block.name === 'core/group' &&
         block !== sectionGroup &&
         attrs.layout?.contentSize &&
-        attrs.layout.contentSize !== '760px'
+        attrs.layout.contentSize !== NARROW_WIDTH_VALUE
       ) {
         violations.push(`nested constrained group uses unapproved contentSize "${attrs.layout.contentSize}"`);
       }
@@ -985,7 +1062,7 @@ function isSupportedJustification(value) {
 function hasApprovedSectionContentRail(header, attrs) {
   return header.Categories === 'supersonic-heroes' &&
     attrs.layout?.type === 'constrained' &&
-    attrs.layout?.contentSize === '760px' &&
+    attrs.layout?.contentSize === NARROW_WIDTH_VALUE &&
     isSupportedJustification(attrs.layout?.justifyContent);
 }
 
@@ -999,7 +1076,7 @@ function hasInnerConstrainedContentGroup(blocks) {
     block.name === 'core/group' &&
     block.attrs.align !== 'full' &&
     block.attrs.layout?.type === 'constrained' &&
-    block.attrs.layout?.contentSize === '760px'
+    block.attrs.layout?.contentSize === NARROW_WIDTH_VALUE
   );
 }
 
@@ -1018,11 +1095,11 @@ async function validateEditorControlContracts() {
       const isSimpleHero = header.Slug === 'supersonic-site-theme/hero-simple';
 
       if (isSimpleHero && sectionOwnsRail && !hasInnerRail) {
-        pass(`${file} lets the selected hero section own its 760px justification rail`);
+        pass(`${file} lets the selected hero section own its narrow-width justification rail`);
       } else if (isSimpleHero && !sectionOwnsRail) {
-        fail(`${file} must let the selected section group own a 760px contentSize and left/center/right justifyContent`);
+        fail(`${file} must let the selected section group own a narrow-width contentSize and left/center/right justifyContent`);
       } else if (isSimpleHero) {
-        fail(`${file} must not add a nested 760px content group that masks section justification`);
+        fail(`${file} must not add a nested narrow-width content group that masks section justification`);
       } else if (sectionOwnsRail || hasInnerRail) {
         pass(`${file} has an approved hero content rail for visible positioning`);
       } else {
@@ -1125,7 +1202,7 @@ async function validateCategoryContracts() {
       if (!faqBlock) {
         violations.push('FAQ pattern must use the approved Rank Math FAQ block');
       } else if (!hasAncestor(faqBlock, (ancestor) => ancestor === sectionGroup)) {
-        violations.push('Rank Math FAQ block must live inside the section group and its 760px content rail');
+        violations.push('Rank Math FAQ block must live inside the section group and its narrow-width content rail');
       }
     }
 
@@ -1171,6 +1248,228 @@ async function validateCategoryContracts() {
   }
 }
 
+// THEME-TPL-1: the theme must ship the full template hierarchy, and the blog-facing
+// templates must render a core Query Loop. Pure: takes a Map of template file name ->
+// content so regression fixtures stay file-free.
+const REQUIRED_TEMPLATES = ['index', 'home', 'single', 'archive', 'search', '404', 'page', 'text-page'];
+const QUERY_LOOP_TEMPLATES = ['index.html', 'home.html', 'archive.html'];
+
+function checkTemplateInventory(templatesByName) {
+  const issues = [];
+
+  for (const name of REQUIRED_TEMPLATES) {
+    if (!templatesByName.has(`${name}.html`)) {
+      issues.push(`THEME-TPL-1 missing required template: templates/${name}.html`);
+    }
+  }
+
+  for (const name of QUERY_LOOP_TEMPLATES) {
+    const content = templatesByName.get(name);
+    if (content !== undefined && !/<!--\s*wp:query[\s{]/.test(content)) {
+      issues.push(`THEME-TPL-1 templates/${name} must render a core Query Loop (wp:query)`);
+    }
+  }
+
+  return issues;
+}
+
+// THEME-PX-1: pattern layout attributes must not repeat the theme width literals.
+// The narrow text rail comes from the narrow-width custom token and the 1200/1440
+// rails come from the theme layout defaults, so a literal px width in a pattern
+// would silently fork the width system.
+function checkLayoutWidthLiterals(content) {
+  const issues = [];
+
+  for (const block of collectBlockTree(content).blocks) {
+    if (!block.attrs.layout) {
+      continue;
+    }
+    const match = JSON.stringify(block.attrs.layout).match(/\b(?:760|1200|1440)px\b/);
+    if (match) {
+      issues.push(`THEME-PX-1 ${block.name} layout uses literal width ${match[0]}; use ${NARROW_WIDTH_VALUE} or the theme layout defaults`);
+    }
+  }
+
+  return issues;
+}
+
+// TWEAK-1: shipped patterns and templates must stay fully editable in the block
+// editor — no per-block locking and no container template locking.
+function checkLockAttributes(content) {
+  const issues = [];
+
+  for (const block of collectBlockTree(content).blocks) {
+    if (block.attrs.lock !== undefined) {
+      issues.push(`TWEAK-1 ${block.name} sets a "lock" attribute; shipped blocks must stay movable and removable`);
+    }
+    if (block.attrs.templateLock !== undefined) {
+      issues.push(`TWEAK-1 ${block.name} sets templateLock; shipped containers must stay fully editable`);
+    }
+  }
+
+  return issues;
+}
+
+// TWEAK-2: pattern color/typography/spacing attributes must reference theme tokens —
+// preset slugs or var:preset|* / var(--wp--preset--*) / var(--wp--custom--*) values —
+// never literal hex/px. Complements SPACE-1 (semantic section rhythm on the top-level
+// block) and the theme.json token checks by closing the literal-value escape hatches
+// on every block in a pattern.
+const TOKEN_VALUE_RE = /^(?:0|var:preset\|[a-z0-9-]+\|[a-z0-9-]+|var\(--wp--preset--[a-z0-9-]+--[a-z0-9-]+\)|var\(--wp--custom--[a-z0-9-]+(?:--[a-z0-9-]+)*\))$/;
+const LITERAL_CSS_VALUE_RE = /^#|^\d+(?:\.\d+)?(?:px|r?em|%|s?v[hw])$|^(?:rgb|hsl)a?\(/i;
+
+function checkTokenizedAttributes(content) {
+  const issues = [];
+
+  for (const block of collectBlockTree(content).blocks) {
+    const attrs = block.attrs;
+
+    for (const attribute of ['textColor', 'backgroundColor', 'fontSize']) {
+      const value = attrs[attribute];
+      if (typeof value === 'string' && LITERAL_CSS_VALUE_RE.test(value.trim())) {
+        issues.push(`TWEAK-2 ${block.name} ${attribute} "${value}" must be a theme preset slug, not a literal value`);
+      }
+    }
+
+    for (const colorKey of ['text', 'background', 'gradient']) {
+      const value = attrs.style?.color?.[colorKey];
+      if (typeof value === 'string' && !TOKEN_VALUE_RE.test(value)) {
+        issues.push(`TWEAK-2 ${block.name} style.color.${colorKey} "${value}" must reference a theme token, not a literal value`);
+      }
+    }
+
+    const inlineFontSize = attrs.style?.typography?.fontSize;
+    if (typeof inlineFontSize === 'string' && !TOKEN_VALUE_RE.test(inlineFontSize)) {
+      issues.push(`TWEAK-2 ${block.name} style.typography.fontSize "${inlineFontSize}" must reference a theme token`);
+    }
+
+    const spacing = attrs.style?.spacing;
+    if (spacing && typeof spacing === 'object') {
+      for (const [property, value] of Object.entries(spacing)) {
+        const entries = typeof value === 'string'
+          ? [[property, value]]
+          : Object.entries(value ?? {}).map(([side, sideValue]) => [`${property}.${side}`, sideValue]);
+
+        for (const [key, spacingValue] of entries) {
+          if (typeof spacingValue === 'string' && !TOKEN_VALUE_RE.test(spacingValue)) {
+            issues.push(`TWEAK-2 ${block.name} style.spacing.${key} "${spacingValue}" must use a spacing preset or theme custom token`);
+          }
+        }
+      }
+    }
+  }
+
+  return issues;
+}
+
+async function validateTemplateInventory() {
+  const templateFiles = await collectFiles('wp-content/themes/supersonic-site-theme/templates', ['.html']);
+  const templatesByName = new Map();
+
+  for (const file of templateFiles) {
+    templatesByName.set(path.posix.basename(file), await readText(file));
+  }
+
+  const issues = checkTemplateInventory(templatesByName);
+  if (issues.length) {
+    for (const issue of issues) {
+      fail(issue);
+    }
+  } else {
+    pass('THEME-TPL-1 all required templates exist and blog templates render a Query Loop');
+  }
+}
+
+async function validateTweakabilityGates() {
+  const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+  const templateFiles = await collectFiles('wp-content/themes/supersonic-site-theme/templates', ['.html']);
+  const patternFileSet = new Set(patternFiles);
+  let issueCount = 0;
+
+  for (const file of [...patternFiles, ...templateFiles]) {
+    const content = await readText(file);
+    const issues = [...checkLockAttributes(content)];
+
+    if (patternFileSet.has(file)) {
+      issues.push(...checkLayoutWidthLiterals(content), ...checkTokenizedAttributes(content));
+    }
+
+    for (const issue of issues) {
+      fail(`${file}: ${issue}`);
+    }
+    issueCount += issues.length;
+  }
+
+  if (issueCount === 0) {
+    pass('THEME-PX-1/TWEAK-1/TWEAK-2 patterns and templates are width-token-true, lock-free, and token-pure');
+  }
+}
+
+function assertFixture(name, condition) {
+  checks.push({
+    status: condition ? 'pass' : 'fail',
+    message: condition
+      ? `regression fixture: ${name} is strict`
+      : `regression fixture FAILED: ${name} is not strict`
+  });
+}
+
+function runFrameworkRegressionFixtures() {
+  // THEME-TPL-1 fixtures.
+  const queryMarkup = '<!-- wp:query {"queryId":1,"query":{"inherit":true}} --><div class="wp-block-query"></div><!-- /wp:query -->';
+  const goodTemplates = new Map([
+    ['index.html', queryMarkup],
+    ['home.html', queryMarkup],
+    ['archive.html', queryMarkup],
+    ['single.html', ''],
+    ['search.html', queryMarkup],
+    ['404.html', ''],
+    ['page.html', ''],
+    ['text-page.html', '']
+  ]);
+  assertFixture('template inventory clean fixture has no issues', checkTemplateInventory(goodTemplates).length === 0);
+
+  const missingTemplate = new Map(goodTemplates);
+  missingTemplate.delete('single.html');
+  assertFixture('missing-template detector (THEME-TPL-1)', checkTemplateInventory(missingTemplate).some((issue) => issue.startsWith('THEME-TPL-1')));
+
+  const queryless = new Map(goodTemplates);
+  queryless.set('home.html', '<!-- wp:paragraph --><p>No loop here.</p><!-- /wp:paragraph -->');
+  assertFixture('query-loop detector (THEME-TPL-1)', checkTemplateInventory(queryless).some((issue) => issue.includes('Query Loop')));
+
+  // THEME-PX-1 fixtures.
+  const tokenRail = `<!-- wp:group {"layout":{"type":"constrained","contentSize":"${NARROW_WIDTH_VALUE}"}} --><div class="wp-block-group"></div><!-- /wp:group -->`;
+  assertFixture('narrow-width token rail fixture has no issues', checkLayoutWidthLiterals(tokenRail).length === 0);
+
+  const literalRail = '<!-- wp:group {"layout":{"type":"constrained","contentSize":"760px"}} --><div class="wp-block-group"></div><!-- /wp:group -->';
+  assertFixture('literal 760px width detector (THEME-PX-1)', checkLayoutWidthLiterals(literalRail).some((issue) => issue.startsWith('THEME-PX-1')));
+
+  const literalWide = '<!-- wp:group {"layout":{"type":"constrained","contentSize":"1440px"}} --><div class="wp-block-group"></div><!-- /wp:group -->';
+  assertFixture('literal 1440px width detector (THEME-PX-1)', checkLayoutWidthLiterals(literalWide).some((issue) => issue.startsWith('THEME-PX-1')));
+
+  // TWEAK-1 fixtures.
+  assertFixture('lock-free fixture has no issues', checkLockAttributes(tokenRail).length === 0);
+
+  const lockedBlock = '<!-- wp:group {"lock":{"move":true,"remove":true}} --><div class="wp-block-group"></div><!-- /wp:group -->';
+  assertFixture('"lock" attribute detector (TWEAK-1)', checkLockAttributes(lockedBlock).some((issue) => issue.startsWith('TWEAK-1')));
+
+  const templateLocked = '<!-- wp:group {"templateLock":"all"} --><div class="wp-block-group"></div><!-- /wp:group -->';
+  assertFixture('templateLock detector (TWEAK-1)', checkLockAttributes(templateLocked).some((issue) => issue.startsWith('TWEAK-1')));
+
+  // TWEAK-2 fixtures.
+  const tokenized = '<!-- wp:group {"textColor":"contrast","backgroundColor":"surface","fontSize":"small","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"},"blockGap":"var:preset|spacing|m"}}} --><div class="wp-block-group"></div><!-- /wp:group -->';
+  assertFixture('tokenized attributes fixture has no issues', checkTokenizedAttributes(tokenized).length === 0);
+
+  const hexText = '<!-- wp:paragraph {"style":{"color":{"text":"#ff0000"}}} --><p></p><!-- /wp:paragraph -->';
+  assertFixture('literal hex color detector (TWEAK-2)', checkTokenizedAttributes(hexText).some((issue) => issue.startsWith('TWEAK-2')));
+
+  const pxPadding = '<!-- wp:group {"style":{"spacing":{"padding":{"top":"13px"}}}} --><div class="wp-block-group"></div><!-- /wp:group -->';
+  assertFixture('literal px spacing detector (TWEAK-2)', checkTokenizedAttributes(pxPadding).some((issue) => issue.startsWith('TWEAK-2')));
+
+  const literalFontSize = '<!-- wp:paragraph {"fontSize":"18px"} --><p></p><!-- /wp:paragraph -->';
+  assertFixture('literal fontSize detector (TWEAK-2)', checkTokenizedAttributes(literalFontSize).some((issue) => issue.startsWith('TWEAK-2')));
+}
+
 async function validatePackages() {
   const themePatternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
   const packagedThemePatterns = themePatternFiles.map((file) =>
@@ -1188,6 +1487,11 @@ async function validatePackages() {
         'supersonic-site-theme/assets/css/navigation.css',
         'supersonic-site-theme/assets/images/pattern-placeholder.svg',
         'supersonic-site-theme/templates/index.html',
+        'supersonic-site-theme/templates/home.html',
+        'supersonic-site-theme/templates/single.html',
+        'supersonic-site-theme/templates/archive.html',
+        'supersonic-site-theme/templates/search.html',
+        'supersonic-site-theme/templates/404.html',
         'supersonic-site-theme/templates/page.html',
         'supersonic-site-theme/templates/text-page.html',
         'supersonic-site-theme/parts/header.html',
@@ -1264,9 +1568,12 @@ await validatePatternHorizontalSpacing();
 await validateSectionSpacingTokens();
 await validateEditorControlContracts();
 await validateCategoryContracts();
+await validateTemplateInventory();
+await validateTweakabilityGates();
 await validatePatternRegistryChecks();
 await validateCertificationProofReports();
 await validatePackages();
+runFrameworkRegressionFixtures();
 
 for (const check of checks) {
   const icon = check.status === 'pass' ? 'PASS' : 'FAIL';

@@ -9,12 +9,19 @@ The plugin controls functionality that should survive theme changes:
 - custom post types
 - taxonomies
 - REST helpers
-- schema helpers
-- SEO helper functions
 - integrations
 - reusable business logic
 - the verified theme auto-update layer
 - dynamic blocks only when approved and necessary
+
+## SEO Output Ownership
+
+This plugin does NOT own SEO output. Rank Math (free, approved in
+`SECURITY.md`) owns meta titles and descriptions, Open Graph tags, JSON-LD
+schema, XML sitemaps, and 301 redirects. The theme and this plugin emit none of
+these. `data/redirects.csv` is the Git source of truth for redirects and flows
+into Rank Math via `tools/export-rankmath-redirects.mjs`. Do not add schema
+helpers, meta-tag output, sitemap code, or redirect handling here.
 
 ## Rules
 
