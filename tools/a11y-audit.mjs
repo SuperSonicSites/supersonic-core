@@ -70,7 +70,7 @@ try {
       findings.push({
         id: `${label}-${viewport.name}-${violation.id}`,
         rule_id: `axe/${violation.id}`,
-        dimension: 'accessibility',
+        dimension: violation.id,
         severity,
         breakpoint: viewport.name,
         target: { selector: (nodes[0] && Array.isArray(nodes[0].target) ? nodes[0].target.join(' ') : include) ?? 'page' },
@@ -94,15 +94,19 @@ try {
   await browser.close();
 }
 
-const summary = { url: scanUrl, include: include ?? null, tags, byViewport, findings };
+// Stdout is the canonical review-finding envelope (data/review-finding.schema.json):
+// skill + target_ref + findings. The optional --out artifact additionally carries the
+// per-viewport breakdown and scan params for human/debug detail.
+const envelope = { skill: 'a11y-audit', target_ref: scanUrl, findings };
+const report = { ...envelope, include: include ?? null, tags, byViewport };
 
 if (outArg) {
   const outPath = path.resolve(root, outArg);
   await mkdir(path.dirname(outPath), { recursive: true });
-  await writeFile(outPath, JSON.stringify(summary, null, 2), 'utf8');
+  await writeFile(outPath, JSON.stringify(report, null, 2), 'utf8');
 }
 
-console.log(JSON.stringify(summary, null, 2));
+console.log(JSON.stringify(envelope, null, 2));
 
 const gating = findings.filter((finding) => GATING_SEVERITIES.has(finding.severity));
 if (gating.length) {

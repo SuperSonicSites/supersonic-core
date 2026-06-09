@@ -143,7 +143,7 @@ export function checkCopyDoc(doc, { phrasesToAvoid = DEFAULT_PHRASES_TO_AVOID } 
         issues.push(`page ${id} slot ${sid} has invalid role: ${slot.role}`);
       }
 
-      if (typeof slot.text !== 'string' || slot.text.length === 0) {
+      if (typeof slot.text !== 'string' || slot.text.trim().length === 0) {
         issues.push(`page ${id} slot ${sid} must have non-empty text`);
         return;
       }

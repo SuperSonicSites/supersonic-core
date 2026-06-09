@@ -493,7 +493,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/contact-map-info-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/contact-map-info-mobile.png"
       },
-      "contentBearing": false,
+      "copy_slots": [
+        { "id": "intro", "role": "body", "max_chars": 140 },
+        { "id": "directions-cta", "role": "cta", "max_chars": 24 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -603,7 +606,6 @@
       "copy_slots": [
         { "id": "section-intro", "role": "body", "max_chars": 120 },
         { "id": "plan-name", "role": "card-title", "max_chars": 30, "repeatable": true },
-        { "id": "plan-price", "role": "label", "max_chars": 16, "repeatable": true },
         { "id": "plan-feature", "role": "list-item", "max_chars": 48, "repeatable": true, "sibling_group": "pricing-features" },
         { "id": "plan-cta", "role": "cta", "max_chars": 24, "repeatable": true, "sibling_group": "pricing-ctas" }
       ],

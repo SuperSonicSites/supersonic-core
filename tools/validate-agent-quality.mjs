@@ -332,6 +332,19 @@ async function validateWorkflows() {
   } else {
     fail('.claude/workflows/visual-qa.js must route visual QA through pattern:proof and Proof Summary');
   }
+
+  // The workflow's finding schema must stay aligned with data/review-finding.schema.json:
+  // it emits canonical field names and never the legacy camelCase suspectedSource. This
+  // guard closes the blind spot where the workflow schema could drift from the skills'.
+  if (
+    visualQaWorkflow.includes('rule_id') &&
+    visualQaWorkflow.includes('suspected_source') &&
+    !visualQaWorkflow.includes('suspectedSource')
+  ) {
+    pass('.claude/workflows/visual-qa.js findings use canonical finding field names');
+  } else {
+    fail('.claude/workflows/visual-qa.js findings must use the canonical finding shape (rule_id, suspected_source) and not the legacy suspectedSource; keep it aligned with data/review-finding.schema.json');
+  }
 }
 
 function runRegressionFixtures() {
