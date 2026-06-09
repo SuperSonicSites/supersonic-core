@@ -437,6 +437,8 @@ async function validatePackageScripts() {
     'screenshot',
     'certify:staging',
     'pattern:registry:check',
+    'compose:check',
+    'a11y:check',
     'test:updater-parser'
   ];
 
@@ -848,6 +850,70 @@ async function validatePatternHorizontalSpacing() {
   }
 }
 
+const SECTION_SPACING_TOKEN_RE = /section-(?:none|small|medium|large)/;
+// Headers and footers are chrome, not sections; they are exempt from the section rhythm rule.
+const NON_SECTION_CATEGORIES = new Set(['supersonic-headers', 'supersonic-footers']);
+
+function sectionSpacingToken(value) {
+  if (typeof value !== 'string') {
+    return null;
+  }
+  const match = value.match(SECTION_SPACING_TOKEN_RE);
+  return match ? match[0] : null;
+}
+
+async function validateSectionSpacingTokens() {
+  // SPACE-1: every section pattern must declare exactly one semantic section spacing token
+  // (section-none|small|medium|large) on its top-level section block, so stacked sections
+  // keep a predictable vertical rhythm instead of accumulating ad-hoc seams. Enforces the
+  // DESIGN_SYSTEM.md / theme rule that was previously checked only by eye. The top block is
+  // usually a full-width core/group but may be a core/cover (image hero), so the check reads
+  // the outermost block's vertical padding rather than assuming a group.
+  const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
+
+  for (const file of patternFiles) {
+    const content = await readText(file);
+    const header = parsePatternHeader(content);
+    if (NON_SECTION_CATEGORIES.has(header.Categories)) {
+      continue;
+    }
+
+    const { root } = collectBlockTree(content);
+    const top = root.children[0];
+    if (!top) {
+      fail(`SPACE-1 ${file}: no top-level block to carry a section spacing token`);
+      continue;
+    }
+
+    const padding = top.attrs.style?.spacing?.padding ?? {};
+    const tokens = [];
+    let hasArbitraryVerticalPadding = false;
+    for (const side of ['top', 'bottom']) {
+      if (padding[side] === undefined) {
+        continue;
+      }
+      const token = sectionSpacingToken(padding[side]);
+      if (token) {
+        tokens.push(token);
+      } else {
+        // A defined top/bottom value that is not a section-* token is arbitrary vertical
+        // spacing (e.g. an l/xl preset or a raw px), which breaks the stacking rhythm.
+        hasArbitraryVerticalPadding = true;
+      }
+    }
+
+    if (tokens.length === 0) {
+      fail(`SPACE-1 ${file}: top-level section block declares no section-none|small|medium|large spacing token`);
+    } else if (hasArbitraryVerticalPadding) {
+      fail(`SPACE-1 ${file}: top-level section block mixes a non-section value into vertical padding; use only section-none|small|medium|large`);
+    } else {
+      // Asymmetric pairs within the semantic scale (e.g. medium top, small bottom) are an
+      // intentional rhythm choice and allowed; only the semantic scale is required.
+      pass(`${file} uses semantic section spacing tokens (${[...new Set(tokens)].join(' / ')})`);
+    }
+  }
+}
+
 function isReadableTextBlock(block) {
   return [
     'core/heading',
@@ -1183,6 +1249,7 @@ await validateJsonFile('data/site-intake.schema.json');
 await validateJsonFile('data/site-intake.example.json');
 await validateJsonFile('data/site-intake.json');
 await validateJsonFile('data/pattern-certifications.json');
+await validateJsonFile('data/review-finding.schema.json');
 await validateVersionMetadata();
 await validatePackageScripts();
 await validateHeaders();
@@ -1194,6 +1261,7 @@ await validateH1Policy();
 await validatePostContentWrappers();
 await validatePluginSecurityPolicy();
 await validatePatternHorizontalSpacing();
+await validateSectionSpacingTokens();
 await validateEditorControlContracts();
 await validateCategoryContracts();
 await validatePatternRegistryChecks();

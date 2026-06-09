@@ -57,27 +57,41 @@ const REVIEW_SCHEMA = {
     screenshots: { type: 'array', items: { type: 'string' } },
     proofSummary: {
       type: 'object',
-      required: ['staticProof', 'stagingProof', 'visualProof', 'interactionProof', 'manualOnlyGaps'],
+      required: ['staticProof', 'stagingProof', 'visualProof', 'interactionProof', 'editorControlProof', 'manualOnlyGaps'],
       properties: {
         staticProof: { type: 'string' },
         stagingProof: { type: 'string' },
         visualProof: { type: 'string' },
         interactionProof: { type: 'string' },
+        editorControlProof: { type: 'string' },
+        toolProof: { type: 'string' },
         manualOnlyGaps: { type: 'string' },
       },
     },
     findings: {
+      // Canonical finding shape — see data/review-finding.schema.json.
       type: 'array',
       items: {
         type: 'object',
-        required: ['id', 'title', 'severity', 'breakpoint', 'evidence', 'suspectedSource'],
+        required: ['id', 'rule_id', 'dimension', 'severity', 'breakpoint', 'evidence', 'status'],
         properties: {
           id: { type: 'string' },
-          title: { type: 'string' },
-          severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low', 'nit'] },
+          rule_id: { type: 'string', description: 'e.g. GRID-1, COLOR-3, A11Y-1' },
+          dimension: { type: 'string', description: 'e.g. spacing, overflow, color-contrast' },
+          severity: { type: 'string', enum: ['blocker', 'major', 'minor', 'nit'] },
           breakpoint: { type: 'string', enum: ['desktop', 'tablet', 'mobile', 'all'] },
+          target: {
+            type: 'object',
+            properties: {
+              file: { type: 'string' },
+              slot: { type: 'string' },
+              selector: { type: 'string' },
+            },
+          },
           evidence: { type: 'string' },
-          suspectedSource: { type: 'string' },
+          suspected_source: { type: 'string' },
+          recommended_fix: { type: 'string' },
+          status: { type: 'string', enum: ['open', 'real', 'false-positive', 'dismissed', 'fixed'] },
         },
       },
     },
@@ -104,8 +118,8 @@ const SYNTH_SCHEMA = {
     counts: {
       type: 'object',
       properties: {
-        critical: { type: 'number' }, high: { type: 'number' },
-        medium: { type: 'number' }, low: { type: 'number' }, nit: { type: 'number' },
+        blocker: { type: 'number' }, major: { type: 'number' },
+        minor: { type: 'number' }, nit: { type: 'number' },
       },
     },
     coverage: { type: 'string', description: 'how many targets got real per-pattern captures vs blocked' },
@@ -210,7 +224,7 @@ ${dryRunOnly
    npm run rest:qa-page:trash -- confirm <id from step 1>
    Set pageLifecycle.trashed=true on success; if it fails, trashed=false with the error in note.`}
 
-For each issue give it a stable id "${t.name}-N", a severity, the breakpoint, concrete evidence (what you saw in which screenshot, or "source-only" in dry-run), and suspectedSource (pattern file + line/token). If clean, return an empty findings array. Do not write scratch files into the repo.
+For each issue emit a canonical finding (data/review-finding.schema.json): a stable id "${t.name}-N", a rule_id (e.g. GRID-1, COLOR-3, A11Y-1), a dimension (e.g. spacing, overflow, color-contrast), a severity (blocker|major|minor|nit), the breakpoint, concrete evidence (what you saw in which screenshot, or "source-only" in dry-run), suspected_source (pattern file + line/token), and status "open". If clean, return an empty findings array. Do not write scratch files into the repo.
 
 Return the review JSON (include screenshot paths, proofSummary, and the pageLifecycle object).${FINAL}`,
     { schema: REVIEW_SCHEMA, model: 'sonnet', phase: 'Review', label: `review:${t.name}` }
@@ -225,10 +239,10 @@ Return the review JSON (include screenshot paths, proofSummary, and the pageLife
         safeAgent(
           `You are an adversarial verifier in the visual-qa SOP. Try to REFUTE this finding by reading the actual source. Default to "false-positive" if the source does not clearly support it.
 
-Finding ${f.id}: ${f.title}
+Finding ${f.id} (${f.rule_id} / ${f.dimension})
 Severity claimed: ${f.severity} | Breakpoint: ${f.breakpoint}
 Evidence: ${f.evidence}
-Suspected source: ${f.suspectedSource}
+Suspected source: ${f.suspected_source}
 
 Open the pattern file (${t.file}) and any token definitions in theme.json / DESIGN_SYSTEM.md you need. Decide: real defect grounded in source, or false positive (intentional placeholder, correct token, screenshot artifact, etc.)? Set sourceConfirmed true only if you actually opened the source and it supports the verdict.${FINAL}`,
           { schema: VERDICT_SCHEMA, model: 'opus', phase: 'Verify', label: `verify:${f.id}` }

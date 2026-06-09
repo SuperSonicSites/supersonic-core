@@ -176,8 +176,15 @@ Use this section in every durable QA or certification report:
 - Visual proof:
 - Interaction proof:
 - Editor-control proof:
+- Tool proof:
 - Manual-only gaps:
 ```
+
+These six labels plus `Tool proof` are the single canonical Proof Summary structure.
+Every review skill uses these exact labels (not renamed variants), so a parent review
+can fold child reviews together without reconciling section names. `Tool proof` lists the
+machine evidence and JSON artifact paths produced by measurement tools (for example
+`npm run a11y:check`); use `n/a` when a section does not apply rather than dropping it.
 
 ## Report
 
@@ -197,3 +204,55 @@ Every durable QA or certification report must include:
 Use `approved` only when the contract is satisfied and proof exists. Use
 `needs-revision` when the work may be visually promising but the evidence is not
 complete.
+
+## Review Finding Contract
+
+Every review skill (`layout-review`, `copy-review`, `visual-qa`,
+`accessibility-review`, `seo-auditor`) and the machine audits (`tools/a11y-audit.mjs`)
+emit findings in ONE shape, defined by `data/review-finding.schema.json`. Before this
+contract each review used its own fields and its own severity words, so a parent review
+could not actually merge a child review's output. The shared shape makes findings
+machine-mergeable.
+
+### One severity scale
+
+`blocker | major | minor | nit`. No other words.
+
+- `blocker` = must fix before approval.
+- `major` = fix before ship.
+- `minor` = should fix.
+- `nit` = optional polish.
+
+Map external scales onto it. axe impact: `critical -> blocker`, `serious -> major`,
+`moderate -> minor`, `minor -> nit`. The retired visual-qa scale:
+`critical -> blocker`, `high -> major`, `medium -> minor`, `low -> nit`, `nit -> nit`.
+
+### Tool proof, not judgment, for what tools can measure
+
+Contrast, target size, labels, and focus order are no longer "manual-only gaps". Run
+`npm run a11y:check -- --url <staging>`; it runs axe-core at all three viewports and emits
+findings with `tool_proof` set. Findings with `tool_proof` are measured evidence, and a
+review must prefer them over an eyeballed judgment for the same dimension.
+
+### Bounded feedback loop (copy-review and layout-review)
+
+The review->fix loop is a contract, not prose:
+
+- Max 2 rounds. Round 1 scores and emits fixes; round 2 verifies the fixes. The
+  synthesize handoff carries `round` and `escalated_upstream`.
+- Recurring-blocker rule: if a finding with the same `rule_id` + `target` reappears after
+  a fix, do NOT open round 3. Escalate the band to `blocked` and route the root cause
+  upstream (`layout-architect` / `pattern-builder` / `seo-strategist`) with the evidence.
+- `dismissed[]` is the authoritative do-not-re-flag set; round 2 must exclude those ids.
+
+### Cross-skill merge (layout-review owns it)
+
+Because all skills emit one finding shape, `layout-review` folds in
+`accessibility-review`, `seo-auditor`, and `visual-qa` deterministically:
+
+- Worst-severity-wins on the same `(rule_id, target)`: dedupe across skills, keep the max
+  severity.
+- A merged finding sets its parent dimension status (axe contrast -> COLOR; axe
+  target-size/focus -> A11Y; seo H1/heading -> HEAD; thin content / `COVERAGE-*` -> the
+  content dimension; visual-qa overflow/console -> the grid dimension). The existing
+  worst-severity-wins band rule then computes the overall band.

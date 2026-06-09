@@ -17,6 +17,7 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/header-simple-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/header-simple-mobile.png"
       },
+      "contentBearing": false,
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -35,6 +36,7 @@
         "tablet": "screenshots/after/0.1.29-header-mega-qa/header-mega-tablet.png",
         "mobile": "screenshots/after/0.1.29-header-mega-qa/header-mega-mobile.png"
       },
+      "contentBearing": false,
       "knownIssues": [],
       "lastReviewedAt": "2026-06-02"
     },
@@ -53,6 +55,7 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/footer-simple-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/footer-simple-mobile.png"
       },
+      "contentBearing": false,
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -95,6 +98,12 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/hero-centered-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/hero-centered-mobile.png"
       },
+      "copy_slots": [
+        { "id": "eyebrow", "role": "eyebrow", "max_chars": 50 },
+        { "id": "lede", "role": "body", "max_chars": 180 },
+        { "id": "cta-primary", "role": "cta", "max_chars": 28 },
+        { "id": "cta-secondary", "role": "cta", "max_chars": 28 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -113,6 +122,11 @@
         "tablet": "screenshots/after/0.1.26-qa/hero-fullscreen-image-tablet.png",
         "mobile": "screenshots/after/0.1.26-qa/hero-fullscreen-image-mobile.png"
       },
+      "copy_slots": [
+        { "id": "lede", "role": "body", "max_chars": 180 },
+        { "id": "cta-primary", "role": "cta", "max_chars": 28 },
+        { "id": "cta-secondary", "role": "cta", "max_chars": 28 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-02"
     },
@@ -153,6 +167,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-text-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-text-mobile.png"
       },
+      "copy_slots": [
+        { "id": "lead", "role": "body", "max_chars": 200 },
+        { "id": "body", "role": "body", "max_chars": 360 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -194,6 +212,11 @@
         "tablet": "screenshots/after/0.1.31-media-split-qa/section-image-text-tablet.png",
         "mobile": "screenshots/after/0.1.31-media-split-qa/section-image-text-mobile.png"
       },
+      "copy_slots": [
+        { "id": "eyebrow", "role": "label", "max_chars": 32 },
+        { "id": "body", "role": "body", "max_chars": 240 },
+        { "id": "cta", "role": "cta", "max_chars": 32 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-02"
     },
@@ -212,6 +235,9 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-media-feature-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-media-feature-mobile.png"
       },
+      "copy_slots": [
+        { "id": "body", "role": "body", "max_chars": 200 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -230,6 +256,11 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-feature-grid-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-feature-grid-mobile.png"
       },
+      "copy_slots": [
+        { "id": "section-intro", "role": "body", "max_chars": 120 },
+        { "id": "card-title", "role": "card-title", "max_chars": 40, "repeatable": true },
+        { "id": "card-body", "role": "card-body", "max_chars": 130, "repeatable": true, "sibling_group": "feature-card-bodies" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -271,6 +302,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-card-row-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-card-row-mobile.png"
       },
+      "copy_slots": [
+        { "id": "card-title", "role": "card-title", "max_chars": 40, "repeatable": true },
+        { "id": "card-body", "role": "card-body", "max_chars": 90, "repeatable": true, "sibling_group": "card-row-bodies" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -289,6 +324,9 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-icon-list-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-icon-list-mobile.png"
       },
+      "copy_slots": [
+        { "id": "list-item", "role": "list-item", "max_chars": 110, "repeatable": true, "sibling_group": "icon-list-items" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -307,6 +345,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-testimonial-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-testimonial-mobile.png"
       },
+      "copy_slots": [
+        { "id": "quote", "role": "body", "max_chars": 200 },
+        { "id": "citation", "role": "caption", "max_chars": 60 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -325,6 +367,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-testimonial-grid-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-testimonial-grid-mobile.png"
       },
+      "copy_slots": [
+        { "id": "quote", "role": "body", "max_chars": 160, "repeatable": true, "sibling_group": "testimonial-quotes" },
+        { "id": "citation", "role": "caption", "max_chars": 50, "repeatable": true, "sibling_group": "testimonial-cites" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -343,6 +389,7 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-logo-row-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-logo-row-mobile.png"
       },
+      "contentBearing": false,
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -361,6 +408,7 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-stat-band-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-stat-band-mobile.png"
       },
+      "contentBearing": false,
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -401,6 +449,11 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/cta-split-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/cta-split-mobile.png"
       },
+      "copy_slots": [
+        { "id": "body", "role": "body", "max_chars": 160 },
+        { "id": "cta-primary", "role": "cta", "max_chars": 24 },
+        { "id": "cta-secondary", "role": "cta", "max_chars": 24 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -419,6 +472,9 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/contact-simple-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/contact-simple-mobile.png"
       },
+      "copy_slots": [
+        { "id": "intro", "role": "body", "max_chars": 160 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -437,6 +493,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/contact-map-info-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/contact-map-info-mobile.png"
       },
+      "copy_slots": [
+        { "id": "intro", "role": "body", "max_chars": 140 },
+        { "id": "directions-cta", "role": "cta", "max_chars": 24 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -455,6 +515,9 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/contact-form-simple-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/contact-form-simple-mobile.png"
       },
+      "copy_slots": [
+        { "id": "intro", "role": "body", "max_chars": 160 }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -473,6 +536,11 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-process-steps-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-process-steps-mobile.png"
       },
+      "copy_slots": [
+        { "id": "section-intro", "role": "body", "max_chars": 120 },
+        { "id": "step-title", "role": "card-title", "max_chars": 40, "repeatable": true },
+        { "id": "step-body", "role": "card-body", "max_chars": 120, "repeatable": true, "sibling_group": "process-step-bodies" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -513,6 +581,10 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-comparison-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-comparison-mobile.png"
       },
+      "copy_slots": [
+        { "id": "option-title", "role": "card-title", "max_chars": 40, "repeatable": true },
+        { "id": "option-detail", "role": "list-item", "max_chars": 60, "repeatable": true, "sibling_group": "comparison-details" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     },
@@ -531,6 +603,12 @@
         "tablet": "screenshots/after/0.1.25-pattern-certification/section-pricing-cards-tablet.png",
         "mobile": "screenshots/after/0.1.25-pattern-certification/section-pricing-cards-mobile.png"
       },
+      "copy_slots": [
+        { "id": "section-intro", "role": "body", "max_chars": 120 },
+        { "id": "plan-name", "role": "card-title", "max_chars": 30, "repeatable": true },
+        { "id": "plan-feature", "role": "list-item", "max_chars": 48, "repeatable": true, "sibling_group": "pricing-features" },
+        { "id": "plan-cta", "role": "cta", "max_chars": 24, "repeatable": true, "sibling_group": "pricing-ctas" }
+      ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
     }

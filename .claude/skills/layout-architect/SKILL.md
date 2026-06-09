@@ -80,12 +80,14 @@ entry if the file already exists). The file must conform to
 records the `page_id`, `url_slug`, `archetype`, and an ordered `patterns` list
 with each approved pattern slug, its `position`, and — for patterns with
 repeatable copy slots (card rows, FAQ items, etc.) — an `instances` count
-reflecting how many times that repeatable slot is placed on the page. Optionally
-add `blueprint_ref` and `composed_markup_ref` pointing to the blueprint artifact
-and the composed block markup. `data/page-compositions.example.json` is a worked
-example. The copywriter reads `data/page-compositions.json` to resolve the
-concrete per-page slot list it fills in `data/copy-deck.json`; an incomplete or
-missing manifest blocks that phase.
+reflecting how many times that repeatable slot is placed on the page. Set exactly
+one `patterns[].h1_owner:true` per page; this machine-readable flag, not the
+free-text `role_on_page`, is the source of truth for which pattern owns the page
+H1. Optionally add `blueprint_ref` and `composed_markup_ref` pointing to the
+blueprint artifact and the composed block markup.
+`data/page-compositions.example.json` is a worked example. The copywriter reads
+`data/page-compositions.json` to resolve the concrete per-page slot list it fills
+in `data/copy-deck.json`; an incomplete or missing manifest blocks that phase.
 
 ## Compose
 
@@ -131,6 +133,14 @@ Use the cheapest proof that verifies each claim.
   one `section-*` token per section; no `core/html`; no arbitrary
   spacing/type/color/radius/shadow/gradient values; every placeholder has alt
   text and explicit `width`/`height`.
+- Composition-manifest proof: set exactly one `patterns[].h1_owner:true` per page
+  (this, not `role_on_page`, is the machine-checked H1 owner) and an `instances`
+  count for every pattern with a repeatable copy slot, then run
+  `npm run compose:check`. It gates `COMPOSE-1..6` at manifest emit time (missing
+  or unapproved pattern slug, content-bearing pattern without `copy_slots`,
+  repeatable slot without `instances`, page without exactly one `h1_owner`, or a
+  `page_id` with no matching brief). Fail closed before handing off to the
+  copywriter.
 - Archetype-order proof: the composed section order matches the page archetype in
   `docs/layout-standard.md`; required sections present; no unapproved extras
   (`IA-1`, `FW-1`). Record the ordered slug list and the archetype checked.

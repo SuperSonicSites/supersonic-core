@@ -22,6 +22,16 @@ const SLOT_ROLES = new Set([
   'faq-answer'
 ]);
 
+// Prose roles that carry the page's substantive body words. Brief coverage counts only
+// these; microcopy (eyebrow, label, card-title, cta) is excluded so a page of buttons
+// cannot fake its way to a word-count target.
+const PROSE_ROLES = new Set(['body', 'card-body', 'faq-answer', 'list-item', 'caption']);
+
+// Brief coverage floor. A page whose realized prose is below this fraction of the brief's
+// target_word_count is genuinely thin (COVERAGE-1). The softer 95% band is intentionally
+// left to copy-review judgment (it now has the measured number) rather than a hard gate.
+const COVERAGE_FLOOR = 0.8;
+
 // Mechanical copy rules (documented in BRAND.md "Mechanical copy rules"). These are
 // hard fails, not prose suggestions: the model is told the rules, the validator makes
 // them true. The runner is binary pass/fail, so smart typography is a hard fail too.
@@ -133,7 +143,7 @@ export function checkCopyDoc(doc, { phrasesToAvoid = DEFAULT_PHRASES_TO_AVOID } 
         issues.push(`page ${id} slot ${sid} has invalid role: ${slot.role}`);
       }
 
-      if (typeof slot.text !== 'string' || slot.text.length === 0) {
+      if (typeof slot.text !== 'string' || slot.text.trim().length === 0) {
         issues.push(`page ${id} slot ${sid} must have non-empty text`);
         return;
       }
@@ -287,6 +297,96 @@ export function checkCompositionsDoc(doc) {
   return issues;
 }
 
+// The layout->copy preflight gate (compose:check). Runs BEFORE the copywriter resolves
+// the slot manifest and converts what used to be opaque join-time failures into named,
+// blame-routed rule violations. registryEntriesBySlug maps slug -> full registry entry
+// (status, copy_slots, contentBearing); briefIds is the set of brief page_ids. Pure: all
+// inputs are passed in so regression fixtures stay file-free.
+export function checkCompositionAgainstRegistry(doc, { registryEntriesBySlug, briefIds } = {}) {
+  const issues = [];
+  const compositions = Array.isArray(doc && doc.compositions) ? doc.compositions : [];
+  const entries = registryEntriesBySlug instanceof Map ? registryEntriesBySlug : new Map();
+  const briefs = briefIds instanceof Set ? briefIds : null;
+
+  for (const composition of compositions) {
+    const id = (composition && composition.page_id) || '#';
+    const patterns = Array.isArray(composition && composition.patterns) ? composition.patterns : [];
+
+    if (briefs && composition && typeof composition.page_id === 'string' && !briefs.has(composition.page_id)) {
+      issues.push(`COMPOSE-6 composition ${id} has no matching brief page_id (compose a page only for a real brief)`);
+    }
+
+    let h1Owners = 0;
+    for (const pattern of patterns) {
+      if (!pattern || typeof pattern !== 'object' || typeof pattern.slug !== 'string' || !pattern.slug) {
+        continue;
+      }
+      if (pattern.h1_owner === true) {
+        h1Owners += 1;
+      }
+      const slug = pattern.slug;
+      const entry = entries.get(slug);
+      if (!entry) {
+        issues.push(`COMPOSE-1 composition ${id} references unknown pattern "${slug}" (not in data/pattern-certifications.json); route to layout-architect`);
+        continue;
+      }
+      if (entry.status !== 'approved') {
+        issues.push(`COMPOSE-2 composition ${id} pattern "${slug}" is not approved (status: ${entry.status}); route to pattern-builder/certify-pattern`);
+      }
+      const slots = Array.isArray(entry.copy_slots) ? entry.copy_slots : [];
+      if (entry.contentBearing !== false && slots.length === 0) {
+        issues.push(`COMPOSE-3 composition ${id} content-bearing pattern "${slug}" declares no copy_slots; route to pattern-builder to declare them or mark contentBearing:false`);
+      }
+      const hasRepeatable = slots.some((slot) => slot && slot.repeatable === true);
+      if (hasRepeatable && !(Number.isInteger(pattern.instances) && pattern.instances >= 1)) {
+        issues.push(`COMPOSE-4 composition ${id} pattern "${slug}" has repeatable copy_slots but no instances count (>=1); layout-architect must set instances`);
+      }
+    }
+
+    if (h1Owners !== 1) {
+      issues.push(`COMPOSE-5 composition ${id} must designate exactly one pattern with h1_owner:true (found ${h1Owners}); the page needs exactly one editable H1`);
+    }
+  }
+
+  return issues;
+}
+
+// Brief coverage: realized prose words per page vs the brief target_word_count. Makes the
+// "thin content" finding measurable for copy-review and seo-auditor. Pure: briefsById maps
+// page_id -> brief. Only the substantive prose roles count (see PROSE_ROLES).
+export function checkBriefCoverage(doc, briefsById, { floor = COVERAGE_FLOOR } = {}) {
+  const issues = [];
+  const pages = Array.isArray(doc && doc.pages) ? doc.pages : [];
+  const briefs = briefsById instanceof Map ? briefsById : new Map();
+
+  for (const page of pages) {
+    if (!page || typeof page !== 'object' || typeof page.page_id !== 'string') {
+      continue;
+    }
+    const brief = briefs.get(page.page_id);
+    const target = brief && Number(brief.target_word_count);
+    if (!Number.isFinite(target) || target <= 0) {
+      continue;
+    }
+    const slots = Array.isArray(page.slots) ? page.slots : [];
+    let realized = 0;
+    for (const slot of slots) {
+      if (slot && typeof slot === 'object' && PROSE_ROLES.has(slot.role) && typeof slot.text === 'string') {
+        realized += wordCount(slot.text);
+      }
+    }
+    const ratio = realized / target;
+    if (ratio < floor) {
+      const pct = Math.round(ratio * 100);
+      issues.push(
+        `COVERAGE-1 page ${page.page_id} body copy is thin: ${realized} prose words is ${pct}% of brief target_word_count ${target} (need >=${Math.round(floor * 100)}%); route to layout-architect (more sections) or copywriter (longer body)`
+      );
+    }
+  }
+
+  return issues;
+}
+
 async function exists(absolutePath) {
   try {
     await stat(absolutePath);
@@ -334,6 +434,20 @@ function buildRegistryMap(registry) {
       }
     }
     map.set(entry.slug, slotMap);
+  }
+  return map;
+}
+
+// Unlike buildRegistryMap (which keeps only entries with copy_slots), this keeps EVERY
+// entry so the compose gate can see status and contentBearing on patterns that have no
+// slots (structural chrome) and on patterns that are missing slots by mistake.
+export function buildRegistryEntryMap(registry) {
+  const map = new Map();
+  const patterns = Array.isArray(registry && registry.patterns) ? registry.patterns : [];
+  for (const entry of patterns) {
+    if (entry && typeof entry === 'object' && typeof entry.slug === 'string') {
+      map.set(entry.slug, entry);
+    }
   }
   return map;
 }
@@ -429,6 +543,24 @@ export async function validateCopy({ rootDir = defaultRoot } = {}) {
         } else {
           for (const pageId of orphans) {
             results.push({ status: 'fail', message: `${deck}: page_id "${pageId}" has no matching brief in ${briefs}` });
+          }
+        }
+
+        // Brief coverage is scoped to the REAL deck only. The .example deck is an
+        // intentionally short illustration and would false-fail a word-count target.
+        if (deck === 'data/copy-deck.json') {
+          const briefsById = new Map(
+            (Array.isArray(briefsDoc.briefs) ? briefsDoc.briefs : [])
+              .filter((brief) => brief && brief.page_id)
+              .map((brief) => [brief.page_id, brief])
+          );
+          const coverageIssues = checkBriefCoverage(doc, briefsById);
+          if (coverageIssues.length === 0) {
+            results.push({ status: 'pass', message: `${deck} body copy meets brief coverage targets` });
+          } else {
+            for (const issue of coverageIssues) {
+              results.push({ status: 'fail', message: `${deck}: ${issue}` });
+            }
           }
         }
       } catch (error) {
@@ -543,6 +675,64 @@ function runRegressionFixtures(results) {
     'registry-budget detector',
     checkDeckAgainstRegistry(drifted, registryMap).some((issue) => issue.includes('must match the pattern budget'))
   );
+
+  // compose:check fixtures (the layout->copy preflight gate, COMPOSE-1..6).
+  const composeEntries = new Map([
+    ['theme/hero', { slug: 'theme/hero', status: 'approved', copy_slots: [{ id: 'lede', role: 'body', max_chars: 180 }] }],
+    ['theme/cards', { slug: 'theme/cards', status: 'approved', copy_slots: [{ id: 'card-body', role: 'card-body', max_chars: 130, repeatable: true }] }],
+    ['theme/chrome', { slug: 'theme/chrome', status: 'approved', contentBearing: false }],
+    ['theme/empty', { slug: 'theme/empty', status: 'approved', copy_slots: [] }],
+    ['theme/draft', { slug: 'theme/draft', status: 'needs-revision', copy_slots: [{ id: 'body', role: 'body' }] }]
+  ]);
+  const composeBriefIds = new Set(['home']);
+  const goodComposition = () => ({
+    version: 1,
+    compositions: [
+      {
+        page_id: 'home',
+        patterns: [
+          { position: 1, slug: 'theme/hero', h1_owner: true },
+          { position: 2, slug: 'theme/cards', instances: 3 },
+          { position: 3, slug: 'theme/chrome' }
+        ]
+      }
+    ]
+  });
+  const compose = (doc) => checkCompositionAgainstRegistry(doc, { registryEntriesBySlug: composeEntries, briefIds: composeBriefIds });
+
+  assertFixture(results, 'compose clean fixture has no issues', compose(goodComposition()).length === 0);
+
+  const cUnknown = goodComposition();
+  cUnknown.compositions[0].patterns[1].slug = 'theme/missing';
+  assertFixture(results, 'compose unknown-slug detector (COMPOSE-1)', compose(cUnknown).some((i) => i.startsWith('COMPOSE-1')));
+
+  const cUnapproved = goodComposition();
+  cUnapproved.compositions[0].patterns[1] = { position: 2, slug: 'theme/draft' };
+  assertFixture(results, 'compose unapproved detector (COMPOSE-2)', compose(cUnapproved).some((i) => i.startsWith('COMPOSE-2')));
+
+  const cEmpty = goodComposition();
+  cEmpty.compositions[0].patterns.push({ position: 4, slug: 'theme/empty' });
+  assertFixture(results, 'compose content-bearing-without-slots detector (COMPOSE-3)', compose(cEmpty).some((i) => i.startsWith('COMPOSE-3')));
+
+  const cNoInstances = goodComposition();
+  delete cNoInstances.compositions[0].patterns[1].instances;
+  assertFixture(results, 'compose repeatable-without-instances detector (COMPOSE-4)', compose(cNoInstances).some((i) => i.startsWith('COMPOSE-4')));
+
+  const cNoH1 = goodComposition();
+  delete cNoH1.compositions[0].patterns[0].h1_owner;
+  assertFixture(results, 'compose h1-owner-cardinality detector (COMPOSE-5)', compose(cNoH1).some((i) => i.startsWith('COMPOSE-5')));
+
+  const cNoBrief = goodComposition();
+  cNoBrief.compositions[0].page_id = 'ghost';
+  assertFixture(results, 'compose missing-brief detector (COMPOSE-6)', compose(cNoBrief).some((i) => i.startsWith('COMPOSE-6')));
+
+  // brief-coverage fixtures (COVERAGE-1).
+  const coverageBriefs = new Map([['home', { page_id: 'home', target_word_count: 100 }]]);
+  const thinDeck = { site, source, pages: [{ page_id: 'home', url_slug: '/', slots: [{ id: 'b', role: 'body', text: 'Too short.' }] }] };
+  assertFixture(results, 'brief-coverage thin-page detector (COVERAGE-1)', checkBriefCoverage(thinDeck, coverageBriefs).some((i) => i.startsWith('COVERAGE-1')));
+  const fullText = Array.from({ length: 100 }, (_unused, i) => `word${i}`).join(' ');
+  const fullDeck = { site, source, pages: [{ page_id: 'home', url_slug: '/', slots: [{ id: 'b', role: 'body', text: fullText }] }] };
+  assertFixture(results, 'brief-coverage passes a full page', checkBriefCoverage(fullDeck, coverageBriefs).length === 0);
 }
 
 if (process.argv[1] === __filename) {

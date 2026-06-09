@@ -1,6 +1,7 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { VIEWPORTS, launchChromium, openMaskedPage } from './lib/browser.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -32,14 +33,6 @@ function getOption(name, positionalIndex, fallback = undefined) {
   return positional[positionalIndex] ?? fallback;
 }
 
-async function loadPlaywright() {
-  try {
-    return await import('playwright');
-  } catch {
-    throw new Error('Playwright is required for screenshot capture. Run `npm install` first, then retry `npm run screenshot -- --url <staging-url>`.');
-  }
-}
-
 const url = getOption('--url', 0);
 const selector = getOption('--selector', 1, 'main');
 const label = getOption('--label', 2, 'staging');
@@ -50,48 +43,18 @@ if (!url) {
   process.exit(1);
 }
 
-const viewports = [
-  { name: 'desktop', width: 1440, height: 1000 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'mobile', width: 390, height: 844 }
-];
-
-const { chromium } = await loadPlaywright();
 await mkdir(outputDir, { recursive: true });
 
-const browser = await chromium.launch();
+const browser = await launchChromium('screenshot capture');
 try {
-  for (const viewport of viewports) {
-    const page = await browser.newPage({ viewport });
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+  for (const viewport of VIEWPORTS) {
+    const page = await openMaskedPage(browser, { viewport, url });
     const filePath = path.join(outputDir, `${label}-${viewport.name}.png`);
     const target = page.locator(selector).first();
     await target.waitFor({ state: 'visible', timeout: 10000 });
-    await page.addStyleTag({
-      content: `
-        iframe[src*="tidio"],
-        iframe[src*="tawk"],
-        iframe[src*="intercom"],
-        iframe[src*="crisp"],
-        iframe[title*="chat" i],
-        [id*="tidio" i],
-        [class*="tidio" i],
-        [id*="tawk" i],
-        [class*="tawk" i],
-        [id*="intercom" i],
-        [class*="intercom" i],
-        [id*="crisp" i],
-        [class*="crisp" i],
-        [aria-label*="chat" i],
-        [title*="chat" i] {
-          display: none !important;
-          visibility: hidden !important;
-        }
-      `
-    });
     await page.waitForTimeout(500);
     await target.screenshot({ path: filePath });
-    await page.close();
+    await page.context().close();
     console.log(`Captured ${path.relative(root, filePath)} from selector "${selector}"`);
   }
 } finally {

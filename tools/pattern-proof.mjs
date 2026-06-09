@@ -1,6 +1,7 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { VIEWPORTS, cacheBust, launchChromium, openMaskedPage } from './lib/browser.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -41,20 +42,6 @@ function getOption(name, positionalIndex, fallback = undefined) {
   }
 
   return positional[positionalIndex] ?? fallback;
-}
-
-async function loadPlaywright() {
-  try {
-    return await import('playwright');
-  } catch {
-    throw new Error('Playwright is required for pattern proof. Run `npm install` first, then retry `npm run pattern:proof -- --url <staging-url> --selector "main <selector>"`.');
-  }
-}
-
-function cacheBust(inputUrl) {
-  const parsed = new URL(inputUrl);
-  parsed.searchParams.set('proof', String(Date.now()));
-  return parsed.toString();
 }
 
 function selectorTargetsMain(url, selector) {
@@ -119,20 +106,13 @@ if (!selectorTargetsMain(url, selector)) {
   process.exit(1);
 }
 
-const viewports = [
-  { name: 'desktop', width: 1440, height: 1000 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'mobile', width: 390, height: 844 }
-];
-
 const proofUrl = cacheBust(url);
 const outputDir = outputArg ? path.resolve(root, outputArg) : null;
-const { chromium } = await loadPlaywright();
 if (outputDir) {
   await mkdir(outputDir, { recursive: true });
 }
 
-const browser = await chromium.launch();
+const browser = await launchChromium('pattern proof');
 const summary = {
   url: proofUrl,
   selector,
@@ -142,41 +122,14 @@ const summary = {
 const failures = [];
 
 try {
-  for (const viewport of viewports) {
+  for (const viewport of VIEWPORTS) {
     const consoleErrors = [];
     const pageErrors = [];
-    const page = await browser.newPage({ viewport });
-    page.on('console', (message) => {
-      if (message.type() === 'error') {
-        consoleErrors.push(message.text());
-      }
-    });
-    page.on('pageerror', (error) => {
-      pageErrors.push(error.message);
-    });
-
-    await page.goto(proofUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
-    await page.addStyleTag({
-      content: `
-        iframe[src*="tidio"],
-        iframe[src*="tawk"],
-        iframe[src*="intercom"],
-        iframe[src*="crisp"],
-        iframe[title*="chat" i],
-        [id*="tidio" i],
-        [class*="tidio" i],
-        [id*="tawk" i],
-        [class*="tawk" i],
-        [id*="intercom" i],
-        [class*="intercom" i],
-        [id*="crisp" i],
-        [class*="crisp" i],
-        [aria-label*="chat" i],
-        [title*="chat" i] {
-          display: none !important;
-          visibility: hidden !important;
-        }
-      `
+    const page = await openMaskedPage(browser, {
+      viewport,
+      url: proofUrl,
+      onConsoleError: (text) => consoleErrors.push(text),
+      onPageError: (message) => pageErrors.push(message)
     });
 
     const viewportInteractions = interactions.filter((interaction) =>
@@ -237,7 +190,7 @@ try {
       screenshot: screenshotPath ? path.relative(root, screenshotPath).replace(/\\/g, '/') : null
     });
 
-    await page.close();
+    await page.context().close();
   }
 } finally {
   await browser.close();

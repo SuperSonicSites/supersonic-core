@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SuperSonicSites/supersonic-core/data/review-finding.schema.json",
+  "title": "Supersonic Review Finding",
+  "description": "The ONE canonical finding + review-result shape emitted by every Supersonic review skill (layout-review, copy-review, visual-qa, accessibility-review, seo-auditor) and by the machine audits (tools/a11y-audit.mjs). Before this contract each review skill emitted its own finding fields and its own severity scale, so layout-review could not actually merge the other reviewers' output. This schema fixes one severity enum (blocker|major|minor|nit) and one finding shape so findings are machine-mergeable across skills (worst-severity-wins on a shared rule_id+target), and it carries the loop-termination fields (round, escalated_upstream, dismissed) that make the review loop bounded instead of prose. A review skill emits one envelope per reviewed target; each issue is a $defs.finding. The a11y audit emits findings with tool_proof set. This schema documents the contract; tools/validate-agent-quality.mjs (npm run agents:check) checks that each review skill references it and that reports use the canonical Proof Summary.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skill", "findings"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "skill": {
+      "type": "string",
+      "description": "Which review surface produced this result.",
+      "enum": ["layout-review", "copy-review", "visual-qa", "accessibility-review", "seo-auditor", "a11y-audit"]
+    },
+    "target_ref": {
+      "type": "string",
+      "description": "What was reviewed: a page_id, a pattern slug, a QA page URL, or a report path."
+    },
+    "band": {
+      "type": "string",
+      "description": "Overall grade for the grading review skills (layout-review, copy-review). Omit for leaf audits that only emit findings.",
+      "enum": ["approved", "acceptable", "needs-revision", "blocked"]
+    },
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2,
+      "description": "Feedback-loop round. The loop is capped at 2 rounds: round 1 scores and emits fixes; round 2 verifies the fixes. A blocker that recurs in round 2 escalates upstream instead of opening a round 3."
+    },
+    "escalated_upstream": {
+      "type": "boolean",
+      "description": "True when a recurring blocker (same rule_id + target after a fix) was routed to the upstream builder (layout-architect / pattern-builder / seo-strategist) instead of re-looping. When true, band must be blocked."
+    },
+    "dismissed": {
+      "type": "array",
+      "description": "Findings considered and dismissed; the authoritative do-not-re-flag set the next round must exclude.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule_id", "reason"],
+        "properties": {
+          "id": { "type": "string" },
+          "rule_id": { "type": "string" },
+          "target": { "$ref": "#/$defs/target" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    }
+  },
+  "$defs": {
+    "severity": {
+      "type": "string",
+      "description": "The one canonical severity scale. blocker = must fix before approval; major = fix before ship; minor = should fix; nit = optional polish. Map axe impact critical->blocker, serious->major, moderate->minor, minor->nit. Map the former visual-qa scale critical->blocker, high->major, medium->minor, low->nit, nit->nit.",
+      "enum": ["blocker", "major", "minor", "nit"]
+    },
+    "breakpoint": {
+      "type": "string",
+      "enum": ["desktop", "tablet", "mobile", "all"]
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Where the finding lives. At least one of file/slot/selector should be set; the merge key is (rule_id + whichever target identity is present).",
+      "properties": {
+        "file": { "type": "string", "description": "Source file path, e.g. a pattern .php or a data file." },
+        "slot": { "type": "string", "description": "Copy-deck slot id (copy-review)." },
+        "selector": { "type": "string", "description": "DOM selector or pattern slug (visual / a11y)." }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "rule_id", "dimension", "severity", "evidence", "status"],
+      "properties": {
+        "id": { "type": "string", "description": "Stable per-run id, e.g. home-color-3." },
+        "rule_id": { "type": "string", "description": "Rule namespace id, e.g. COLOR-3, A11Y-1, CONV-1, COMPOSE-4, axe/color-contrast." },
+        "dimension": { "type": "string", "description": "Human dimension name, e.g. color-contrast, persuasion, heading-hierarchy." },
+        "severity": { "$ref": "#/$defs/severity" },
+        "breakpoint": { "$ref": "#/$defs/breakpoint" },
+        "target": { "$ref": "#/$defs/target" },
+        "evidence": { "type": "string", "description": "Concrete proof of the finding: measured value, quote, or screenshot path." },
+        "suspected_source": { "type": "string", "description": "The pattern/section/upstream skill likely responsible, for blame-routing." },
+        "recommended_fix": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["open", "real", "false-positive", "dismissed", "fixed"]
+        },
+        "money_page": { "type": "boolean", "description": "copy-review: this slot is on a primary conversion page; fixes get the higher-tier model." },
+        "tool_proof": {
+          "type": "object",
+          "description": "Machine evidence when the finding came from a tool (axe, lighthouse). Distinguishes measured findings from judgment.",
+          "additionalProperties": true,
+          "properties": {
+            "tool": { "type": "string", "description": "e.g. axe, lighthouse." },
+            "ruleId": { "type": "string" },
+            "impact": { "type": "string" },
+            "metric": { "type": "string" },
+            "value": { "type": ["number", "string"] }
+          }
+        }
+      }
+    }
+  }
+}

@@ -58,10 +58,13 @@ registry updates, and package checks before approving.
   `data/pattern-certifications.json` declares a non-empty `copy_slots` array
   before marking the pattern approved. Structural-only patterns (header/footer
   navigation chrome, logo rows, purely decorative bands with no writer-editable
-  text) are exempt. Reason: `copy_slots` is the budget source of truth that
-  `tools/validate-copy.mjs` (`npm run copy:check`) and the `copywriter` skill
-  read; a certified pattern without `copy_slots` blocks copy production for any
-  page that uses it.
+  text) are exempt and must set `"contentBearing": false`. Reason: `copy_slots`
+  is the budget source of truth that `tools/validate-copy.mjs`
+  (`npm run copy:check`) and the `copywriter` skill read; a certified pattern
+  without `copy_slots` blocks copy production for any page that uses it.
+- Run `npm run pattern:registry:check` as a REQUIRED gate before marking a pattern
+  approved. It FAILS (`REG-CB-1`) when a content-bearing, approved pattern declares
+  no `copy_slots`; structural patterns must instead set `"contentBearing": false`.
 - Require a report `Proof Summary`.
 
 ## Failure Policy
