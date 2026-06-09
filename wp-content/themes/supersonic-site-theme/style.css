@@ -11,46 +11,9 @@ Update URI: https://github.com/SuperSonicSites/supersonic-core
 Text Domain: supersonic-site-theme
 */
 
-.supersonic-section-page > .wp-block-post-content.has-global-padding {
-	padding-left: 0;
-	padding-right: 0;
-}
-
-.supersonic-section-page > .wp-block-post-content.has-global-padding > .alignfull {
-	margin-left: 0;
-	margin-right: 0;
-}
-
-.has-text-color .wp-block-button__link:not(.has-text-color) {
-	color: inherit;
-}
-
-.supersonic-brand-lockup {
-	align-items: center;
-	display: flex;
-	gap: var(--wp--preset--spacing--s);
-	min-width: 0;
-}
-
-.supersonic-brand-lockup .wp-block-site-title {
-	margin: 0;
-	min-width: 0;
-}
-
-.supersonic-brand-lockup .wp-block-site-title,
-.supersonic-brand-lockup .wp-block-site-title a {
-	font-size: var(--wp--preset--font-size--body);
-	line-height: 1.25;
-	overflow-wrap: anywhere;
-	word-break: normal;
-}
-
-.supersonic-pattern-image {
-	margin: 0;
-}
-
-.supersonic-pattern-image img {
-	display: block;
-	width: 100%;
-}
-
+/*
+ * This block theme loads all pattern/structural CSS via functions.php
+ * (assets/css/patterns.css and assets/css/navigation.css) and design tokens via
+ * theme.json. style.css holds the WordPress theme header only — it is not
+ * enqueued, so do not add rules here. Put pattern CSS in assets/css/patterns.css.
+ */
