@@ -17,6 +17,71 @@ const allowedStatuses = new Set([
   'needs-revision'
 ]);
 
+// Roles a copy_slot may declare. Mirrors SLOT_ROLES in tools/validate-copy.mjs and
+// the role enum in data/copy-deck.schema.json. Headings (h1/h2/h3) are owned upstream
+// and never written as copy slots, so they are deliberately excluded here too.
+const copySlotRoles = new Set([
+  'eyebrow',
+  'label',
+  'body',
+  'card-title',
+  'card-body',
+  'list-item',
+  'cta',
+  'caption',
+  'faq-answer'
+]);
+
+function isPositiveInteger(value) {
+  return Number.isInteger(value) && value > 0;
+}
+
+// Validates the optional per-pattern copy_slots budgets (the source of truth that
+// tools/validate-copy.mjs cross-checks the copy deck against). Each entry must carry a
+// unique non-empty id, a known role string, and any declared char/word caps must be
+// positive integers. copy_slots is optional; only entries that declare it are checked.
+function validateCopySlots(entry, results) {
+  if (entry.copy_slots === undefined) {
+    return;
+  }
+  if (!Array.isArray(entry.copy_slots)) {
+    push(results, 'fail', `${entry.slug} copy_slots must be an array`);
+    return;
+  }
+
+  const seenIds = new Set();
+  entry.copy_slots.forEach((slot, index) => {
+    const ref = (slot && typeof slot.id === 'string' && slot.id) || `#${index}`;
+
+    if (!slot || typeof slot !== 'object' || Array.isArray(slot)) {
+      push(results, 'fail', `${entry.slug} copy_slots[${index}] must be an object`);
+      return;
+    }
+
+    if (typeof slot.id !== 'string' || !slot.id) {
+      push(results, 'fail', `${entry.slug} copy_slots ${ref} must have a non-empty string id`);
+    } else if (seenIds.has(slot.id)) {
+      push(results, 'fail', `${entry.slug} has duplicate copy_slots id: ${slot.id}`);
+    } else {
+      seenIds.add(slot.id);
+    }
+
+    if (typeof slot.role !== 'string' || !copySlotRoles.has(slot.role)) {
+      push(results, 'fail', `${entry.slug} copy_slots ${ref} has invalid role: ${slot.role ?? '(missing)'}`);
+    }
+
+    for (const field of ['max_chars', 'min_chars', 'max_words']) {
+      if (slot[field] !== undefined && !isPositiveInteger(slot[field])) {
+        push(results, 'fail', `${entry.slug} copy_slots ${ref} ${field} must be a positive integer: ${slot[field]}`);
+      }
+    }
+
+    if (slot.sibling_group !== undefined && (typeof slot.sibling_group !== 'string' || !slot.sibling_group)) {
+      push(results, 'fail', `${entry.slug} copy_slots ${ref} sibling_group must be a non-empty string`);
+    }
+  });
+}
+
 function normalizePath(value) {
   return value.replace(/\\/g, '/');
 }
@@ -278,6 +343,8 @@ export async function validatePatternRegistry({ rootDir = defaultRoot } = {}) {
     if (!Array.isArray(entry.knownIssues)) {
       push(results, 'fail', `${entry.slug} knownIssues must be an array`);
     }
+
+    validateCopySlots(entry, results);
   }
 
   for (const file of patternFiles) {

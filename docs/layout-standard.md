@@ -535,6 +535,16 @@ For each composed section, decide and record:
     typography, alignment / justification, media replacement, radius, and shadow,
     per the control-ownership matrix in `docs/gutenberg-authoring-standard.md`.
 
+## Copywriter Connection
+
+After composition, `layout-architect` emits `data/page-compositions.json` — the
+ordered patterns and instance counts per page. The `copywriter` skill joins this
+manifest with each pattern's `copy_slots` in `data/pattern-certifications.json`
+(per-slot role, length caps, and `sibling_group` balance rules) to derive the
+per-page slot manifest for `data/copy-deck.json`. Every pattern with editable
+body copy, CTA, or label copy must declare its `copy_slots` before the copywriter
+can write for that pattern.
+
 ## Proof & Review
 
 A composed layout is proven, not asserted. `layout-review` scores each dimension

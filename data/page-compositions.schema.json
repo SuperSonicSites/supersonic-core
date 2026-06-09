@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SuperSonicSites/supersonic-core/data/page-compositions.schema.json",
+  "title": "Supersonic Page Compositions",
+  "description": "Machine-readable per-page pattern manifest emitted by the layout-architect skill when it composes a page. It is the link the copywriter resolves against: for each page it lists the ordered approved pattern slugs and, for patterns with repeatable copy slots (card rows, FAQ lists), the instance count placed on that page. The copywriter joins this manifest with each pattern's copy_slots in data/pattern-certifications.json to derive the concrete per-page slot list (with length caps and sibling groups) it fills in data/copy-deck.json. Generate data/page-compositions.json from this schema in a cloned site repo; data/page-compositions.example.json is a worked example. Slugs must reference patterns approved in data/pattern-certifications.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "compositions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 },
+    "description": { "type": "string" },
+    "compositions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["page_id", "url_slug", "patterns"],
+        "properties": {
+          "page_id": { "type": "string", "description": "Must match a briefs[].page_id and a copy-deck pages[].page_id." },
+          "url_slug": {
+            "type": "string",
+            "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*)?/?$"
+          },
+          "archetype": {
+            "type": "string",
+            "enum": ["home", "service", "landing", "about", "contact", "pricing", "blog-article", "faq", "local-business"]
+          },
+          "blueprint_ref": { "type": "string", "description": "Path to the human-readable Layout Blueprint, e.g. docs/layouts/<page>-blueprint.md." },
+          "composed_markup_ref": { "type": "string", "description": "Path to the composed block markup, e.g. data/page-json/<page>.json." },
+          "patterns": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Ordered list of the approved patterns placed in <main>, top to bottom. Header/footer come from the template and are not copy targets here.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["position", "slug"],
+              "properties": {
+                "position": { "type": "integer", "minimum": 1 },
+                "slug": { "type": "string", "description": "An approved pattern slug from data/pattern-certifications.json." },
+                "instances": { "type": "integer", "minimum": 1, "description": "How many times each repeatable copy slot of this pattern is placed on the page (e.g. 4 service cards, 3 FAQ items). Omit when the pattern has no repeatable slots." },
+                "role_on_page": { "type": "string", "description": "Optional human note, e.g. \"owns the H1\" or \"final CTA\"." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

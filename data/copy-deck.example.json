@@ -1,0 +1,81 @@
+{
+  "$schema": "./copy-deck.schema.json",
+  "site": {
+    "niche": "Residential plumbing services",
+    "geography": "Dallas, Texas, United States",
+    "notes": "Worked example only. Body copy avoids em/en dashes, smart quotes, and phrases-to-avoid. Caps and sibling groups are denormalized from each pattern's copy_slots in data/pattern-certifications.json."
+  },
+  "source": {
+    "briefs": "data/seo-briefs.example.json",
+    "intake": "data/site-intake.example.json",
+    "compositions": "data/page-compositions.example.json",
+    "generatedBy": "copywriter"
+  },
+  "pages": [
+    {
+      "page_id": "home",
+      "url_slug": "/",
+      "word_count_target": 1200,
+      "locked_headings": {
+        "h1": "Dallas's 24/7 Emergency Plumbers",
+        "sections": [
+          { "h2": "Plumbing Help When You Need It Most" },
+          { "h2": "Our Plumbing Services", "h3": ["Drain Cleaning", "Water Heater Repair", "Leak Detection"] },
+          { "h2": "Why Dallas Homeowners Trust Us" }
+        ]
+      },
+      "slots": [
+        { "id": "home-hero-eyebrow", "role": "eyebrow", "pattern_slug": "supersonic-site-theme/hero-simple", "slot_ref": "eyebrow", "max_chars": 50, "section_ref": "Plumbing Help When You Need It Most", "text": "Licensed Dallas plumbers, on call 24/7" },
+        { "id": "home-hero-lede", "role": "body", "pattern_slug": "supersonic-site-theme/hero-simple", "slot_ref": "lede", "max_chars": 180, "section_ref": "Plumbing Help When You Need It Most", "text": "Burst pipe at 2 a.m.? We answer the phone and roll a truck the same day, with upfront pricing before any work begins." },
+        { "id": "home-hero-cta-primary", "role": "cta", "pattern_slug": "supersonic-site-theme/hero-simple", "slot_ref": "cta-primary", "max_chars": 28, "text": "Call now for same-day help" },
+        { "id": "home-hero-cta-secondary", "role": "cta", "pattern_slug": "supersonic-site-theme/hero-simple", "slot_ref": "cta-secondary", "max_chars": 28, "text": "See our services" },
+
+        { "id": "home-services-intro", "role": "body", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "section-intro", "max_chars": 100, "section_ref": "Our Plumbing Services", "text": "From clogged drains to water heaters, we fix it fast and clean up after." },
+        { "id": "home-card-1-title", "role": "card-title", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-title", "max_chars": 40, "section_ref": "Our Plumbing Services", "text": "Drain Cleaning" },
+        { "id": "home-card-2-title", "role": "card-title", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-title", "max_chars": 40, "section_ref": "Our Plumbing Services", "text": "Water Heater Repair" },
+        { "id": "home-card-3-title", "role": "card-title", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-title", "max_chars": 40, "section_ref": "Our Plumbing Services", "text": "Leak Detection" },
+        { "id": "home-card-4-title", "role": "card-title", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-title", "max_chars": 40, "section_ref": "Our Plumbing Services", "text": "24/7 Emergency Service" },
+        { "id": "home-card-1-body", "role": "card-body", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-body", "max_chars": 130, "sibling_group": "home-service-card-bodies", "section_ref": "Our Plumbing Services", "text": "Slow or clogged drains cleared fast with professional snaking and hydro jetting." },
+        { "id": "home-card-2-body", "role": "card-body", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-body", "max_chars": 130, "sibling_group": "home-service-card-bodies", "section_ref": "Our Plumbing Services", "text": "Repairs and replacements for tank and tankless water heaters, done the same day." },
+        { "id": "home-card-3-body", "role": "card-body", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-body", "max_chars": 130, "sibling_group": "home-service-card-bodies", "section_ref": "Our Plumbing Services", "text": "We find hidden leaks fast, without tearing up your floors, walls, or yard." },
+        { "id": "home-card-4-body", "role": "card-body", "pattern_slug": "supersonic-site-theme/section-service-cards", "slot_ref": "card-body", "max_chars": 130, "sibling_group": "home-service-card-bodies", "section_ref": "Our Plumbing Services", "text": "Around the clock response for burst pipes and other urgent plumbing failures." },
+
+        { "id": "home-feature-eyebrow", "role": "label", "pattern_slug": "supersonic-site-theme/section-text-image", "slot_ref": "eyebrow", "max_chars": 32, "section_ref": "Why Dallas Homeowners Trust Us", "text": "Why homeowners trust us" },
+        { "id": "home-feature-body", "role": "body", "pattern_slug": "supersonic-site-theme/section-text-image", "slot_ref": "body", "max_chars": 240, "section_ref": "Why Dallas Homeowners Trust Us", "text": "Every plumber we send is licensed, insured, and background checked. We quote the full price before any work begins, so there are no surprise fees and no pressure. Most calls get a same-day appointment." },
+        { "id": "home-feature-cta", "role": "cta", "pattern_slug": "supersonic-site-theme/section-text-image", "slot_ref": "cta", "max_chars": 32, "text": "Learn about our team" },
+
+        { "id": "home-cta-body", "role": "body", "pattern_slug": "supersonic-site-theme/cta-band", "slot_ref": "body", "max_chars": 140, "text": "Water rising or a drain backing up? Call now and a licensed Dallas plumber will be on the way." },
+        { "id": "home-cta-button", "role": "cta", "pattern_slug": "supersonic-site-theme/cta-band", "slot_ref": "cta", "max_chars": 24, "text": "Call for fast help" }
+      ]
+    },
+    {
+      "page_id": "service-drain-cleaning",
+      "url_slug": "/drain-cleaning",
+      "word_count_target": 1000,
+      "locked_headings": {
+        "h1": "Professional Drain Cleaning in Dallas",
+        "sections": [
+          { "h2": "Signs You Need Drain Cleaning" },
+          { "h2": "How We Clear Your Drains", "h3": ["Drain Snaking", "Hydro Jetting"] },
+          { "h2": "Upfront, Honest Pricing" }
+        ]
+      },
+      "slots": [
+        { "id": "drain-intro-label", "role": "label", "pattern_slug": "supersonic-site-theme/section-page-intro", "slot_ref": "label", "max_chars": 30, "section_ref": "Signs You Need Drain Cleaning", "text": "Drain cleaning" },
+        { "id": "drain-intro-body", "role": "body", "pattern_slug": "supersonic-site-theme/section-page-intro", "slot_ref": "body", "max_chars": 180, "section_ref": "Signs You Need Drain Cleaning", "text": "When a drain backs up, the early warning signs show up fast. Catching them sooner keeps a small clog from turning into a flooded floor." },
+
+        { "id": "drain-method-eyebrow", "role": "label", "pattern_slug": "supersonic-site-theme/section-text-image", "slot_ref": "eyebrow", "max_chars": 32, "section_ref": "How We Clear Your Drains", "text": "How we clear your drains" },
+        { "id": "drain-method-body", "role": "body", "pattern_slug": "supersonic-site-theme/section-text-image", "slot_ref": "body", "max_chars": 240, "section_ref": "How We Clear Your Drains", "text": "For routine clogs we snake the line. For grease and heavy buildup we use hydro jetting to scour the pipe wall, so the fix lasts longer than a quick plunge. We match the method to the blockage." },
+        { "id": "drain-method-cta", "role": "cta", "pattern_slug": "supersonic-site-theme/section-text-image", "slot_ref": "cta", "max_chars": 32, "text": "See how we work" },
+
+        { "id": "drain-faq-intro", "role": "body", "pattern_slug": "supersonic-site-theme/section-faq-rankmath", "slot_ref": "intro", "max_chars": 120, "section_ref": "Upfront, Honest Pricing", "text": "Quick answers to the questions Dallas homeowners ask us most about drain cleaning." },
+        { "id": "drain-faq-1-answer", "role": "faq-answer", "pattern_slug": "supersonic-site-theme/section-faq-rankmath", "slot_ref": "faq-answer", "max_chars": 320, "text": "Most drains clear in under an hour. Heavy sewer line blockages can take longer, and we will tell you before we start." },
+        { "id": "drain-faq-2-answer", "role": "faq-answer", "pattern_slug": "supersonic-site-theme/section-faq-rankmath", "slot_ref": "faq-answer", "max_chars": 320, "text": "Snaking handles most clogs. For recurring backups or grease, hydro jetting cleans the full pipe wall and lasts longer." },
+        { "id": "drain-faq-3-answer", "role": "faq-answer", "pattern_slug": "supersonic-site-theme/section-faq-rankmath", "slot_ref": "faq-answer", "max_chars": 320, "text": "Yes. You get the full price before we begin, with no surprise fees, and same-day appointments are usually available." },
+
+        { "id": "drain-cta-body", "role": "body", "pattern_slug": "supersonic-site-theme/cta-band", "slot_ref": "body", "max_chars": 140, "text": "Clogged drain slowing you down? Book a drain cleaning and we will clear it fast." },
+        { "id": "drain-cta-button", "role": "cta", "pattern_slug": "supersonic-site-theme/cta-band", "slot_ref": "cta", "max_chars": 24, "text": "Book a drain cleaning" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SuperSonicSites/supersonic-core/data/copy-deck.schema.json",
+  "title": "Supersonic Copy Deck",
+  "description": "Per-page website body copy produced by the copywriter skill during Phase 8, after seo-strategist owns the SEO metadata and layout-architect composes the page. The copywriter fills body copy only: it never authors SEO titles, meta descriptions, slugs, schema, or the H1/H2/H3 heading outline. Those headings appear here only as a read-only locked_headings echo; the slot role enum has no heading member, so a heading can never be written as an editable slot. Per-slot length caps and sibling_group balance come from each pattern's copy_slots in data/pattern-certifications.json (the budget source of truth). Generate data/copy-deck.json from this schema in a cloned site repo; data/copy-deck.example.json is a worked example. tools/validate-copy.mjs (npm run copy:check) enforces every rule here plus banned characters, phrases-to-avoid, length caps, sibling balance, brief linkage, and registry consistency.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["site", "source", "pages"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["niche", "geography"],
+      "properties": {
+        "niche": { "type": "string" },
+        "geography": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Provenance. The copy deck is downstream of these inputs and must never become a second source of truth for SEO metadata or layout structure.",
+      "required": ["briefs", "intake"],
+      "properties": {
+        "briefs": { "type": "string", "description": "Path to the seo-strategist briefs this copy fills, e.g. data/seo-briefs.json." },
+        "intake": { "type": "string", "description": "Path to the client intake the voice is grounded in, e.g. data/site-intake.json." },
+        "compositions": { "type": "string", "description": "Path to the layout-architect page composition manifest, e.g. data/page-compositions.json." },
+        "generatedBy": { "type": "string" }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["page_id", "url_slug", "slots"],
+        "properties": {
+          "page_id": { "type": "string", "description": "Must match a briefs[].page_id." },
+          "url_slug": {
+            "type": "string",
+            "description": "Echoed from the brief for traceability. Lowercase, hyphen-separated path; root home page may be \"/\".",
+            "pattern": "^/(?:[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*)?/?$"
+          },
+          "word_count_target": { "type": "integer", "minimum": 0, "description": "Echoed from brief.target_word_count; advisory. Per-slot caps are the hard gates." },
+          "locked_headings": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Read-only echo of the brief heading outline for traceability. NEVER writer-editable; owned by seo-strategist and placed by layout-architect. Not length-checked by the copy validator because the writer does not own this text.",
+            "required": ["h1"],
+            "properties": {
+              "h1": { "type": "string" },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["h2"],
+                  "properties": {
+                    "h2": { "type": "string" },
+                    "h3": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          },
+          "slots": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "role", "text"],
+              "properties": {
+                "id": { "type": "string", "description": "Stable slot id, unique within the page." },
+                "role": {
+                  "type": "string",
+                  "description": "The kind of editable copy. Deliberately excludes the SEO heading outline (no h1/h2/h3 member): headings are owned upstream and only echoed in locked_headings.",
+                  "enum": ["eyebrow", "label", "body", "card-title", "card-body", "list-item", "cta", "caption", "faq-answer"]
+                },
+                "text": { "type": "string", "minLength": 1 },
+                "pattern_slug": { "type": "string", "description": "The pattern this slot belongs to, e.g. supersonic-site-theme/section-service-cards. Used with slot_ref for the registry-consistency cross-check." },
+                "slot_ref": { "type": "string", "description": "The id of the pattern's copy_slots entry this slot instantiates. Repeatable slots reuse the same slot_ref across instances." },
+                "max_chars": { "type": "integer", "minimum": 1, "description": "Per-slot hard cap, denormalized from the pattern copy_slot. Keeps image-adjacent copy from overflowing its column." },
+                "min_chars": { "type": "integer", "minimum": 0 },
+                "max_words": { "type": "integer", "minimum": 1 },
+                "sibling_group": { "type": "string", "description": "Page-unique tag; slots sharing it must hold roughly equal text (e.g. cards in a row). Enforced within +/-25% by the validator." },
+                "section_ref": { "type": "string", "description": "The brief section h2 this slot supports, for traceability." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

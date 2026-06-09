@@ -1,0 +1,33 @@
+{
+  "$schema": "./page-compositions.schema.json",
+  "version": 1,
+  "description": "Worked example only. layout-architect emits data/page-compositions.json per cloned site after composing each page. page_ids and slugs here match data/seo-briefs.example.json and the approved patterns in data/pattern-certifications.json.",
+  "compositions": [
+    {
+      "page_id": "home",
+      "url_slug": "/",
+      "archetype": "local-business",
+      "blueprint_ref": "docs/layouts/plumbing-home-page-blueprint.md",
+      "composed_markup_ref": "data/page-json/plumbing-home-page.json",
+      "patterns": [
+        { "position": 1, "slug": "supersonic-site-theme/hero-simple", "role_on_page": "owns the H1; value prop + primary CTA" },
+        { "position": 2, "slug": "supersonic-site-theme/section-service-cards", "instances": 4, "role_on_page": "top 4 services, each links to its detail page" },
+        { "position": 3, "slug": "supersonic-site-theme/section-text-image", "role_on_page": "why-choose-us with image; secondary CTA" },
+        { "position": 4, "slug": "supersonic-site-theme/cta-band", "role_on_page": "final CTA" }
+      ]
+    },
+    {
+      "page_id": "service-drain-cleaning",
+      "url_slug": "/drain-cleaning",
+      "archetype": "service",
+      "blueprint_ref": "docs/layouts/sample-service-page-blueprint.md",
+      "composed_markup_ref": "data/page-json/sample-service-page.json",
+      "patterns": [
+        { "position": 1, "slug": "supersonic-site-theme/section-page-intro", "role_on_page": "owns the H1; scopes the service" },
+        { "position": 2, "slug": "supersonic-site-theme/section-text-image", "role_on_page": "method explainer with image" },
+        { "position": 3, "slug": "supersonic-site-theme/section-faq-rankmath", "instances": 3, "role_on_page": "FAQ answers; schema owned by Rank Math" },
+        { "position": 4, "slug": "supersonic-site-theme/cta-band", "role_on_page": "final CTA" }
+      ]
+    }
+  ]
+}

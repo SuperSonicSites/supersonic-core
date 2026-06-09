@@ -291,6 +291,10 @@ Update `data/pattern-certifications.json` after every pattern review. The entry
 must record the source file, QA page slug/URL, certification status, report path,
 and screenshot paths when screenshots have been captured.
 
+For patterns with body text slots (labels, eyebrows, CTAs, card bodies, etc.),
+declare the `copy_slots` array with slot id, role, and `max_chars`; this lets
+the copywriter validate text against budget caps during `npm run copy:check`.
+
 Run:
 
 ```text

@@ -58,6 +58,8 @@ Then route by task. **Invoke the matching skill first** — each skill is the op
 | Research site SEO architecture & keywords at Init (Ubersuggest MCP) | `seo-strategist` | `SEO_STRATEGY.md`, `PAGE_MAP.md`, `CONTENT_MODEL.md`, `data/seo-briefs.schema.json` |
 | Build or change one pattern or section | `pattern-builder` | `DESIGN_SYSTEM.md`, `docs/gutenberg-authoring-standard.md`, `docs/design-tokens-standard.md`, theme `CLAUDE.md` |
 | Compose or assemble a full page layout from patterns | `layout-architect` | `docs/layout-standard.md`, `PAGE_MAP.md`, `BRAND.md`, `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `DESIGN_SYSTEM.md` |
+| Write or fill website body copy from the briefs | `copywriter` | `BRAND.md`, `data/copy-deck.schema.json`, `data/seo-briefs.json`, `data/site-intake.json`, `data/page-compositions.json` |
+| Review / grade / QA the website copy deck | `copy-review` | `BRAND.md`, `data/copy-deck.json`, `data/seo-briefs.json`, `data/site-intake.json` |
 | Review / grade / QA a composed page layout | `layout-review` | `docs/layout-standard.md`, `QA_CHECKLIST.md` |
 | Visual / responsive screenshot review | `visual-qa` | `QA_CHECKLIST.md` |
 | Accessibility review | `accessibility-review` | `QA_CHECKLIST.md` |
@@ -234,6 +236,8 @@ A task is done only when the final report includes:
 For visual work, screenshots are required.
 
 For pattern certification work, update `data/pattern-certifications.json` and run `npm run pattern:registry:check`.
+
+For website copy work, the copy deck must pass `npm run copy:check` (no banned em dashes, phrases-to-avoid, per-slot length caps, equal-text card balance, and pattern-budget consistency).
 
 For plugin/security work, security review is required.
 

@@ -53,6 +53,15 @@ registry updates, and package checks before approving.
 - Confirm desktop, tablet, and mobile screenshots target the reviewed component.
 - Confirm headers, footers, navigation, accordions, overlays, and similar
   interactive components have open/closed or hover/click evidence.
+- For every content-bearing pattern (any pattern that renders body copy, CTA
+  labels, card text, list items, or FAQ answers): confirm that its entry in
+  `data/pattern-certifications.json` declares a non-empty `copy_slots` array
+  before marking the pattern approved. Structural-only patterns (header/footer
+  navigation chrome, logo rows, purely decorative bands with no writer-editable
+  text) are exempt. Reason: `copy_slots` is the budget source of truth that
+  `tools/validate-copy.mjs` (`npm run copy:check`) and the `copywriter` skill
+  read; a certified pattern without `copy_slots` blocks copy production for any
+  page that uses it.
 - Require a report `Proof Summary`.
 
 ## Failure Policy
@@ -79,7 +88,7 @@ Follow `docs/workflows/theme-pattern-certification.md` in order:
 5. Token editability check — for each pattern under review, prove it stays editable in the block editor (text, links/labels, media, section padding, colors, typography, radius/shadow presets) with no block validation warnings.
 6. Rule audits — exactly one editable H1 per page layout, header/footer remain modular pattern files, header navigation CSS stays scoped to `.supersonic-site-header`, and shadows use only approved presets.
 7. Screenshot review — capture section-level desktop, tablet, and mobile screenshots with `npm run screenshot`, targeting the changed component selector.
-8. Registry — update `data/pattern-certifications.json` and run `npm run pattern:registry:check`.
+8. Registry — update `data/pattern-certifications.json` and run `npm run pattern:registry:check`. For each content-bearing pattern being certified, confirm its entry declares a non-empty `copy_slots` array (see Proof Gates). If `copy_slots` is absent or empty for a pattern that renders writer-editable text, add it now before approving — the `copywriter` skill will block on any page that includes a pattern without declared copy budgets.
 9. Report — write a certification report in `docs/reports/` (scope, QA page status, registry status, versions, checks, screenshots, editor result, issues, fixes, remaining risks, approval).
 10. Commit — only after validation, staging certification, screenshots, the editor check, the registry check, and the report all pass.
 

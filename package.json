@@ -23,6 +23,7 @@
     "certify:staging": "node tools/staging-rest.mjs certify",
     "pattern:registry:check": "node tools/validate-pattern-registry.mjs",
     "seo:briefs:check": "node tools/validate-seo-briefs.mjs",
+    "copy:check": "node tools/validate-copy.mjs",
     "test:updater-parser": "php tools/test-theme-updater-parser.php",
     "version:check": "node tools/bump-version.mjs --check",
     "version:bump": "node tools/bump-version.mjs"

@@ -41,6 +41,7 @@ Selected block:
 Promised controls:
 Owning block for each control:
 Expected proof:
+Copy slots (id, role, caps, sibling_group):
 Manual-only gaps:
 ```
 
@@ -128,8 +129,13 @@ than patching a single page.
 ## Proof Gates
 
 - Static proof: run `npm run validate` and fix failures before approval.
-- Registry proof: update `data/pattern-certifications.json` when certifying and
-  run `npm run pattern:registry:check`.
+- Registry proof: update `data/pattern-certifications.json` when certifying,
+  declare every editable text surface as a `copy_slots` entry (each with a
+  unique `id`, a valid `role` from `tools/validate-copy.mjs`, character caps
+  `max_chars`/`min_chars`/`max_words`, and `sibling_group` for any card or
+  repeated slot that must balance visually), then run
+  `npm run pattern:registry:check`. Patterns without `copy_slots` block the
+  `copywriter` skill from resolving real budgets — do not omit them.
 - Staging proof: use cache-busted staging URLs for final screenshots.
 - Selector proof: when using a `qa-pattern-*` page, target the reviewed pattern
   under `main`, not site chrome or the full page unless the full component is the
@@ -167,4 +173,12 @@ relevant, issues/fixes, manual-only gaps, and approval status.
 6. Sync to Hostinger staging when needed.
 7. Capture section-level desktop, tablet, and mobile screenshots.
 8. Fix only the issues found in review.
-9. Report files changed, screenshots reviewed, checks run, and remaining risks.
+9. Declare `copy_slots` in `data/pattern-certifications.json` for every editable
+   text surface the pattern exposes: assign each slot a unique `id`, the correct
+   `role` (from `tools/validate-copy.mjs` `SLOT_ROLES`), character and word caps
+   (`max_chars`, `min_chars`, `max_words`), and a `sibling_group` key for any
+   card-body or repeated text slot that must balance visually across siblings.
+   Run `npm run pattern:registry:check` to confirm the entries are valid.
+   A pattern without `copy_slots` blocks the `copywriter` from resolving real
+   budgets for any page that composes it.
+10. Report files changed, screenshots reviewed, checks run, and remaining risks.

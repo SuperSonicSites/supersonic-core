@@ -72,6 +72,21 @@ The blueprint is the contract `layout-review` grades and the artifact a human
 approves before staging. Each per-section decision must cite the controlling
 rule(s) from `docs/layout-standard.md` (e.g. `SPACE-1`, `ALIGN-2`, `CONV-1`).
 
+## Output
+
+After composing a page, write `data/page-compositions.json` (or append the page
+entry if the file already exists). The file must conform to
+`data/page-compositions.schema.json`: a `compositions` array where each entry
+records the `page_id`, `url_slug`, `archetype`, and an ordered `patterns` list
+with each approved pattern slug, its `position`, and — for patterns with
+repeatable copy slots (card rows, FAQ items, etc.) — an `instances` count
+reflecting how many times that repeatable slot is placed on the page. Optionally
+add `blueprint_ref` and `composed_markup_ref` pointing to the blueprint artifact
+and the composed block markup. `data/page-compositions.example.json` is a worked
+example. The copywriter reads `data/page-compositions.json` to resolve the
+concrete per-page slot list it fills in `data/copy-deck.json`; an incomplete or
+missing manifest blocks that phase.
+
 ## Compose
 
 - Order sections from the archetype in `docs/layout-standard.md` for the page
@@ -156,7 +171,8 @@ Every layout report includes:
 
 - scope (page + intent/archetype)
 - the Layout Blueprint card
-- files created/changed (blueprint artifact and composed-page markup location)
+- files created/changed (blueprint artifact, composed-page markup location, and
+  `data/page-compositions.json` updated with the new page entry)
 - `Proof Summary` (static, staging, visual via layout-review, manual-only gaps)
 - the approved-pattern check and any patterns routed to `pattern-builder`
 - the structured-data plan and internal-link plan
@@ -173,7 +189,12 @@ Every layout report includes:
    `pattern-builder`.
 4. Compose the page by referencing patterns; set each block's spec; place one
    H1; fill placeholders; plan schema; add internal links.
-5. Run `npm run validate`; fix static failures.
-6. Hand off to `layout-review` for scored visual/responsive/interaction proof.
-7. Fix only what `layout-review` flags (by rule ID); re-review.
-8. Report; request approval before any staging write or commit.
+5. Write or update `data/page-compositions.json` (conforming to
+   `data/page-compositions.schema.json`): record the ordered pattern slugs,
+   positions, `instances` counts for repeatable slots, and the `archetype`.
+   This manifest is the input `copywriter` requires; an incomplete entry blocks
+   Phase 8.
+6. Run `npm run validate`; fix static failures.
+7. Hand off to `layout-review` for scored visual/responsive/interaction proof.
+8. Fix only what `layout-review` flags (by rule ID); re-review.
+9. Report; request approval before any staging write or commit.

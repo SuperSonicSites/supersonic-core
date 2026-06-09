@@ -28,6 +28,8 @@ When a task matches one of these workflows, read the matching
 - `deployment-review`
 - `new-site-init`
 - `seo-strategist`
+- `copywriter`
+- `copy-review`
 
 ## Scoped Instructions
 
