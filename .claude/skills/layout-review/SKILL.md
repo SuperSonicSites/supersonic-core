@@ -54,9 +54,10 @@ Define before capturing or scoring:
 
 ## Scoring Rubric
 
-Score each dimension against its rules in `docs/layout-standard.md`. Status per
-dimension: **pass** / **minor** / **major** / **blocker**. Findings cite rule
-IDs.
+Score each dimension against its rules in `docs/layout-standard.md`. Per-finding
+severity is the canonical four-word scale: **blocker** / **major** / **minor** /
+**nit** (no other words). A dimension's status takes the worst severity among its
+findings (`pass` when none). Findings cite rule IDs.
 
 | # | Dimension | Rules | Gating? |
 |---|-----------|-------|---------|
@@ -66,15 +67,15 @@ IDs.
 | 4 | Alignment, justification & measure | `ALIGN-*` | — |
 | 5 | Grid & responsive (no overflow) | `GRID-*` | overflow = blocker |
 | 6 | Typography | `TYPE-*` | — |
-| 7 | Color & contrast | `COLOR-*` | AA contrast fail = blocker |
+| 7 | Color & contrast | `COLOR-*` | AA contrast fail = blocker; requires axe Tool proof |
 | 8 | Conversion design | `CONV-*` | — |
 | 9 | Semantic structure & landmarks | `SEM-*` | `core/html` = blocker |
 | 10 | Heading hierarchy | `HEAD-*` | 0 or >1 H1 = blocker |
 | 11 | Structured-data plan readiness | `SD-*` | duplicate/mismatched schema = blocker |
 | 12 | Internal linking | `LINK-*` | orphan target = major |
 | 13 | Imagery & placeholders | `IMG-*` | missing alt/dims = major |
-| 14 | Core Web Vitals (layout) | `CWV-*` | lazy-loaded hero = major |
-| 15 | Accessibility (layout) | `A11Y-*` | target <24px / no focus = blocker |
+| 14 | Core Web Vitals (layout) | `CWV-*` | lazy-loaded hero = major; documented manual gate this pass (future `tools/cwv-audit.mjs` hook) |
+| 15 | Accessibility (layout) | `A11Y-*` | target <24px / no focus = blocker; requires axe Tool proof |
 | 16 | Framework & token compliance | `FW-*` | unapproved pattern / arbitrary value = blocker |
 
 Dimension 7 also scores the background rhythm: two identical neutral backgrounds
@@ -86,6 +87,15 @@ seams: a base-colored margin/seam between two adjacent colored bands (`SPACE-7`)
 single-pattern QA. Dimension 16 also scores control exposure: a section that
 flattens a control `theme.json` enables (`FW-7`) = **major**; an archetype-order
 mismatch or unapproved extra section (`IA-1`/`FW-1`) = **major**.
+
+**Measured proof for COLOR and A11Y.** The contrast (`COLOR-2`/`COLOR-8/9`) and
+target-size/focus (`A11Y-*`) checks are no longer manual-only gaps. Run
+`npm run a11y:check -- --url <staging>` (axe-core at all three viewports) and fold
+its findings in as **Tool proof**, mapping axe impact to the canonical severity
+(`critical -> blocker`, `serious -> major`, `moderate -> minor`, `minor -> nit`).
+Prefer the axe Tool proof over an eyeballed judgment for the same dimension. The
+CWV (`CWV-*`) dimension stays a documented manual gate this pass; a future
+`tools/cwv-audit.mjs` hook will measure it.
 
 **Overall score and band.** Score each of the 16 dimensions (`pass = 1`,
 `minor = 0.5`, `major = 0`, `blocker = 0`); the percentage is `sum / 16`. The
@@ -116,12 +126,35 @@ until staging proof lands.
   and selector are available.
 - Capture required interaction states (header/nav open+closed, hover, overlays,
   accordions).
+- Tool proof: run `npm run a11y:check -- --url <staging>` (axe-core at all three
+  viewports) and fold its findings in as measured **Tool proof** for the COLOR
+  (contrast) and A11Y (target-size/focus) dimensions.
 - Cross-skill proof: run `accessibility-review` (contrast/keyboard/focus),
   `seo-auditor` (title/meta/H1/heading order/schema fit), and `visual-qa`
   (token spacing/overflow/responsive) and fold their results into the matching
   dimensions.
-- Write a `Proof Summary` (static, staging, visual, interaction, cross-skill,
-  manual-only gaps).
+- Write a `Proof Summary` using the canonical labels, never renamed: **Static
+  proof / Staging proof / Visual proof / Interaction proof / Editor-control proof
+  / Tool proof / Manual-only gaps**. Use `n/a` for an inapplicable label; never
+  drop one. `Tool proof` lists the axe JSON artifact path and any other machine
+  evidence. Findings conform to `data/review-finding.schema.json`.
+
+## Cross-Skill Merge
+
+`layout-review` owns the deterministic merge. Because every review skill emits
+the one finding shape in `data/review-finding.schema.json`, fold
+`accessibility-review`, `seo-auditor`, and `visual-qa` (plus the axe Tool proof)
+into this score using the "Cross-skill merge" rules in
+`docs/agent-quality-standard.md`:
+
+- **Worst-severity-wins** on the same `(rule_id, target)`: dedupe across skills
+  and keep the maximum severity.
+- **Map each merged finding to its parent dimension:** axe contrast ->
+  **COLOR** (dim 7); axe target-size/focus -> **A11Y** (dim 15); seo H1/heading
+  -> **HEAD** (dim 10); thin content / `COVERAGE-*` -> the content/conversion
+  dimension (**CONV**, dim 8); visual-qa overflow/console -> the grid dimension
+  (**GRID**, dim 5). The dimension's status takes the worst merged severity, and
+  the existing worst-severity-wins rule then computes the overall band.
 
 ## Failure Policy
 
@@ -135,13 +168,20 @@ score.
 
 ## Feedback Loop
 
-The primary output is a prioritized fix list fed back to `layout-architect`:
+The primary output is a prioritized fix list fed back to `layout-architect`.
+Findings conform to `data/review-finding.schema.json`.
 
-- Each finding: `{rule ID, dimension, severity, breakpoint, evidence,
-  suspected source (pattern/section), recommended fix}`.
-- `layout-architect` applies fixes and re-submits; `layout-review` re-scores only
-  the affected dimensions plus a regression pass. Loop until band is `strong` or
-  `acceptable` and no blocker remains.
+- **Bounded loop — max 2 rounds** (see "Bounded feedback loop" in
+  `docs/agent-quality-standard.md`). Round 1 scores and emits fixes; round 2
+  verifies the fixes. `layout-architect` applies fixes and re-submits; round 2
+  re-scores only the affected dimensions plus a regression pass.
+- **Recurring-blocker rule:** if a finding with the same `rule_id` + `target`
+  reappears after a fix, do NOT open round 3. Escalate the band to `blocked` and
+  route the root cause upstream (`layout-architect` / `pattern-builder` /
+  `seo-strategist`) with the evidence.
+- `dismissed[]` is the authoritative do-not-re-flag set; round 2 must exclude
+  those ids. Otherwise loop until band is `strong` or `acceptable` and no blocker
+  remains.
 - **Block-level fix requests:** when a finding's root cause is a block/pattern or
   theme property — not a per-page composition choice — file a fix request to
   `pattern-builder` (pattern markup, CSS, or token) instead of patching the page.
@@ -179,7 +219,8 @@ Keep it site-agnostic — discover target, version, and staging at runtime.
 
 ## Handoff Contract
 
-Stages pass validated JSON, not prose:
+Stages pass validated JSON, not prose. Findings conform to
+`data/review-finding.schema.json`.
 
 ```jsonc
 // Discover -> Review
@@ -192,14 +233,24 @@ Stages pass validated JSON, not prose:
 
 // Review -> Verify (per dimension)
 { "dimension": 10, "name": "heading-hierarchy", "status": "blocker",
-  "findings": [ { "id": "h1-1", "rule": "HEAD-1", "severity": "blocker",
-                  "breakpoint": "all", "evidence": "2 H1s (hero + page-intro)",
-                  "suspectedSource": "section-page-intro", "fix": "Demote intro to h2" } ] }
+  "findings": [ { "id": "h1-1", "rule_id": "HEAD-1", "dimension": "HEAD",
+                  "severity": "blocker", "breakpoint": "all",
+                  "target": { "slot": "section-page-intro" },
+                  "evidence": "2 H1s (hero + page-intro)",
+                  "suspected_source": "section-page-intro",
+                  "recommended_fix": "Demote intro to h2",
+                  "status": "open" } ] }
 
 // Verify -> Synthesize (per finding)
 { "id": "h1-1", "verdict": "real", "reasoning": "...", "sourceConfirmed": true }
+
+// Synthesize handoff (loop control)
+{ "band": "needs-revision", "round": 1, "escalated_upstream": false,
+  "dismissed": ["..."] }
 ```
 
-Rules: every finding carries a stable `id` and a `rule` so verify verdicts and
-feedback map back 1:1; only `real` findings reach the report; dismissed ones are
-listed as "considered and dismissed" so the next run does not re-flag them.
+Rules: every finding carries a stable `id` and a `rule_id` so verify verdicts and
+feedback map back 1:1; the `target` object holds `file`/`slot`/`selector`; only
+`real` findings reach the report; dismissed ones are listed as "considered and
+dismissed" so the next run does not re-flag them. The synthesize handoff carries
+`round` and `escalated_upstream` so the bounded loop terminates at 2 rounds.

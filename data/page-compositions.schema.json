@@ -40,8 +40,9 @@
               "properties": {
                 "position": { "type": "integer", "minimum": 1 },
                 "slug": { "type": "string", "description": "An approved pattern slug from data/pattern-certifications.json." },
-                "instances": { "type": "integer", "minimum": 1, "description": "How many times each repeatable copy slot of this pattern is placed on the page (e.g. 4 service cards, 3 FAQ items). Omit when the pattern has no repeatable slots." },
-                "role_on_page": { "type": "string", "description": "Optional human note, e.g. \"owns the H1\" or \"final CTA\"." }
+                "instances": { "type": "integer", "minimum": 1, "description": "How many times each repeatable copy slot of this pattern is placed on the page (e.g. 4 service cards, 3 FAQ items). REQUIRED when the referenced pattern declares any repeatable copy_slot; omit when the pattern has no repeatable slots. npm run compose:check enforces this (COMPOSE-4)." },
+                "h1_owner": { "type": "boolean", "description": "Exactly one pattern per page sets this true; it owns the page's single editable H1 (usually the first hero or section-page-intro). npm run compose:check enforces the one-per-page cardinality (COMPOSE-5). The legacy role_on_page note is human-only and no longer the source of truth for H1 ownership." },
+                "role_on_page": { "type": "string", "description": "Optional human note, e.g. \"final CTA\". H1 ownership is machine-tracked via h1_owner, not this field." }
               }
             }
           }

@@ -14,6 +14,17 @@ const requiredSections = [
   '## Report'
 ];
 
+// The review/grading skills that emit findings. They must all converge on the one
+// canonical finding shape (data/review-finding.schema.json) so a parent review can merge
+// a child review's output. Builder skills (copywriter, layout-architect, ...) are exempt.
+const reviewSkills = new Set([
+  'layout-review',
+  'copy-review',
+  'visual-qa',
+  'accessibility-review',
+  'seo-auditor'
+]);
+
 function pass(message) {
   results.push({ status: 'pass', message });
 }
@@ -176,6 +187,14 @@ async function validateSkills() {
     } else {
       fail(`${file} must reference docs/agent-quality-standard.md`);
     }
+
+    if (reviewSkills.has(dir)) {
+      if (content.includes('data/review-finding.schema.json')) {
+        pass(`${file} references the canonical review-finding schema`);
+      } else {
+        fail(`${file} is a review skill and must reference data/review-finding.schema.json (the one canonical finding shape)`);
+      }
+    }
   }
 }
 
@@ -243,6 +262,12 @@ async function validateDocs() {
     pass('docs/agent-quality-standard.md defines the new skill methodology');
   } else {
     fail('docs/agent-quality-standard.md must define the new skill methodology');
+  }
+
+  if (includesAll(standard, ['## Review Finding Contract', 'data/review-finding.schema.json', 'Tool proof', 'blocker', 'major', 'minor', 'nit'])) {
+    pass('docs/agent-quality-standard.md defines the canonical review finding contract');
+  } else {
+    fail('docs/agent-quality-standard.md must define the Review Finding Contract (data/review-finding.schema.json, the blocker|major|minor|nit scale, and the Tool proof Proof Summary line)');
   }
 
   const templateBlockMatch = standard.match(/##\s+Skill Methodology Template[\s\S]*?```markdown\r?\n([\s\S]*?)\r?\n```/);

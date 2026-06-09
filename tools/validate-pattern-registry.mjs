@@ -79,7 +79,33 @@ function validateCopySlots(entry, results) {
     if (slot.sibling_group !== undefined && (typeof slot.sibling_group !== 'string' || !slot.sibling_group)) {
       push(results, 'fail', `${entry.slug} copy_slots ${ref} sibling_group must be a non-empty string`);
     }
+
+    if (slot.repeatable !== undefined && typeof slot.repeatable !== 'boolean') {
+      push(results, 'fail', `${entry.slug} copy_slots ${ref} repeatable must be a boolean`);
+    }
   });
+}
+
+// REG-CB-1: a content-bearing pattern (anything not explicitly contentBearing:false) that
+// is approved must declare a non-empty copy_slots array. Otherwise the copywriter has no
+// slot to fill and the layout->copy gate (COMPOSE-3) fails downstream with a less obvious
+// error. Gated on approved so in-flight patterns are not blocked mid-build. Structural
+// chrome (headers, footers, logo/stat bands, NAP blocks) sets contentBearing:false.
+function validateContentBearing(entry, results) {
+  if (entry.contentBearing !== undefined && typeof entry.contentBearing !== 'boolean') {
+    push(results, 'fail', `${entry.slug} contentBearing must be a boolean`);
+    return;
+  }
+  if (entry.contentBearing === false) {
+    return;
+  }
+  if (entry.status === 'approved' && !(Array.isArray(entry.copy_slots) && entry.copy_slots.length > 0)) {
+    push(
+      results,
+      'fail',
+      `REG-CB-1 ${entry.slug} is content-bearing and approved but declares no copy_slots; add copy_slots or set contentBearing:false`
+    );
+  }
 }
 
 function normalizePath(value) {
@@ -345,6 +371,7 @@ export async function validatePatternRegistry({ rootDir = defaultRoot } = {}) {
     }
 
     validateCopySlots(entry, results);
+    validateContentBearing(entry, results);
   }
 
   for (const file of patternFiles) {

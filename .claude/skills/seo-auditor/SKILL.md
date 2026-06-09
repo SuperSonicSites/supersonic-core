@@ -34,15 +34,30 @@ Fail closed when metadata, schema, H1, or visible-content proof is missing. Do
 not approve keyword stuffing, generic metadata, duplicate content, or schema that
 does not match visible content.
 
+## Finding Shape
+
+Emit every issue in the one canonical finding shape defined by
+`data/review-finding.schema.json` (fields `id`, `rule_id`, `dimension`,
+`severity`, `breakpoint`, `target`, `evidence`, `suspected_source`,
+`recommended_fix`, `status`, `tool_proof`), so `layout-review` can merge this
+audit deterministically. Use only the canonical severity enum
+`blocker | major | minor | nit` — no other severity words. Put the measured
+number or quote in `evidence`, and set `tool_proof` when the finding came from
+`copy:check` or `a11y:check`.
+
 ## Check
 
 - page intent
 - one H1
 - unique SEO title
 - unique meta description
-- useful heading structure
+- useful heading structure (compare realized page H2s against the brief outline
+  `h2`/`talking_points` in `data/seo-briefs.json`)
 - internal links
-- thin content
+- thin content — measured, not guessed: read the page `target_word_count` and
+  outline from `data/seo-briefs.json`, then cite `npm run copy:check` `COVERAGE-1`
+  (realized prose words vs brief `target_word_count`, floor 80%). Report the
+  measured percentage and rule id as `evidence`; do not eyeball thinness.
 - duplicate content
 - schema fit
 
@@ -58,9 +73,28 @@ does not match visible content.
 Include:
 
 - page or section reviewed
-- proof summary
-- issues found
+- proof summary (canonical labels below)
+- issues found (in the `data/review-finding.schema.json` shape)
 - recommended fixes
 - metadata notes
 - schema notes, if relevant
+
+Use the canonical Proof Summary, never renaming a label and never dropping one
+(use `n/a` when a label does not apply):
+
+```text
+## Proof Summary
+
+- Static proof:
+- Staging proof:
+- Visual proof:
+- Interaction proof:
+- Editor-control proof:
+- Tool proof:
+- Manual-only gaps:
+```
+
+`Tool proof` lists the measured machine evidence: the `npm run copy:check`
+`COVERAGE-1` result (realized words vs brief `target_word_count`) and any
+`npm run a11y:check` result if it was run.
 

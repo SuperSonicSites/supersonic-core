@@ -31,7 +31,10 @@ For a pattern, include the control contract card from `pattern-builder`.
   panels, mobile/tablet overlays, accordions, details blocks, and any other
   stateful UI.
 - Run `npm run pattern:proof` when a staging URL and selector are available.
-- Update the report with a `Proof Summary`.
+- Run `npm run a11y:check -- --url <staging>` for the measured accessibility pass
+  (axe: contrast, target-size, labels, focus). Record its result under `Tool proof`.
+- Update the report with a `Proof Summary`. Findings conform to
+  `data/review-finding.schema.json`.
 
 ## Failure Policy
 
@@ -44,8 +47,28 @@ block approval.
 
 Include scope, target selector, cache-busted URL, screenshots, static/staging
 checks, interaction evidence, issues, fixes, manual-only gaps, and approval
-status. For pattern reviews, update `data/pattern-certifications.json` and pass
+status. Findings conform to `data/review-finding.schema.json`. For pattern
+reviews, update `data/pattern-certifications.json` and pass
 `npm run pattern:registry:check`.
+
+The `Proof Summary` uses the single canonical structure — these exact labels,
+never renamed, with `n/a` for inapplicable rows (never drop a label):
+
+```text
+## Proof Summary
+
+- Static proof:
+- Staging proof:
+- Visual proof:
+- Interaction proof:
+- Editor-control proof:
+- Tool proof:
+- Manual-only gaps:
+```
+
+Keep the interaction-state proof requirements: header/nav open and closed,
+desktop hover panels, mobile/tablet overlays, accordions, details blocks, and
+any other stateful UI. Record `npm run a11y:check` output under `Tool proof`.
 
 A self-contained runbook for screenshot-based visual QA on Hostinger staging.
 Follow these steps in order — do not re-derive the process or re-read the whole doc set.
@@ -177,11 +200,14 @@ deterministically. The workflow enforces these with schemas; keep the shapes sta
   "knownOpenFindings": [ "<title from latest report>" ] }
 
 // Review  →  Verify   (per target)
+// Findings conform to data/review-finding.schema.json.
 { "target": "hero-simple",
   "screenshots": ["screenshots/after/<folder>/hero-simple-desktop.png", "...tablet.png", "...mobile.png"],
-  "findings": [ { "id": "hero-simple-1", "title": "...", "severity": "critical|high|medium|low|nit",
+  "findings": [ { "id": "hero-simple-1", "rule_id": "<rule>", "title": "...",
+                  "severity": "blocker|major|minor|nit",
                   "breakpoint": "desktop|tablet|mobile|all", "evidence": "...",
-                  "suspectedSource": "<file>:<line or token>" } ] }
+                  "target": { "file": "<file>", "selector": "<selector>" },
+                  "suspected_source": "<file>:<line or token>", "status": "open" } ] }
 
 // Verify  →  Synthesize   (per finding)
 { "id": "hero-simple-1", "verdict": "real|false-positive",

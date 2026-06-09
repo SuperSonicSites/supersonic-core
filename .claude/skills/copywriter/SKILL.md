@@ -145,6 +145,15 @@ Before writing any copy, define the contract:
 
 Use the cheapest proof that verifies each claim.
 
+- Pre-flight proof: before resolving the per-page slot manifest, run
+  `npm run compose:check`. It validates `data/page-compositions.json` against the
+  pattern registry and SEO briefs and fails closed on `COMPOSE-1..6` (a composed
+  pattern slug missing from `data/pattern-certifications.json`, a composed pattern
+  not `status:approved`, a content-bearing pattern with no `copy_slots`, a
+  repeatable copy slot with no `instances` count, a page without exactly one
+  `patterns[].h1_owner:true`, or a `page_id` with no matching brief). This is a
+  PRE-FLIGHT gate that replaces discovering these problems at slot-manifest-join
+  time; do not draft copy until it passes.
 - Copy proof: `npm run copy:check` passes — no banned em/en dashes, no smart/curly
   quotes or ellipsis character (straight apostrophes and quotes are required and
   expected for natural English; never drop a possessive apostrophe to dodge a
@@ -172,9 +181,10 @@ condition, not a prompt.
 - Missing brief, composition, or intake for a page -> `blocked`; name the gap and
   route it back to `seo-strategist`, `layout-architect`, or `new-site-init`. Never
   invent brand/market facts.
-- A pattern placed on a page has no `copy_slots` in the registry -> `needs-revision`;
-  route to `pattern-builder`/`certify-pattern` to declare the pattern's copy slots
-  before writing its copy.
+- A pattern placed on a page has no `copy_slots` in the registry -> now caught up
+  front by `npm run compose:check` (`COMPOSE-3`) and routed to
+  `layout-architect`/`pattern-builder` to declare the pattern's copy slots (or mark
+  it `contentBearing:false` structural chrome) before any copy is written.
 - `npm run copy:check` fails (banned glyph, phrase-to-avoid, over-cap slot,
   unbalanced group, budget drift, orphan page) -> `needs-revision`; fix before
   handoff.

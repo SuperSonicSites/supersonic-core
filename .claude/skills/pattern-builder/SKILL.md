@@ -135,7 +135,12 @@ than patching a single page.
   `max_chars`/`min_chars`/`max_words`, and `sibling_group` for any card or
   repeated slot that must balance visually), then run
   `npm run pattern:registry:check`. Patterns without `copy_slots` block the
-  `copywriter` skill from resolving real budgets — do not omit them.
+  `copywriter` skill from resolving real budgets — do not omit them. This check is
+  a REQUIRED pre-approval gate: it FAILS (`REG-CB-1`) if a content-bearing,
+  approved pattern declares no `copy_slots`. Declare `copy_slots` for every
+  content-bearing pattern, or set `"contentBearing": false` for structural chrome
+  (headers/footers/decorative bands/NAP blocks), before marking the pattern
+  approved.
 - Staging proof: use cache-busted staging URLs for final screenshots.
 - Selector proof: when using a `qa-pattern-*` page, target the reviewed pattern
   under `main`, not site chrome or the full page unless the full component is the

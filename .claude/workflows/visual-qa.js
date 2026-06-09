@@ -57,12 +57,14 @@ const REVIEW_SCHEMA = {
     screenshots: { type: 'array', items: { type: 'string' } },
     proofSummary: {
       type: 'object',
-      required: ['staticProof', 'stagingProof', 'visualProof', 'interactionProof', 'manualOnlyGaps'],
+      required: ['staticProof', 'stagingProof', 'visualProof', 'interactionProof', 'editorControlProof', 'manualOnlyGaps'],
       properties: {
         staticProof: { type: 'string' },
         stagingProof: { type: 'string' },
         visualProof: { type: 'string' },
         interactionProof: { type: 'string' },
+        editorControlProof: { type: 'string' },
+        toolProof: { type: 'string' },
         manualOnlyGaps: { type: 'string' },
       },
     },
@@ -74,7 +76,7 @@ const REVIEW_SCHEMA = {
         properties: {
           id: { type: 'string' },
           title: { type: 'string' },
-          severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low', 'nit'] },
+          severity: { type: 'string', enum: ['blocker', 'major', 'minor', 'nit'] },
           breakpoint: { type: 'string', enum: ['desktop', 'tablet', 'mobile', 'all'] },
           evidence: { type: 'string' },
           suspectedSource: { type: 'string' },
@@ -104,8 +106,8 @@ const SYNTH_SCHEMA = {
     counts: {
       type: 'object',
       properties: {
-        critical: { type: 'number' }, high: { type: 'number' },
-        medium: { type: 'number' }, low: { type: 'number' }, nit: { type: 'number' },
+        blocker: { type: 'number' }, major: { type: 'number' },
+        minor: { type: 'number' }, nit: { type: 'number' },
       },
     },
     coverage: { type: 'string', description: 'how many targets got real per-pattern captures vs blocked' },
