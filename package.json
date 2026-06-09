@@ -28,7 +28,11 @@
     "a11y:check": "node tools/a11y-audit.mjs",
     "test:updater-parser": "php tools/test-theme-updater-parser.php",
     "version:check": "node tools/bump-version.mjs --check",
-    "version:bump": "node tools/bump-version.mjs"
+    "version:bump": "node tools/bump-version.mjs",
+    "capture:site": "node tools/capture-site.mjs",
+    "capture:self-test": "node tools/capture-site.mjs --self-test",
+    "redirects:export": "node tools/export-rankmath-redirects.mjs",
+    "redirects:export:self-test": "node tools/export-rankmath-redirects.mjs --self-test"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",

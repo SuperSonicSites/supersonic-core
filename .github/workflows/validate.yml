@@ -51,3 +51,21 @@ jobs:
 
       - name: Validate pattern registry
         run: npm run pattern:registry:check
+
+      - name: Validate SEO briefs
+        run: npm run seo:briefs:check
+
+      - name: Validate copy deck
+        run: npm run copy:check
+
+      - name: Validate page compositions
+        run: npm run compose:check
+
+      - name: Validate agent quality
+        run: npm run agents:check
+
+      - name: Capture toolkit self-test
+        run: npm run capture:self-test
+
+      - name: Rank Math export self-test
+        run: npm run redirects:export:self-test
