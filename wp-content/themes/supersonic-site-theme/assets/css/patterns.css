@@ -130,3 +130,41 @@
 		flex-basis: 100% !important;
 	}
 }
+
+/*
+ * Content motion system. Uses only the theme's transition tokens
+ * (--wp--custom--transition--*) so timing stays globally tunable; no new
+ * durations or easings may be hardcoded in patterns. Header navigation has
+ * its own scoped motion in navigation.css and is deliberately not covered
+ * here. Hover shadows remain whatever preset the block already declares —
+ * this layer only animates between states, it never adds shadows.
+ */
+@media (prefers-reduced-motion: no-preference) {
+	main .wp-block-button__link {
+		transition:
+			background-color var(--wp--custom--transition--fast, 150ms) ease,
+			border-color var(--wp--custom--transition--fast, 150ms) ease,
+			color var(--wp--custom--transition--fast, 150ms) ease,
+			transform var(--wp--custom--transition--fast, 150ms) ease;
+	}
+
+	main .wp-block-button__link:hover {
+		transform: translateY(-1px);
+	}
+
+	main .wp-block-button__link:active {
+		transform: translateY(0);
+	}
+
+	/* In-content text links; excludes buttons (handled above). */
+	main a:not(.wp-block-button__link) {
+		transition: color var(--wp--custom--transition--fast, 150ms) ease;
+	}
+
+	/* Card-like groups that already carry a border or shadow preset animate
+	   between their normal and editor-defined hover states. */
+	main .wp-block-group[class*="has-border-color"],
+	main .wp-block-group[style*="box-shadow"] {
+		transition: box-shadow var(--wp--custom--transition--base, 250ms) ease;
+	}
+}
