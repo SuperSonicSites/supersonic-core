@@ -270,6 +270,27 @@ async function run(opts) {
 
   if (boot.ok) {
     console.log(`PASS: boot — ${boot.detail}`);
+    // The CLI serves while the blueprint's seeding PHP is still running, so
+    // wait for the LAST seeded page (inserts are sequential) before checking
+    // anything — otherwise early pattern pages race the seeder and 404.
+    const lastPage = renderPagePath(slugs[slugs.length - 1]);
+    const seedDeadline = Date.now() + 180000;
+    let seeded = false;
+    while (Date.now() < seedDeadline) {
+      try {
+        const probe = await fetch(`${boot.baseUrl}${lastPage}`, { signal: AbortSignal.timeout(5000) });
+        if (probe.status === 200) {
+          seeded = true;
+          break;
+        }
+      } catch {
+        // still seeding
+      }
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+    if (!seeded) {
+      checks.push({ ok: false, label: 'seeding', detail: `last render page ${lastPage} never appeared within 180s` });
+    }
     if (opts.blogSmoke) {
       checks.push(await checkUrl(boot.baseUrl, '/', { label: 'blog: front page' }));
       checks.push(await checkUrl(boot.baseUrl, '/?name=seed-post-1', { label: 'blog: single post' }));
