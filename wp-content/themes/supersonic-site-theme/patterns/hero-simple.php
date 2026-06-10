@@ -9,8 +9,8 @@
 ?>
 <!-- wp:group {"metadata":{"name":"Hero: Simple"},"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-large"}}},"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)","justifyContent":"left"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
-	<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-	<p class="has-accent-color has-text-color has-small-font-size"><strong>Editable starter section</strong></p>
+	<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"small"} -->
+	<p class="has-accent-ink-color has-text-color has-small-font-size"><strong>Editable starter section</strong></p>
 	<!-- /wp:paragraph -->
 
 	<!-- wp:heading {"level":1,"fontSize":"heading-1"} -->

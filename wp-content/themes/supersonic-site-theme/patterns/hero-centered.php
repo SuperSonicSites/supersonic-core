@@ -11,8 +11,8 @@
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-large)">
 	<!-- wp:group {"layout":{"type":"constrained","contentSize":"var(--wp--custom--layout--narrow-width)"}} -->
 	<div class="wp-block-group">
-		<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"small"} -->
-		<p class="has-text-align-center has-accent-color has-text-color has-small-font-size"><strong>Starter page hero</strong></p>
+		<!-- wp:paragraph {"align":"center","textColor":"accent-ink","fontSize":"small"} -->
+		<p class="has-text-align-center has-accent-ink-color has-text-color has-small-font-size"><strong>Starter page hero</strong></p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"display"} -->

@@ -50,7 +50,7 @@
 .supersonic-site-header .wp-block-navigation .wp-block-navigation-item__content:hover,
 .supersonic-site-header .wp-block-navigation .current-menu-item > .wp-block-navigation-item__content,
 .supersonic-site-header .wp-block-navigation .wp-block-navigation-item__content[aria-current] {
-	color: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--accent-ink);
 }
 
 .supersonic-site-header .wp-block-navigation .wp-block-navigation-item__content:hover::after,

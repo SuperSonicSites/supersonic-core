@@ -54,8 +54,8 @@
 				<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l)">
 				<!-- wp:group {"metadata":{"name":"Badge Slot"},"style":{"dimensions":{"minHeight":"var(--wp--preset--spacing--m)"}},"layout":{"type":"default"}} -->
 				<div class="wp-block-group" style="min-height:var(--wp--preset--spacing--m)">
-					<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-					<p class="has-accent-color has-text-color has-small-font-size"><strong>Popular</strong></p>
+					<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"small"} -->
+					<p class="has-accent-ink-color has-text-color has-small-font-size"><strong>Popular</strong></p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->

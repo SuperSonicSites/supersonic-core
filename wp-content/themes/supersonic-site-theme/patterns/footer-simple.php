@@ -5,11 +5,11 @@
  * Categories: supersonic-footers
  * Block Types: core/template-part/footer
  * Keywords: footer, columns, links, contact
- * Description: Three-column footer with a logo link (home), quick links, and contact info, plus a centered copyright line. Rides the site gutter; vertical rhythm only.
+ * Description: Premium dark three-column footer: brand lockup and description, quick links, and contact, closed by a legal line. Rides the site gutter; vertical rhythm only.
  */
 ?>
-<!-- wp:group {"align":"full","className":"supersonic-site-footer","backgroundColor":"muted","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-medium","bottom":"var:preset|spacing|section-medium"},"blockGap":"var:preset|spacing|l"}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull supersonic-site-footer has-muted-background-color has-background" style="padding-top:var(--wp--preset--spacing--section-medium);padding-bottom:var(--wp--preset--spacing--section-medium)">
+<!-- wp:group {"align":"full","className":"supersonic-site-footer","backgroundColor":"contrast","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|section-large","bottom":"var:preset|spacing|section-medium"},"blockGap":"var:preset|spacing|xl"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull supersonic-site-footer has-base-color has-contrast-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--section-large);padding-bottom:var(--wp--preset--spacing--section-medium)">
 	<!-- wp:columns {"isStackedOnMobile":false} -->
 	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->

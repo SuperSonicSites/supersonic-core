@@ -167,63 +167,58 @@ export function compileDna(design) {
   const brandAccent = accent ?? '#1a5fd0';
   const baseHex = base ?? '#ffffff';
 
-  // Build the full ramp for a candidate accent. Hover/strong step darker when
-  // white text owns the accent, lighter when black text does (so button text
-  // keeps clearing 4.5:1 across the whole ramp).
-  const buildRamp = (candidate) => {
-    const white = contrastRatio('#ffffff', candidate);
-    const black = contrastRatio('#111111', candidate);
-    const textOnAccent = white >= black ? '#ffffff' : '#111111';
-    const direction = textOnAccent === '#ffffff' ? -1 : 1;
-    const palette = {
-      base: baseHex,
-      contrast: text ?? '#111111',
-      'contrast-subtle': mix('#4b5563', candidate, 0.12),
-      surface: mix('#f7f8fa', candidate, 0.03),
-      muted: mix('#f1f3f5', candidate, 0.05),
-      border: mix('#d9dde3', candidate, 0.08),
-      accent: candidate,
-      'accent-hover': adjustLightness(candidate, direction * 0.08),
-      'accent-strong': adjustLightness(candidate, direction * 0.16),
-      'accent-contrast': textOnAccent
-    };
-    // The exact six pairs validate-framework.mjs enforces.
-    const pairs = [
-      ['accent', 'base'],
-      ['accent', 'surface'],
-      ['accent', 'muted'],
-      ['accent-contrast', 'accent'],
-      ['accent-contrast', 'accent-hover'],
-      ['accent-contrast', 'accent-strong']
-    ];
-    const report = pairs.map(([fg, bg]) => ({ pair: `${fg} on ${bg}`, ratio: contrastRatio(palette[fg], palette[bg]) }));
-    return { palette, report, ok: report.every((entry) => entry.ratio >= 4.5) };
+  // TWO-ROLE ACCENT. `accent` is the vivid brand FILL (buttons, bands): it
+  // keeps the brand's actual color, and only its on-fill text (white or
+  // black) must clear AA — vivid yellow with black text is premium AND
+  // accessible. `accent-ink` is the readable text/link role on the light
+  // bands: derived by darkening the brand color only as far as WCAG needs.
+  // Never again does a rich brand color get muddied to serve as link text.
+  const white = contrastRatio('#ffffff', brandAccent);
+  const black = contrastRatio('#111111', brandAccent);
+  const textOnAccent = white >= black ? '#ffffff' : '#111111';
+  const direction = textOnAccent === '#ffffff' ? -1 : 1;
+
+  const palette = {
+    base: baseHex,
+    contrast: text ?? '#111111',
+    'contrast-subtle': mix('#4b5563', brandAccent, 0.12),
+    surface: mix('#f7f8fa', brandAccent, 0.03),
+    muted: mix('#f1f3f5', brandAccent, 0.05),
+    border: mix('#d9dde3', brandAccent, 0.08),
+    accent: brandAccent,
+    'accent-ink': brandAccent,
+    'accent-hover': adjustLightness(brandAccent, direction * 0.08),
+    'accent-strong': adjustLightness(brandAccent, direction * 0.16),
+    'accent-contrast': textOnAccent
   };
 
-  // DNA-5 auto-adjustment: nudge accent lightness toward viability (links on
-  // light bands need darker; black-text accents may need lighter for ramp).
-  let candidate = brandAccent;
-  let ramp = buildRamp(candidate);
-  let steps = 0;
-  while (!ramp.ok && steps < 14) {
-    const linksTooLight = ramp.report.find((entry) => entry.pair.startsWith('accent on') && entry.ratio < 4.5);
-    candidate = adjustLightness(candidate, linksTooLight ? -0.02 : 0.02);
-    ramp = buildRamp(candidate);
-    steps += 1;
+  // Derive accent-ink: darken until it clears 4.5:1 on every light band.
+  let inkSteps = 0;
+  while (inkSteps < 20 && ['base', 'surface', 'muted'].some((bg) => contrastRatio(palette['accent-ink'], palette[bg]) < 4.5)) {
+    palette['accent-ink'] = adjustLightness(palette['accent-ink'], -0.02);
+    inkSteps += 1;
   }
-  if (!ramp.ok) {
-    const worst = ramp.report.filter((entry) => entry.ratio < 4.5).map((entry) => `${entry.pair} ${entry.ratio.toFixed(2)}:1`).join(', ');
+
+  // The exact pairs validate-framework.mjs enforces.
+  const pairs = [
+    ['accent-ink', 'base'],
+    ['accent-ink', 'surface'],
+    ['accent-ink', 'muted'],
+    ['accent-contrast', 'accent'],
+    ['accent-contrast', 'accent-hover'],
+    ['accent-contrast', 'accent-strong']
+  ];
+  const report = pairs.map(([fg, bg]) => ({ pair: `${fg} on ${bg}`, ratio: contrastRatio(palette[fg], palette[bg]) }));
+  const broken = report.filter((entry) => entry.ratio < 4.5);
+  if (broken.length > 0) {
     failures.push({
       rule: 'DNA-5',
-      detail: `accent ${brandAccent} cannot satisfy WCAG AA on the theme's surfaces even after lightness adjustment (${worst}); pick a brand color with more contrast range`
+      detail: `brand color ${brandAccent} cannot satisfy WCAG AA (${broken.map((entry) => `${entry.pair} ${entry.ratio.toFixed(2)}:1`).join(', ')}); pick a brand color with more contrast range`
     });
     return { ok: false, failures };
   }
-  const palette = ramp.palette;
-  const report = [...ramp.report];
-  const accentAdjusted = candidate.toLowerCase() !== brandAccent.toLowerCase();
-  if (accentAdjusted) {
-    report.push({ pair: `accent auto-adjusted ${brandAccent} -> ${candidate} for WCAG`, ratio: contrastRatio(candidate, palette.muted) });
+  if (palette['accent-ink'] !== brandAccent) {
+    report.push({ pair: `accent-ink derived ${brandAccent} -> ${palette['accent-ink']} (accent fill stays vivid)`, ratio: contrastRatio(palette['accent-ink'], palette.base) });
   }
 
   for (const bg of ['base', 'surface', 'muted']) {
@@ -433,14 +428,24 @@ function selfTest() {
     assert(theme.settings.color.palette[0].color === '#1a5fd0', 'input mutated');
   });
 
-  checkCase('teal that fails accent-on-muted is auto-adjusted to clear all six framework pairs', () => {
-    // #0e7c6b was 4.31:1 on muted — the exact bug the e2e harness caught.
+  checkCase('teal: accent fill stays the brand color, ink derived to clear WCAG', () => {
+    // #0e7c6b was 4.31:1 on muted — the original e2e-caught bug.
     const dna = compileDna({ colors: ['#0e7c6b'] });
     assert(dna.ok, JSON.stringify(dna.failures));
-    for (const entry of dna.report.filter((r) => / on /.test(r.pair))) {
-      assert(entry.ratio >= 4.5, `${entry.pair} ${entry.ratio}`);
+    assert(dna.palette.accent === '#0e7c6b', `fill was changed: ${dna.palette.accent}`);
+    for (const bg of ['base', 'surface', 'muted']) {
+      assert(contrastRatio(dna.palette['accent-ink'], dna.palette[bg]) >= 4.5, `ink fails on ${bg}`);
     }
-    assert(dna.report.some((r) => r.pair.includes('auto-adjusted')), 'adjustment not reported');
+  });
+
+  checkCase('vivid yellow: fill stays rich, black on-fill text, dark ink for links', () => {
+    // The mustard bug: #f5d802 must NOT be muddied into the fill role.
+    const dna = compileDna({ colors: ['#f5d802'] });
+    assert(dna.ok, JSON.stringify(dna.failures));
+    assert(dna.palette.accent === '#f5d802', `yellow fill was muddied: ${dna.palette.accent}`);
+    assert(dna.palette['accent-contrast'] === '#111111', 'yellow buttons need black text');
+    assert(contrastRatio(dna.palette['accent-ink'], '#ffffff') >= 4.5, 'ink not readable on white');
+    assert(dna.palette['accent-ink'] !== dna.palette.accent, 'ink should diverge from vivid fill');
   });
 
   checkCase('deterministic compile', () => {

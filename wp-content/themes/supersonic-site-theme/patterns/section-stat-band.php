@@ -13,8 +13,8 @@
 	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-2"} -->
-			<p class="has-text-align-center has-accent-color has-text-color has-heading-2-font-size"><strong>25+</strong></p>
+			<!-- wp:paragraph {"align":"center","textColor":"accent-ink","fontSize":"heading-2"} -->
+			<p class="has-text-align-center has-accent-ink-color has-text-color has-heading-2-font-size"><strong>25+</strong></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
 			<p class="has-text-align-center has-small-font-size">Proof point</p>
@@ -23,8 +23,8 @@
 		<!-- /wp:column -->
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-2"} -->
-			<p class="has-text-align-center has-accent-color has-text-color has-heading-2-font-size"><strong>98%</strong></p>
+			<!-- wp:paragraph {"align":"center","textColor":"accent-ink","fontSize":"heading-2"} -->
+			<p class="has-text-align-center has-accent-ink-color has-text-color has-heading-2-font-size"><strong>98%</strong></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
 			<p class="has-text-align-center has-small-font-size">Proof point</p>
@@ -33,8 +33,8 @@
 		<!-- /wp:column -->
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"align":"center","textColor":"accent","fontSize":"heading-2"} -->
-			<p class="has-text-align-center has-accent-color has-text-color has-heading-2-font-size"><strong>10k</strong></p>
+			<!-- wp:paragraph {"align":"center","textColor":"accent-ink","fontSize":"heading-2"} -->
+			<p class="has-text-align-center has-accent-ink-color has-text-color has-heading-2-font-size"><strong>10k</strong></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
 			<p class="has-text-align-center has-small-font-size">Proof point</p>

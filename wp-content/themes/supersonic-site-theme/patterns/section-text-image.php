@@ -13,8 +13,8 @@
 	<div class="wp-block-columns are-vertically-aligned-center supersonic-media-split supersonic-media-split--image-right">
 		<!-- wp:column {"verticalAlignment":"center","className":"supersonic-media-split__content"} -->
 		<div class="wp-block-column is-vertically-aligned-center supersonic-media-split__content">
-			<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-			<p class="has-accent-color has-text-color has-small-font-size"><strong>Featured section</strong></p>
+			<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"small"} -->
+			<p class="has-accent-ink-color has-text-color has-small-font-size"><strong>Featured section</strong></p>
 			<!-- /wp:paragraph -->
 
 			<!-- wp:heading {"fontSize":"heading-2"} -->

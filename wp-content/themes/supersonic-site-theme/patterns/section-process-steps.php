@@ -24,8 +24,8 @@
 	<div class="wp-block-columns is-not-stacked-on-mobile">
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-2"} -->
-			<p class="has-accent-color has-text-color has-heading-2-font-size"><strong>01</strong></p>
+			<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"heading-2"} -->
+			<p class="has-accent-ink-color has-text-color has-heading-2-font-size"><strong>01</strong></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:heading {"level":3} -->
 			<h3 class="wp-block-heading">Step one</h3>
@@ -38,8 +38,8 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-2"} -->
-			<p class="has-accent-color has-text-color has-heading-2-font-size"><strong>02</strong></p>
+			<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"heading-2"} -->
+			<p class="has-accent-ink-color has-text-color has-heading-2-font-size"><strong>02</strong></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:heading {"level":3} -->
 			<h3 class="wp-block-heading">Step two</h3>
@@ -52,8 +52,8 @@
 
 		<!-- wp:column -->
 		<div class="wp-block-column">
-			<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-2"} -->
-			<p class="has-accent-color has-text-color has-heading-2-font-size"><strong>03</strong></p>
+			<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"heading-2"} -->
+			<p class="has-accent-ink-color has-text-color has-heading-2-font-size"><strong>03</strong></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:heading {"level":3} -->
 			<h3 class="wp-block-heading">Step three</h3>

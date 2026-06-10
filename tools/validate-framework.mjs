@@ -104,7 +104,7 @@ async function validateDesignTokens() {
     const gradientSlugs = new Set(parsed.settings?.color?.gradients?.map((gradient) => gradient.slug) ?? []);
     const requiredSpacing = ['gutter', 'section-none', 'section-small', 'section-medium', 'section-large'];
     const requiredFonts = ['small', 'body', 'large', 'heading-3', 'heading-2', 'heading-1', 'display'];
-    const requiredColors = ['base', 'contrast', 'contrast-subtle', 'surface', 'muted', 'border', 'accent', 'accent-hover', 'accent-strong', 'accent-contrast'];
+    const requiredColors = ['base', 'contrast', 'contrast-subtle', 'surface', 'muted', 'border', 'accent', 'accent-ink', 'accent-hover', 'accent-strong', 'accent-contrast'];
     const requiredShadows = ['soft', 'medium', 'strong'];
     const requiredGradients = ['surface-rise', 'accent-veil', 'muted-soft'];
 
@@ -234,9 +234,11 @@ async function validateDesignTokens() {
     // on the light bands, and accent-contrast text must clear it on every accent step.
     const paletteBySlug = new Map((parsed.settings?.color?.palette ?? []).map((color) => [color.slug, color.color]));
     const accentPairs = [
-      ['accent', 'base'],
-      ['accent', 'surface'],
-      ['accent', 'muted'],
+      // accent is the vivid brand FILL (only its on-fill text must clear AA);
+      // accent-ink is the readable text/link role on the light bands.
+      ['accent-ink', 'base'],
+      ['accent-ink', 'surface'],
+      ['accent-ink', 'muted'],
       ['accent-contrast', 'accent'],
       ['accent-contrast', 'accent-hover'],
       ['accent-contrast', 'accent-strong']
@@ -1112,7 +1114,7 @@ function isInsideIgnoredTextContainer(block) {
 
 function isDecorativeAccentText(block) {
   return block.name === 'core/paragraph' &&
-    block.attrs.textColor === 'accent' &&
+    ['accent', 'accent-ink'].includes(block.attrs.textColor) &&
     ['small', 'large', 'heading-2', 'heading-3'].includes(block.attrs.fontSize ?? '');
 }
 

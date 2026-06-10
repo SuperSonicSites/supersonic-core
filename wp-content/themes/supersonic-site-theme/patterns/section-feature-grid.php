@@ -27,8 +27,8 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
-				<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>01</strong></p>
+				<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"heading-3"} -->
+				<p class="has-accent-ink-color has-text-color has-heading-3-font-size"><strong>01</strong></p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:heading {"level":3} -->
@@ -47,8 +47,8 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
-				<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>02</strong></p>
+				<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"heading-3"} -->
+				<p class="has-accent-ink-color has-text-color has-heading-3-font-size"><strong>02</strong></p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:heading {"level":3} -->
@@ -67,8 +67,8 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"textColor":"contrast","backgroundColor":"base","style":{"border":{"radius":"var(--wp--custom--radius--medium)"},"shadow":"var:preset|shadow|soft","spacing":{"padding":{"top":"var:preset|spacing|l","right":"var:preset|spacing|l","bottom":"var:preset|spacing|l","left":"var:preset|spacing|l"}}}} -->
 			<div class="wp-block-group has-contrast-color has-base-background-color has-text-color has-background" style="border-radius:var(--wp--custom--radius--medium);padding-top:var(--wp--preset--spacing--l);padding-right:var(--wp--preset--spacing--l);padding-bottom:var(--wp--preset--spacing--l);padding-left:var(--wp--preset--spacing--l);box-shadow:var(--wp--preset--shadow--soft)">
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"heading-3"} -->
-				<p class="has-accent-color has-text-color has-heading-3-font-size"><strong>03</strong></p>
+				<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"heading-3"} -->
+				<p class="has-accent-ink-color has-text-color has-heading-3-font-size"><strong>03</strong></p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:heading {"level":3} -->

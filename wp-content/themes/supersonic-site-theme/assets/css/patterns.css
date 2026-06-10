@@ -168,3 +168,22 @@
 		transition: box-shadow var(--wp--custom--transition--base, 250ms) ease;
 	}
 }
+
+/*
+ * Footer link treatment. The global link color is accent-ink (readable on
+ * light bands); on the dark footer links inherit the footer's own text color
+ * with a quiet underline so they stay visible on the contrast background.
+ * Scoped to the footer only — header navigation keeps its own scoped system.
+ */
+.supersonic-site-footer .wp-block-navigation,
+.supersonic-site-footer a,
+.supersonic-site-footer .wp-block-navigation a,
+.supersonic-site-footer .wp-block-navigation .wp-block-navigation-item__content {
+	color: inherit;
+	text-decoration-color: var(--wp--preset--color--accent);
+}
+
+.supersonic-site-footer a:hover,
+.supersonic-site-footer .wp-block-navigation a:hover {
+	color: var(--wp--preset--color--accent);
+}

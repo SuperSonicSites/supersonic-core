@@ -31,8 +31,8 @@
 				<h3 class="wp-block-heading">Person Name</h3>
 				<!-- /wp:heading -->
 
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-				<p class="has-accent-color has-text-color has-small-font-size">Role or title</p>
+				<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"small"} -->
+				<p class="has-accent-ink-color has-text-color has-small-font-size">Role or title</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
@@ -55,8 +55,8 @@
 				<h3 class="wp-block-heading">Person Name</h3>
 				<!-- /wp:heading -->
 
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-				<p class="has-accent-color has-text-color has-small-font-size">Role or title</p>
+				<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"small"} -->
+				<p class="has-accent-ink-color has-text-color has-small-font-size">Role or title</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
@@ -79,8 +79,8 @@
 				<h3 class="wp-block-heading">Person Name</h3>
 				<!-- /wp:heading -->
 
-				<!-- wp:paragraph {"textColor":"accent","fontSize":"small"} -->
-				<p class="has-accent-color has-text-color has-small-font-size">Role or title</p>
+				<!-- wp:paragraph {"textColor":"accent-ink","fontSize":"small"} -->
+				<p class="has-accent-ink-color has-text-color has-small-font-size">Role or title</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph {"textColor":"contrast-subtle"} -->
