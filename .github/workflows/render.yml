@@ -1,0 +1,56 @@
+name: Render
+
+# Boots real WordPress (Playground, WASM — no Docker/MySQL) with the
+# working-tree theme + plugin, renders every certified pattern at three
+# viewports, smoke-tests the blog templates, and diffs the screenshots
+# against the committed baselines in screenshots/baseline/.
+#
+# When a visual change is intentional: review the diff artifacts, run
+# `npm run render && npm run visual:diff -- --update-baselines` locally,
+# and commit the updated baselines with the change.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Render harness self-test
+        run: npm run render:self-test
+
+      - name: Render all patterns in WordPress Playground
+        run: npm run render
+
+      - name: Visual regression against baselines
+        run: npm run visual:diff
+
+      - name: Upload renders and diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pattern-renders
+          path: |
+            screenshots/render/
+            screenshots/diff/
+          if-no-files-found: ignore
+          retention-days: 14
