@@ -98,6 +98,13 @@ export function buildBlueprint(patternSlugs) {
     steps: [
       { step: 'activateTheme', themeFolderName: 'supersonic-site-theme' },
       { step: 'activatePlugin', pluginPath: 'supersonic-site-core/plugin.php' },
+      // Rank Math is the framework's approved SEO plugin; the FAQ pattern
+      // embeds rank-math/faq-block, which renders nothing without it.
+      {
+        step: 'installPlugin',
+        pluginData: { resource: 'wordpress.org/plugins', slug: 'seo-by-rank-math' },
+        options: { activate: true }
+      },
       { step: 'runPHP', code: buildSeedPhp(patternSlugs) }
     ]
   };
@@ -373,7 +380,7 @@ function selfTest() {
   checkCase('blueprint activates theme + plugin then seeds', () => {
     const blueprint = buildBlueprint(['supersonic-site-theme/hero-simple']);
     const steps = blueprint.steps.map((step) => step.step).join(',');
-    assert(steps === 'activateTheme,activatePlugin,runPHP', steps);
+    assert(steps === 'activateTheme,activatePlugin,installPlugin,runPHP', steps);
     assert(blueprint.steps[1].pluginPath === 'supersonic-site-core/plugin.php', blueprint.steps[1].pluginPath);
   });
 
