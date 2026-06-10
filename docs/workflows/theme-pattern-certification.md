@@ -299,9 +299,16 @@ Run:
 
 ```text
 npm run pattern:registry:check
+npm run render -- --patterns <pattern-slug>
+npm run visual:diff
 ```
 
-The registry must pass before marking a pattern approved.
+The registry must pass before marking a pattern approved. The render harness
+must report the pattern clean (real WordPress, three viewports, no overflow,
+no console errors), and the visual diff must be green — if the change is
+intentional, update baselines with
+`node tools/visual-diff.mjs --update-baselines --patterns <slug>` and review
+the diff images before accepting.
 
 ## Commit
 

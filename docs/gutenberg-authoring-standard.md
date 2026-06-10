@@ -150,8 +150,10 @@ Foreground behavior:
 - group typography is not a reliable primary control when child text blocks use
   explicit font-size presets
 - decorative text such as eyebrows, stats, and numbered markers may own a local
-  accent color; normal headings and body copy should inherit section or local
-  surface text color unless the local override is documented
+  `accent-ink` color (the readable accent role on light bands; `accent` is the
+  fill role and is never used as text on light backgrounds); normal headings
+  and body copy should inherit section or local surface text color unless the
+  local override is documented
 
 Category behavior:
 

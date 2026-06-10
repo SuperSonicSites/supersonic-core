@@ -108,7 +108,8 @@ cards, CTA panels, form panels, and similar framed content.
   typography when child text blocks have preset font sizes; test typography at
   the intended heading, paragraph, quote, or list block.
 - Decorative text, such as eyebrows, stats, and numbered markers, may own a
-  local accent color. Normal headings and readable body copy should inherit
+  local `accent-ink` color (the readable accent role on light bands; never
+  `accent`, which is the fill role). Normal headings and readable body copy should inherit
   section or local-surface text color unless there is a documented reason.
 
 ## Existing Pattern Remediation
