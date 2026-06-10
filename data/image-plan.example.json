@@ -1,0 +1,20 @@
+{
+  "description": "One entry per image slot per pattern instance per composed page. Produced during layout from captured/asset-inventory.json (npm run image:curate); gated by npm run image:check (IMG-1..IMG-5, fail-closed). pending:true entries only survive drafting (--allow-pending), never production.",
+  "slots": [
+    {
+      "page_id": "home",
+      "position": 1,
+      "imageIndex": 1,
+      "asset": "captured/assets/images/64fa45e16df69061.webp",
+      "alt": "Central Key & Safe service van parked outside the downtown Wichita shop",
+      "kind": "photo"
+    },
+    {
+      "page_id": "home",
+      "position": 4,
+      "imageIndex": 1,
+      "pending": true,
+      "reason": "client booking a team photo shoot next week"
+    }
+  ]
+}

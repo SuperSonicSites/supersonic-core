@@ -239,6 +239,8 @@ For pattern certification work, update `data/pattern-certifications.json` and ru
 
 For any theme or pattern source change, the pattern must render clean in the local WordPress harness (`npm run render -- --patterns <slug>`) and `npm run visual:diff` must pass — baseline updates are reviewed and accepted deliberately, never blindly.
 
+For composed page work, the image plan must pass `npm run image:check` (every image slot assigned a real asset with human alt text; placeholders and pending entries fail).
+
 For website copy work, the copy deck must pass `npm run copy:check` (no banned em dashes, phrases-to-avoid, per-slot length caps, equal-text card balance, and pattern-budget consistency).
 
 For plugin/security work, security review is required.

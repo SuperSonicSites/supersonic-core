@@ -90,3 +90,9 @@ jobs:
 
       - name: Design-DNA compiler self-test
         run: npm run design:compile:self-test
+
+      - name: Asset curator self-test
+        run: npm run image:curate:self-test
+
+      - name: Image plan gate self-test
+        run: npm run image:check:self-test
