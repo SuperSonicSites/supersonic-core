@@ -45,6 +45,8 @@
     "render:self-test": "node tools/playground-render.mjs --self-test",
     "visual:diff": "node tools/visual-diff.mjs",
     "visual:diff:self-test": "node tools/visual-diff.mjs --self-test",
+    "seo:meta:export": "node tools/export-rankmath-meta.mjs",
+    "seo:meta:export:self-test": "node tools/export-rankmath-meta.mjs --self-test",
     "redirects:export": "node tools/export-rankmath-redirects.mjs",
     "redirects:export:self-test": "node tools/export-rankmath-redirects.mjs --self-test"
   },

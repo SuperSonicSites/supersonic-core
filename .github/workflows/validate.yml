@@ -79,6 +79,9 @@ jobs:
       - name: Rank Math export self-test
         run: npm run redirects:export:self-test
 
+      - name: Rank Math meta export self-test
+        run: npm run seo:meta:export:self-test
+
       - name: Studio self-test
         run: npm run studio:self-test
 
