@@ -38,6 +38,77 @@ const REQUIRED_BRIEF_FIELDS = [
   'schema'
 ];
 
+// Normalizes a site-relative path for comparison: lowercase, leading "/", no
+// trailing "/" (except the root). Returns null for non-path values.
+function normalizePath(value) {
+  if (typeof value !== 'string' || !value.trim()) {
+    return null;
+  }
+  let candidate = value.trim();
+  if (/^https?:\/\//i.test(candidate)) {
+    try {
+      candidate = new URL(candidate).pathname;
+    } catch {
+      return null;
+    }
+  }
+  if (!candidate.startsWith('/')) {
+    return null;
+  }
+  candidate = candidate.toLowerCase();
+  if (candidate.length > 1 && candidate.endsWith('/')) {
+    candidate = candidate.slice(0, -1);
+  }
+  return candidate;
+}
+
+// Minimal CSV parser for data/redirects.csv (from,to,status,notes). Handles
+// quoted fields the same way tools/capture-site.mjs toCsv() writes them.
+export function parseRedirectsCsv(text) {
+  const rows = [];
+  const lines = String(text).split(/\r?\n/);
+  for (const line of lines) {
+    if (!line.trim()) {
+      continue;
+    }
+    const fields = [];
+    let field = '';
+    let quoted = false;
+    for (let i = 0; i < line.length; i += 1) {
+      const char = line[i];
+      if (quoted) {
+        if (char === '"' && line[i + 1] === '"') {
+          field += '"';
+          i += 1;
+        } else if (char === '"') {
+          quoted = false;
+        } else {
+          field += char;
+        }
+      } else if (char === '"') {
+        quoted = true;
+      } else if (char === ',') {
+        fields.push(field);
+        field = '';
+      } else {
+        field += char;
+      }
+    }
+    fields.push(field);
+    rows.push({
+      from: (fields[0] || '').trim(),
+      to: (fields[1] || '').trim(),
+      status: (fields[2] || '').trim(),
+      notes: (fields[3] || '').trim()
+    });
+  }
+  // Drop the header row if present.
+  if (rows.length && rows[0].from.toLowerCase() === 'from' && rows[0].to.toLowerCase() === 'to') {
+    rows.shift();
+  }
+  return rows;
+}
+
 function slugWordCount(slug) {
   return slug
     .split('/')
@@ -179,6 +250,35 @@ export function checkBriefsDoc(doc) {
           issues.push(`brief ${id} internal_links[${linkIndex}] needs a non-empty target_slug and anchor_text`);
         }
       });
+    }
+
+    const legacy = brief.legacy;
+    if (legacy !== undefined) {
+      if (!legacy || typeof legacy !== 'object' || Array.isArray(legacy)) {
+        issues.push(`brief ${id} legacy must be an object (sourceUrls/preservedKeywords/rankingsNotes/waiver)`);
+      } else {
+        if (legacy.sourceUrls !== undefined) {
+          if (!Array.isArray(legacy.sourceUrls)) {
+            issues.push(`brief ${id} legacy.sourceUrls must be an array of site-relative paths`);
+          } else {
+            legacy.sourceUrls.forEach((sourceUrl, urlIndex) => {
+              if (typeof sourceUrl !== 'string' || !sourceUrl.startsWith('/')) {
+                issues.push(
+                  `brief ${id} legacy.sourceUrls[${urlIndex}] must be a site-relative path starting with "/" (matching data/redirects.csv from): ${sourceUrl}`
+                );
+              }
+            });
+          }
+        }
+        if (legacy.preservedKeywords !== undefined && !Array.isArray(legacy.preservedKeywords)) {
+          issues.push(`brief ${id} legacy.preservedKeywords must be an array of keyword strings`);
+        }
+        for (const field of ['rankingsNotes', 'waiver']) {
+          if (legacy[field] !== undefined && typeof legacy[field] !== 'string') {
+            issues.push(`brief ${id} legacy.${field} must be a string`);
+          }
+        }
+      }
     }
   });
 

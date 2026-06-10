@@ -161,6 +161,31 @@
               "notes": { "type": "string" }
             }
           },
+          "legacy": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Redesign-only rankings-preservation block. Present when the build replaces an existing site (intake legacySite.isRedesign): records which legacy URLs feed this page, which legacy keywords its rankings must keep, or an explicit waiver. Cross-checked against data/site-intake.json and data/redirects.csv by npm run seo:briefs:check (SEO-LEG-1/SEO-LEG-2).",
+            "properties": {
+              "sourceUrls": {
+                "type": "array",
+                "description": "Site-relative legacy paths (starting with \"/\", matching the from column of data/redirects.csv) that this page replaces and that 301 to its url_slug.",
+                "items": { "type": "string" }
+              },
+              "preservedKeywords": {
+                "type": "array",
+                "description": "Legacy keywords this page must keep ranking for. The first-priority keyword pool: woven into the keyword map before competitor research and protected from cannibalization like any other keyword.",
+                "items": { "type": "string" }
+              },
+              "rankingsNotes": {
+                "type": "string",
+                "description": "Evidence and context for the preservation decision: legacy positions, sessions, or capture findings (titles, H1s, meta descriptions) behind preservedKeywords."
+              },
+              "waiver": {
+                "type": "string",
+                "description": "Explicit decision NOT to preserve this page's legacy rankings, with the reason. A non-empty waiver satisfies SEO-LEG-2 in place of preservedKeywords."
+              }
+            }
+          },
           "competitor_refs": {
             "type": "array",
             "items": {
