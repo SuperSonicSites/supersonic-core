@@ -8,9 +8,9 @@ This document is generated from `data/pattern-certifications.json`. Edit that fi
 
 ## Summary
 
-- Total patterns: 29
+- Total patterns: 32
 - approved: 28
-- source-ready: 1
+- source-ready: 4
 
 ## Headers
 
@@ -32,6 +32,7 @@ This document is generated from `data/pattern-certifications.json`. Edit that fi
 | `supersonic-site-theme/hero-centered` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-centered.php)) | Hero: Centered | approved | 0.1.25 | 2026-06-01 | 4 |
 | `supersonic-site-theme/hero-fullscreen-image` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-fullscreen-image.php)) | Hero: Fullscreen Image | approved | 0.1.26 | 2026-06-02 | 3 |
 | `supersonic-site-theme/hero-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-simple.php)) | Hero: Simple | approved | 0.1.25 | 2026-06-01 | 4 |
+| `supersonic-site-theme/hero-simple-dark` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-simple-dark.php)) | Hero: Simple (Dark) | source-ready |  | 2026-06-10 | 0 |
 
 ## Intros
 
@@ -63,6 +64,7 @@ This document is generated from `data/pattern-certifications.json`. Edit that fi
 | --- | --- | --- | --- | --- | --- |
 | `supersonic-site-theme/section-logo-row` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-logo-row.php)) | Section: Logo Row | approved | 0.1.25 | 2026-06-01 | 0 |
 | `supersonic-site-theme/section-stat-band` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-stat-band.php)) | Section: Stat Band | approved | 0.1.25 | 2026-06-01 | 0 |
+| `supersonic-site-theme/section-stat-band-dark` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-stat-band-dark.php)) | Section: Stat Band (Dark) | source-ready |  | 2026-06-10 | 0 |
 | `supersonic-site-theme/section-team-grid` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-team-grid.php)) | Section: Team Grid | source-ready |  | 2026-06-10 | 0 |
 | `supersonic-site-theme/section-testimonial` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-testimonial.php)) | Section: Testimonial | approved | 0.1.25 | 2026-06-01 | 2 |
 | `supersonic-site-theme/section-testimonial-grid` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-testimonial-grid.php)) | Section: Testimonial Grid | approved | 0.1.25 | 2026-06-01 | 2 |
@@ -75,6 +77,7 @@ This document is generated from `data/pattern-certifications.json`. Edit that fi
 | `supersonic-site-theme/contact-map-info` ([source](../wp-content/themes/supersonic-site-theme/patterns/contact-map-info.php)) | Contact: Map + Info | approved | 0.1.25 | 2026-06-01 | 2 |
 | `supersonic-site-theme/contact-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/contact-simple.php)) | Contact: Simple | approved | 0.1.25 | 2026-06-01 | 1 |
 | `supersonic-site-theme/cta-band` ([source](../wp-content/themes/supersonic-site-theme/patterns/cta-band.php)) | CTA: Band | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/cta-band-dark` ([source](../wp-content/themes/supersonic-site-theme/patterns/cta-band-dark.php)) | CTA: Band (Dark) | source-ready |  | 2026-06-10 | 0 |
 | `supersonic-site-theme/cta-split` ([source](../wp-content/themes/supersonic-site-theme/patterns/cta-split.php)) | CTA: Split | approved | 0.1.25 | 2026-06-01 | 3 |
 
 ## Info

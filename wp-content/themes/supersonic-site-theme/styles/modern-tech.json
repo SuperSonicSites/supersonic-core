@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.8/theme.json",
+	"version": 3,
+	"title": "Modern Tech",
+	"description": "Single-family geometry, compact scale, soft-rounded shapes. For SaaS, startups, digital services — clarity and momentum.",
+	"settings": {
+		"typography": {
+			"fontFamilies": [
+				{
+					"fontFamily": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+					"name": "Body (Inter)",
+					"slug": "inter"
+				},
+				{
+					"fontFamily": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif",
+					"name": "Heading (Inter)",
+					"slug": "montserrat"
+				}
+			],
+			"fontSizes": [
+				{ "name": "Small", "size": "0.875rem", "slug": "small", "fluid": false },
+				{ "name": "Body", "size": "1.0625rem", "slug": "body", "fluid": { "min": "1rem", "max": "1.0625rem" } },
+				{ "name": "Large", "size": "1.3125rem", "slug": "large", "fluid": { "min": "1.125rem", "max": "1.3125rem" } },
+				{ "name": "Heading 3", "size": "1.75rem", "slug": "heading-3", "fluid": { "min": "1.4375rem", "max": "1.75rem" } },
+				{ "name": "Heading 2", "size": "2.625rem", "slug": "heading-2", "fluid": { "min": "1.875rem", "max": "2.625rem" } },
+				{ "name": "Heading 1", "size": "3.5rem", "slug": "heading-1", "fluid": { "min": "2.375rem", "max": "3.5rem" } },
+				{ "name": "Display", "size": "4.5rem", "slug": "display", "fluid": { "min": "2.75rem", "max": "4.5rem" } }
+			]
+		},
+		"custom": {
+			"radius": {
+				"none": "0",
+				"small": "6px",
+				"medium": "10px",
+				"large": "20px",
+				"pill": "999px"
+			}
+		}
+	},
+	"styles": {
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontWeight": "700",
+					"letterSpacing": "-0.02em",
+					"lineHeight": "1.1"
+				}
+			},
+			"h1": {
+				"typography": {
+					"letterSpacing": "-0.025em",
+					"lineHeight": "1.05"
+				}
+			},
+			"button": {
+				"typography": {
+					"fontWeight": "600"
+				}
+			}
+		}
+	}
+}

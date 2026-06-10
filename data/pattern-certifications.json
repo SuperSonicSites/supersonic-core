@@ -875,6 +875,51 @@
       "contentBearing": true,
       "knownIssues": [],
       "lastReviewedAt": "2026-06-10"
+    },
+    {
+      "slug": "supersonic-site-theme/hero-simple-dark",
+      "title": "Hero: Simple (Dark)",
+      "category": "supersonic-heroes",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/hero-simple-dark.php",
+      "qaPageSlug": "qa-pattern-hero-simple-dark",
+      "qaPageUrl": "",
+      "status": "source-ready",
+      "certifiedThemeVersion": "",
+      "reportPath": "",
+      "screenshots": {},
+      "contentBearing": true,
+      "knownIssues": [],
+      "lastReviewedAt": "2026-06-10"
+    },
+    {
+      "slug": "supersonic-site-theme/cta-band-dark",
+      "title": "CTA: Band (Dark)",
+      "category": "supersonic-conversion",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/cta-band-dark.php",
+      "qaPageSlug": "qa-pattern-cta-band-dark",
+      "qaPageUrl": "",
+      "status": "source-ready",
+      "certifiedThemeVersion": "",
+      "reportPath": "",
+      "screenshots": {},
+      "contentBearing": true,
+      "knownIssues": [],
+      "lastReviewedAt": "2026-06-10"
+    },
+    {
+      "slug": "supersonic-site-theme/section-stat-band-dark",
+      "title": "Section: Stat Band (Dark)",
+      "category": "supersonic-trust",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-stat-band-dark.php",
+      "qaPageSlug": "qa-pattern-section-stat-band-dark",
+      "qaPageUrl": "",
+      "status": "source-ready",
+      "certifiedThemeVersion": "",
+      "reportPath": "",
+      "screenshots": {},
+      "contentBearing": true,
+      "knownIssues": [],
+      "lastReviewedAt": "2026-06-10"
     }
   ]
 }

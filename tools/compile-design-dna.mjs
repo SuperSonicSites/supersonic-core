@@ -33,6 +33,7 @@
  */
 
 import { readFile, writeFile } from 'node:fs/promises';
+import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -272,14 +273,65 @@ export function applyDna(themeJson, dna) {
   return next;
 }
 
+// Deep merge for personality variations: objects merge recursively, arrays
+// replace wholesale (variations define complete fontSizes/fontFamilies lists).
+export function deepMerge(base, override) {
+  if (Array.isArray(override) || typeof override !== 'object' || override === null) {
+    return structuredClone(override);
+  }
+  const out = typeof base === 'object' && base !== null && !Array.isArray(base) ? structuredClone(base) : {};
+  for (const [key, value] of Object.entries(override)) {
+    out[key] = deepMerge(out[key], value);
+  }
+  return out;
+}
+
+// Personalities own typography, shape, and density — NEVER color. Color is
+// the brand DNA's job; a variation that smuggles color in would bypass the
+// WCAG-gated palette compile, so it fails closed here.
+export function assertColorless(variation, name) {
+  const offenders = [];
+  const walk = (node, trail) => {
+    if (typeof node !== 'object' || node === null) {
+      return;
+    }
+    for (const [key, value] of Object.entries(node)) {
+      if (['color', 'palette', 'gradients', 'duotone', 'background'].includes(key)) {
+        offenders.push(`${trail}${key}`);
+      } else {
+        walk(value, `${trail}${key}.`);
+      }
+    }
+  };
+  walk(variation.settings ?? {}, 'settings.');
+  walk(variation.styles ?? {}, 'styles.');
+  if (offenders.length > 0) {
+    throw new Error(`personality ${name} must be colorless (color comes from brand DNA); found: ${offenders.join(', ')}`);
+  }
+}
+
+// Applies a personality variation's settings/styles over a theme.json.
+export function applyPersonality(themeJson, variation, name) {
+  assertColorless(variation, name);
+  const next = structuredClone(themeJson);
+  if (variation.settings) {
+    next.settings = deepMerge(next.settings, variation.settings);
+  }
+  if (variation.styles) {
+    next.styles = deepMerge(next.styles, variation.styles);
+  }
+  return next;
+}
+
 // --- CLI -----------------------------------------------------------------------
 
 function parseArgs(argv) {
-  const opts = { intake: DEFAULT_INTAKE, themeJson: DEFAULT_THEME_JSON, write: false, checkMode: false, selfTest: false };
+  const opts = { intake: DEFAULT_INTAKE, themeJson: DEFAULT_THEME_JSON, write: false, checkMode: false, selfTest: false, personality: null };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === '--intake') opts.intake = argv[++i];
     else if (arg === '--theme-json') opts.themeJson = argv[++i];
+    else if (arg === '--personality') opts.personality = argv[++i];
     else if (arg === '--write') opts.write = true;
     else if (arg === '--check') opts.checkMode = true;
     else if (arg === '--self-test') opts.selfTest = true;
@@ -312,7 +364,19 @@ async function run(opts) {
   const themePath = path.resolve(ROOT, opts.themeJson);
   const themeRaw = await readFile(themePath, 'utf8');
   const themeJson = JSON.parse(themeRaw);
-  const compiled = applyDna(themeJson, dna);
+  let compiled = applyDna(themeJson, dna);
+  if (opts.personality) {
+    const variationPath = path.join(path.dirname(themePath), 'styles', `${opts.personality}.json`);
+    let variation;
+    try {
+      variation = JSON.parse(await readFile(variationPath, 'utf8'));
+    } catch {
+      console.error(`FAIL: unknown personality "${opts.personality}" — no ${variationPath}`);
+      process.exit(1);
+    }
+    compiled = applyPersonality(compiled, variation, opts.personality);
+    console.log(`PLAN: personality -> ${variation.title} (${opts.personality})`);
+  }
   const serialized = `${JSON.stringify(compiled, null, '\t')}\n`;
 
   const current = themeJson.settings.color.palette;
@@ -446,6 +510,50 @@ function selfTest() {
     assert(dna.palette['accent-contrast'] === '#111111', 'yellow buttons need black text');
     assert(contrastRatio(dna.palette['accent-ink'], '#ffffff') >= 4.5, 'ink not readable on white');
     assert(dna.palette['accent-ink'] !== dna.palette.accent, 'ink should diverge from vivid fill');
+  });
+
+  checkCase('personality merge: objects merge, arrays replace, base untouched', () => {
+    const theme = { settings: { typography: { fontSizes: [{ slug: 'body', size: '1rem' }] }, custom: { radius: { small: '4px', pill: '999px' } } }, styles: { elements: { heading: { typography: { fontWeight: '700' } } } } };
+    const variation = { settings: { typography: { fontSizes: [{ slug: 'body', size: '2rem' }] }, custom: { radius: { small: '2px' } } }, styles: { elements: { heading: { typography: { fontWeight: '800' } } } } };
+    const next = applyPersonality(theme, variation, 'test');
+    assert(next.settings.typography.fontSizes[0].size === '2rem', 'array not replaced');
+    assert(next.settings.custom.radius.small === '2px' && next.settings.custom.radius.pill === '999px', 'object merge wrong');
+    assert(next.styles.elements.heading.typography.fontWeight === '800', 'styles not merged');
+    assert(theme.settings.custom.radius.small === '4px', 'input mutated');
+  });
+
+  checkCase('personalities must be colorless (fail closed)', () => {
+    let threw = false;
+    try {
+      applyPersonality({}, { settings: { color: { palette: [] } } }, 'smuggler');
+    } catch (error) {
+      threw = /colorless/.test(error.message);
+    }
+    assert(threw, 'color smuggling not rejected');
+    let threw2 = false;
+    try {
+      applyPersonality({}, { styles: { elements: { button: { color: { text: '#fff' } } } } }, 'smuggler2');
+    } catch (error) {
+      threw2 = /colorless/.test(error.message);
+    }
+    assert(threw2, 'styles color smuggling not rejected');
+  });
+
+  checkCase('shipped personalities are colorless and keep token slugs stable', () => {
+    const stylesDir = path.join(ROOT, 'wp-content/themes/supersonic-site-theme/styles');
+    const baseTheme = JSON.parse(readFileSync(path.join(ROOT, DEFAULT_THEME_JSON), 'utf8'));
+    const baseSizeSlugs = JSON.stringify(baseTheme.settings.typography.fontSizes.map((s) => s.slug));
+    const baseRadiusKeys = JSON.stringify(Object.keys(baseTheme.settings.custom.radius));
+    const files = readdirSync(stylesDir).filter((f) => f.endsWith('.json'));
+    assert(files.length >= 3, `expected >=3 personalities, found ${files.length}`);
+    for (const file of files) {
+      const variation = JSON.parse(readFileSync(path.join(stylesDir, file), 'utf8'));
+      const merged = applyPersonality(baseTheme, variation, file);
+      assert(JSON.stringify(merged.settings.typography.fontSizes.map((s) => s.slug)) === baseSizeSlugs, `${file} changes fontSize slugs`);
+      assert(JSON.stringify(Object.keys(merged.settings.custom.radius)) === baseRadiusKeys, `${file} changes radius keys`);
+      const familySlugs = (merged.settings.typography.fontFamilies ?? []).map((f) => f.slug).sort();
+      assert(familySlugs.includes('inter') && familySlugs.includes('montserrat'), `${file} breaks font family slugs`);
+    }
   });
 
   checkCase('deterministic compile', () => {
