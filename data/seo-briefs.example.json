@@ -139,6 +139,11 @@
         },
         "emitted_by": "plugin",
         "notes": "Service + provider + areaServed; breadcrumb Home > Drain Cleaning."
+      },
+      "legacy": {
+        "sourceUrls": ["/services/drain-cleaning.html"],
+        "preservedKeywords": ["drain cleaning dallas", "hydro jetting dallas"],
+        "rankingsNotes": "Worked example (redesign builds only): legacy page ranked top 10 for drain cleaning dallas per capture + client analytics; 301 it to /drain-cleaning in data/redirects.csv and keep both keywords in the H1/H2 outline."
       }
     },
     {

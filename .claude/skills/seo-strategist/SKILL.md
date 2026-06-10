@@ -63,6 +63,36 @@ pulls to a Haiku sub-agent (see Model Policy) that fetches, reads any saved
 result file in chunks (offset/limit), and returns only the parsed top-N terms
 with Volume and SD; verify the returned data against the Proof Gates.
 
+## Legacy Rankings (Redesigns)
+
+When `data/site-intake.json` -> `legacySite.isRedesign` is true, the build
+replaces a live site that already ranks. The client's existing rankings are the
+**first-priority keyword pool** — they enter the keyword map before any
+competitor research and are protected from cannibalization like any other
+keyword.
+
+- Mandatory input: the legacy capture `captured/inventory.json` (or the
+  `legacySite.captureDir` the intake names). If it is missing, fail closed and
+  instruct the operator to run `npm run capture:site -- --url <legacy-url>`
+  first — never research a redesign without the legacy inventory.
+- Extract legacy keyword themes **per page** from the inventory (titles, H1s,
+  meta descriptions, heading outlines) and fold in `legacySite.knownTopPages`
+  and `keepUrls` before pulling Ubersuggest data.
+- Every brief that absorbs legacy URLs gets a `legacy` block: `sourceUrls` (the
+  site-relative legacy paths that 301 to it) plus `preservedKeywords`, or an
+  explicit `waiver` recording the decision not to preserve that page's
+  rankings. `rankingsNotes` carries the evidence.
+- Propose the curated `data/redirects.csv` rows (legacy `from` -> new `to`
+  slug); final curation and validation happen via `npm run redirects:check` in
+  the init gate.
+- Add a keyword-preservation table to `SEO_STRATEGY.md`: legacy URL ->
+  keyword(s) -> new page slug.
+
+`npm run seo:briefs:check` enforces this: SEO-LEG-1 (every redirect into a
+briefed page is claimed in that brief's `legacy.sourceUrls`) and SEO-LEG-2
+(every known legacy top page that maps to a brief has `preservedKeywords` or a
+waiver).
+
 ## Model Policy
 
 Pick the model per sub-task — quality-critical reasoning on the strongest model,
@@ -108,6 +138,12 @@ Read:
   Structured-Data Plan).
 - `data/seo-briefs.schema.json` (the output contract) and
   `data/seo-briefs.example.json` (a worked example).
+- **Redesigns only** (`legacySite.isRedesign` true in the intake):
+  `captured/inventory.json` (or `legacySite.captureDir`) — a mandatory input —
+  plus `data/redirects.csv` for any rows already curated. A missing inventory is
+  a fail-closed condition: instruct
+  `npm run capture:site -- --url <legacy-url>` (see Legacy Rankings and the
+  Failure Policy).
 - `git status --short`; preserve unrelated local work.
 
 Drive every decision from the intake plus Ubersuggest data. Derive competitors
@@ -131,6 +167,11 @@ Before writing anything, define the research contract:
 - Outputs: enrich `SEO_STRATEGY.md`, `PAGE_MAP.md`, and `CONTENT_MODEL.md`
   (candidate structured types only), and write `data/seo-briefs.json` validated
   against the schema.
+- **Redesigns:** a per-page `legacy` block in every brief that absorbs legacy
+  URLs (`sourceUrls` + `preservedKeywords`, or an explicit `waiver`), the
+  keyword-preservation table in `SEO_STRATEGY.md` (legacy URL -> keyword(s) ->
+  new page slug), and proposed `data/redirects.csv` rows for the init gate's
+  `npm run redirects:check`.
 
 Site-memory docs are inputs to downstream agents; only this Init research pass
 authors the SEO strategy and briefs.
@@ -139,16 +180,26 @@ authors the SEO strategy and briefs.
 
 1. `auth_status`; read the Discovery inputs; if a required intake field is
    missing, fail closed and name it (do not prompt). Resolve geography.
-2. Competitor recon -> baseline topics, authority, and content gaps.
-3. Pull and cluster keywords by intent; assign one primary keyword per
+2. **Redesigns only, before any competitor research:** extract legacy keyword
+   themes per page from `captured/inventory.json` (titles, H1s, meta
+   descriptions, heading outlines) plus `legacySite.knownTopPages` /
+   `keepUrls` — this is the first-priority keyword pool; protect it from
+   cannibalization like any other keyword.
+3. Competitor recon -> baseline topics, authority, and content gaps.
+4. Pull and cluster keywords by intent; assign one primary keyword per
    cluster/page (enforce no shared primary keyword); extract 3-5 LSI terms.
-4. Map clusters to the hub-and-spoke sitemap and archetypes; set slugs.
-5. For each page, author the authoritative `seo_title`, `meta_description`,
-   heading outline, internal-link matrix, and structured-data plan.
-6. Write `data/seo-briefs.json`; enrich `SEO_STRATEGY.md`, `PAGE_MAP.md`, and
+5. Map clusters to the hub-and-spoke sitemap and archetypes; set slugs. On
+   redesigns, map every legacy URL to its new page and propose the
+   `data/redirects.csv` rows.
+6. For each page, author the authoritative `seo_title`, `meta_description`,
+   heading outline, internal-link matrix, and structured-data plan; on
+   redesigns, the `legacy` block (`sourceUrls` + `preservedKeywords`, or an
+   explicit `waiver`).
+7. Write `data/seo-briefs.json`; enrich `SEO_STRATEGY.md` (including the
+   keyword-preservation table on redesigns), `PAGE_MAP.md`, and
    `CONTENT_MODEL.md`.
-7. Run `npm run seo:briefs:check`; fix failures.
-8. Report and hand off to `layout-architect` (structure) and the writer (copy).
+8. Run `npm run seo:briefs:check`; fix failures.
+9. Report and hand off to `layout-architect` (structure) and the writer (copy).
 
 ## Proof Gates
 
@@ -167,6 +218,10 @@ Use the cheapest proof that verifies each claim.
 - Schema conformance: `npm run seo:briefs:check` passes — document shape plus the
   slug, title/meta length, anti-cannibalization, and schema-emitter rules from
   `data/seo-briefs.schema.json`.
+- Legacy-preservation proof (redesigns): SEO-LEG-1 and SEO-LEG-2 report PASS
+  (not SKIP) in `npm run seo:briefs:check` — every redirect into a briefed page
+  is claimed in `legacy.sourceUrls`, and every known legacy top page has
+  `preservedKeywords` or an explicit `waiver`.
 - Report a `Proof Summary`.
 
 ## Failure Policy
@@ -180,6 +235,11 @@ fail-closed condition, not a prompt.
   Never invent brand/market facts and never prompt the user to fill it.
 - Ubersuggest MCP unavailable or `auth_status` fails -> `blocked`; do not invent
   volumes, difficulty, or competitor data.
+- Redesign (`legacySite.isRedesign` true) with no `captured/inventory.json` ->
+  `blocked`; instruct the operator to run
+  `npm run capture:site -- --url <legacy-url>` first. Never research keywords
+  for a redesign without the legacy inventory, and never invent legacy
+  rankings.
 - Two pages share a primary keyword, a slug breaks the format rule, or a
   title/meta exceeds its limit -> `needs-revision`; fix before handoff.
 - A schema plan that does not match the page's visible content -> drop it.
@@ -194,8 +254,12 @@ Include:
 - the research contract and the per-page keyword/slug/intent map
 - files created/changed (`data/seo-briefs.json`, enriched docs)
 - `Proof Summary` (data, anti-cannibalization, metadata, schema-plan, schema
-  conformance, manual-only gaps)
-- the `npm run seo:briefs:check` result
+  conformance, legacy preservation on redesigns, manual-only gaps)
+- the `npm run seo:briefs:check` result (including SEO-LEG-1/SEO-LEG-2 on
+  redesigns)
+- redesigns: the keyword-preservation table (legacy URL -> keyword(s) -> new
+  page slug) and the proposed `data/redirects.csv` rows, noting that final
+  curation/validation runs via `npm run redirects:check` in the init gate
 - the handoff: which briefs feed `layout-architect` (structure) and the writer
   (copy)
 - known issues / open questions and the next recommended step (run
