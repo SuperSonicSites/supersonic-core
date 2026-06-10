@@ -15,7 +15,7 @@
 		<!-- wp:group {"className":"supersonic-brand-lockup","style":{"spacing":{"blockGap":"var:preset|spacing|s"}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
 		<div class="wp-block-group supersonic-brand-lockup">
 			<!-- wp:site-logo {"width":140} /-->
-			<!-- wp:site-title /-->
+			<!-- wp:site-title {"level":0} /-->
 		</div>
 		<!-- /wp:group -->
 

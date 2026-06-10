@@ -370,9 +370,13 @@ function collectInPage() {
 }
 
 async function capturePage(browser, pageUrl, host) {
+  // Real-world legacy sites sit behind CDNs that challenge bot user agents,
+  // and frequently have broken/intercepted TLS chains. Capture is a read-only
+  // crawl of the client's own site: present as a normal browser and tolerate
+  // certificate errors rather than failing the whole capture.
   const context = await browser.newContext({
     viewport: { width: VIEWPORTS[0].width, height: VIEWPORTS[0].height },
-    userAgent: USER_AGENT
+    ignoreHTTPSErrors: true
   });
   try {
     const page = await context.newPage();
