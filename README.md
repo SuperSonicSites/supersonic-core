@@ -118,6 +118,9 @@ npm run redirects:export            Export curated redirects to a Rank Math-impo
 npm run render                      Boot real WordPress (Playground) and render every certified pattern
 npm run visual:diff                 Compare renders against committed baselines (pixelmatch, fail-closed)
 npm run pattern:registry:generate   Regenerate docs/pattern-registry.md from the certification registry
+npm run design:compile              Compile brand intake colors/fonts into WCAG-gated theme tokens (dry-run; --write to apply, --personality <slug> for art direction)
+npm run seo:meta:export             Export per-page SEO titles/meta/keywords from the briefs to a Rank Math CSV
+npm run e2e:pipeline                Stress-test the full pipeline A-to-Z on mock engagements (synthetic legacy sites + negative gate suite)
 npm run copy:check                  Validate the copy deck (voice rules, length caps, pattern budgets)
 npm run compose:check               Validate page compositions against the layout standard
 ```

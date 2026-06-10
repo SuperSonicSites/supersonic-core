@@ -129,8 +129,28 @@ Rules:
 | `surface` | Elevated or separated surfaces |
 | `muted` | Soft background bands |
 | `border` | Borders and separators |
-| `accent` | Primary action and link color |
-| `accent-contrast` | Text on accent backgrounds |
+| `accent` | The vivid brand FILL: buttons, bands. Never muddied to serve as text — only its on-fill text must clear AA |
+| `accent-ink` | The readable text/link role on light bands (links, eyebrows, stat numbers). Derived by darkening the brand color only as far as WCAG requires |
+| `accent-hover` / `accent-strong` | Accent ramp steps for hover states and heavy fills |
+| `accent-contrast` | Text on accent fills (white or black, chosen by contrast) |
+
+Two-role accent rule: `accent` and `accent-ink` may be the same color when the
+brand color already reads on white (the framework gate checks `accent-ink` on
+base/surface/muted and `accent-contrast` across the accent ramp — the exact
+pairs `npm run validate` enforces and `npm run design:compile` derives).
+
+Monochrome chassis: the committed default palette is a neutral near-black
+ramp. Color only arrives through the brand DNA compile
+(`npm run design:compile -- --write`, approval-gated) — an engagement that
+skips the brand step LOOKS unbranded instead of silently wearing a framework
+color nobody chose.
+
+Art-direction personalities: `styles/*.json` theme variations (Bold
+Industrial, Editorial, Modern Tech) own typography, shape, and density and
+are colorless by contract — the compiler rejects any variation touching
+color. Apply with `npm run design:compile -- --personality <slug>`. Token
+slugs never change across personalities, so all certified patterns work
+under every personality unmodified.
 
 Rules:
 
