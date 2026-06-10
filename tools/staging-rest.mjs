@@ -1,6 +1,7 @@
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { authHeader, readJson } from './lib/wp-rest.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -93,25 +94,8 @@ function assertStagingHost(baseUrl) {
   }
 }
 
-function authHeader(env) {
-  if (!env.WP_REST_USER || !env.WP_REST_APP_PASSWORD) {
-    return null;
-  }
-  return `Basic ${Buffer.from(`${env.WP_REST_USER}:${env.WP_REST_APP_PASSWORD}`).toString('base64')}`;
-}
-
-async function readJson(url, headers = {}) {
-  const response = await fetch(url, { headers });
-  const text = await response.text();
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch {
-    data = text;
-  }
-
-  return { response, data };
-}
+// authHeader() and readJson() moved to tools/lib/wp-rest.mjs (shared with the
+// Playground render harness).
 
 async function check() {
   const env = await loadEnv();

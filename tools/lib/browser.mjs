@@ -64,9 +64,23 @@ export async function launchChromium(context = 'this tool') {
 // Pages are created via an explicit per-viewport browser context (not browser.newPage)
 // because @axe-core/playwright requires a context-owned page; each page already had its own
 // implicit context before, so this is behavior-preserving for the screenshot/proof tools.
-export async function openMaskedPage(browser, { viewport, url, timeout = 45000, onConsoleError, onPageError } = {}) {
+export async function openMaskedPage(browser, { viewport, url, timeout = 45000, onConsoleError, onPageError, blockExternal = false } = {}) {
   const context = await browser.newContext(viewport ? { viewport } : {});
   const page = await context.newPage();
+  // Hermetic mode for local render harnesses: abort every request that leaves
+  // the page's own origin so external fonts/CDNs can neither slow CI nor fail
+  // it with environment-specific network errors.
+  if (blockExternal) {
+    const ownHost = new URL(url).host;
+    await page.route('**/*', (route) => {
+      const target = route.request().url();
+      if (target.startsWith('data:') || target.startsWith('blob:') || new URL(target).host === ownHost) {
+        route.continue();
+      } else {
+        route.abort('blockedbyclient');
+      }
+    });
+  }
   if (typeof onConsoleError === 'function') {
     page.on('console', (message) => {
       if (message.type() === 'error') {
