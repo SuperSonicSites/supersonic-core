@@ -31,6 +31,10 @@
     "version:bump": "node tools/bump-version.mjs",
     "capture:site": "node tools/capture-site.mjs",
     "capture:self-test": "node tools/capture-site.mjs --self-test",
+    "redirects:check": "node tools/validate-redirects.mjs",
+    "redirects:check:self-test": "node tools/validate-redirects.mjs --self-test",
+    "rest:media:dry-run": "node tools/staging-rest.mjs media-dry-run",
+    "rest:media:upload": "node tools/staging-rest.mjs media-upload",
     "redirects:export": "node tools/export-rankmath-redirects.mjs",
     "redirects:export:self-test": "node tools/export-rankmath-redirects.mjs --self-test"
   },

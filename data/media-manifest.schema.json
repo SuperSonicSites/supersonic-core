@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SuperSonicSites/supersonic-core/data/media-manifest.schema.json",
+  "title": "Supersonic Media Manifest",
+  "description": "Upload plan for the staging media pipeline (tools/staging-rest.mjs media-dry-run / media-upload). Each entry maps a repo-local image file to its media-library metadata. altText is mandatory and must describe the image; MEDIA-ALT-1 in tools/validate-copy.mjs rejects empty, too-short, filename, or placeholder alt text. Generate data/media-manifest.json from this schema in a cloned site repo; data/media-manifest.example.json is a worked example.",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["file", "title", "altText"],
+    "properties": {
+      "file": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Repo-relative path to the image file to upload (jpg, jpeg, png, webp, avif, svg, or gif)."
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Media library title for the attachment."
+      },
+      "altText": {
+        "type": "string",
+        "minLength": 5,
+        "description": "Descriptive alt text. Must not be empty, the filename, or a generic placeholder like img_1234."
+      },
+      "caption": {
+        "type": "string",
+        "description": "Optional caption shown under the image where the theme renders captions."
+      },
+      "attachToSlug": {
+        "type": "string",
+        "description": "Optional page slug this image is intended for. Informational in the upload plan; attachment is wired by the page composition."
+      }
+    }
+  }
+}

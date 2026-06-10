@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "compositions": [
+    { "page_id": "home", "url_slug": "/" },
+    { "page_id": "service-drain-cleaning", "url_slug": "/drain-cleaning" }
+  ]
+}

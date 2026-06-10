@@ -1,0 +1,3 @@
+from,to,status,notes
+/about,/services,301,first half of a cycle
+/services,/about,301,second half of a cycle

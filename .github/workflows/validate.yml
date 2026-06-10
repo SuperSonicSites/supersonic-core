@@ -67,5 +67,11 @@ jobs:
       - name: Capture toolkit self-test
         run: npm run capture:self-test
 
+      - name: Redirects validator
+        run: npm run redirects:check
+
+      - name: Redirects validator self-test
+        run: npm run redirects:check:self-test
+
       - name: Rank Math export self-test
         run: npm run redirects:export:self-test

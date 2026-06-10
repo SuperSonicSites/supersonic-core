@@ -1,0 +1,7 @@
+[
+  { "path": "/", "url": "https://legacy.example.com/", "status": 200, "title": "Legacy Home" },
+  { "path": "/about-us/", "url": "https://legacy.example.com/about-us/", "status": 200, "title": "About Us" },
+  { "path": "/services/", "url": "https://legacy.example.com/services/", "status": 200, "title": "Services" },
+  { "path": "/spring-sale", "url": "https://legacy.example.com/spring-sale", "status": 200, "title": "Spring Sale" },
+  { "path": "/old-promo", "url": "https://legacy.example.com/old-promo", "status": 404, "title": "Gone Promo" }
+]

@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,7 +16,8 @@ const valueFlags = new Set([
   '--content',
   '--method',
   '--route',
-  '--payload'
+  '--payload',
+  '--manifest'
 ]);
 
 function parseEnv(content) {
@@ -472,8 +473,280 @@ async function qaPageTrash() {
   console.log(JSON.stringify({ trashed: true, id: data.id ?? pageId, status: data.status ?? 'trash' }, null, 2));
 }
 
-if (!['check', 'certify', 'pages', 'qa-pages', 'dry-run', 'qa-page-dry-run', 'qa-page-trash-dry-run', 'qa-page-create', 'qa-page-trash'].includes(command)) {
-  console.error('Usage: node tools/staging-rest.mjs <check|certify|pages|qa-pages|dry-run|qa-page-dry-run|qa-page-trash-dry-run|qa-page-create|qa-page-trash> [theme-version plugin-version] [confirm] [status] [theme/pattern] [page-id] [--theme X.Y.Z] [--plugin X.Y.Z] [--pattern theme/pattern] [--content data/page-json/example.json] [--id page-id] [--confirm] [--status publish] [--method POST] [--route /wp-json/wp/v2/pages] [--payload data/page-json/example.json]');
+// Media pipeline: extension -> Content-Type allowlist. Anything outside this map
+// is rejected in both the dry-run plan and the live upload.
+const MEDIA_MIME_TYPES = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+  '.svg': 'image/svg+xml',
+  '.gif': 'image/gif'
+};
+
+const MEDIA_MANIFEST_KEYS = new Set(['file', 'title', 'altText', 'caption', 'attachToSlug']);
+
+// Inline schema-shape validation mirroring data/media-manifest.schema.json
+// (array of {file, title, altText, caption?, attachToSlug?}, additionalProperties false).
+function checkMediaManifestShape(entries) {
+  const issues = [];
+
+  if (!Array.isArray(entries)) {
+    issues.push('media manifest must be a JSON array of entries (see data/media-manifest.schema.json)');
+    return issues;
+  }
+  if (entries.length === 0) {
+    issues.push('media manifest must contain at least one entry');
+  }
+
+  entries.forEach((entry, index) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      issues.push(`entry #${index} must be an object`);
+      return;
+    }
+    const label = `entry #${index} (${typeof entry.file === 'string' && entry.file ? entry.file : 'no file'})`;
+    for (const key of ['file', 'title', 'altText']) {
+      if (typeof entry[key] !== 'string' || entry[key].trim().length === 0) {
+        issues.push(`${label} missing required non-empty string field: ${key}`);
+      }
+    }
+    for (const key of ['caption', 'attachToSlug']) {
+      if (entry[key] !== undefined && typeof entry[key] !== 'string') {
+        issues.push(`${label} optional field ${key} must be a string`);
+      }
+    }
+    for (const key of Object.keys(entry)) {
+      if (!MEDIA_MANIFEST_KEYS.has(key)) {
+        issues.push(`${label} has unknown field: ${key} (additionalProperties are not allowed)`);
+      }
+    }
+  });
+
+  return issues;
+}
+
+async function loadMediaManifest(manifestPath) {
+  const absolutePath = path.resolve(root, manifestPath);
+  let text;
+  try {
+    text = await readFile(absolutePath, 'utf8');
+  } catch {
+    throw new Error(`Media manifest not found: ${manifestPath}. Provide --manifest <path> or create data/media-manifest.json.`);
+  }
+  let entries;
+  try {
+    entries = JSON.parse(text);
+  } catch (error) {
+    throw new Error(`Media manifest ${manifestPath} is invalid JSON: ${error.message}`);
+  }
+  return entries;
+}
+
+// Builds the per-entry upload plan and collects every blocker (shape violations,
+// missing files, disallowed extensions) so the dry-run can fail closed with the
+// complete list instead of stopping at the first problem.
+async function buildMediaPlan(entries) {
+  const issues = [...checkMediaManifestShape(entries)];
+  const plan = [];
+
+  for (const [index, entry] of (Array.isArray(entries) ? entries : []).entries()) {
+    if (!entry || typeof entry !== 'object' || typeof entry.file !== 'string' || !entry.file) {
+      continue;
+    }
+    const filePath = path.resolve(root, entry.file);
+    const fileName = path.basename(filePath);
+    const extension = path.extname(fileName).toLowerCase();
+    const mime = MEDIA_MIME_TYPES[extension] ?? null;
+    let size = null;
+
+    if (!mime) {
+      issues.push(`entry #${index} (${entry.file}) has unsupported extension "${extension || 'none'}"; allowed: ${Object.keys(MEDIA_MIME_TYPES).join(', ')}`);
+    }
+    try {
+      size = (await stat(filePath)).size;
+    } catch {
+      issues.push(`entry #${index} (${entry.file}) file does not exist on disk: ${entry.file}`);
+    }
+
+    plan.push({
+      file: entry.file,
+      fileName,
+      size,
+      mime,
+      title: entry.title ?? null,
+      altText: entry.altText ?? null,
+      attachToSlug: entry.attachToSlug ?? null
+    });
+  }
+
+  return { plan, issues };
+}
+
+async function mediaDryRun() {
+  const env = await loadEnv();
+  const manifestPath = getArg('--manifest', positionalArgs()[0] ?? 'data/media-manifest.json');
+  const issues = [];
+  let baseUrl = null;
+
+  // Resolve staging URL/auth like every other command, but collect the failures so
+  // the dry-run reports everything that would block a live upload, then exits 2.
+  try {
+    baseUrl = requireStagingUrl(env);
+  } catch (error) {
+    issues.push(error.message);
+  }
+  if (!authHeader(env)) {
+    issues.push('WP_REST_USER and WP_REST_APP_PASSWORD are required for media upload.');
+  }
+
+  let entries = null;
+  try {
+    entries = await loadMediaManifest(manifestPath);
+  } catch (error) {
+    issues.push(error.message);
+  }
+
+  console.log('Media dry-run only. No request was sent.');
+  console.log(`Manifest: ${manifestPath}`);
+  console.log(`Target: ${baseUrl ? `${baseUrl}/wp-json/wp/v2/media` : 'not resolved (missing WP_STAGING_URL)'}`);
+
+  if (entries !== null) {
+    const { plan, issues: planIssues } = await buildMediaPlan(entries);
+    issues.push(...planIssues);
+    console.log(`Upload plan (${plan.length} entries):`);
+    console.log(JSON.stringify(plan, null, 2));
+  }
+
+  if (issues.length) {
+    console.error('MEDIA DRY-RUN FAILED: the following issues block a live upload:');
+    for (const issue of issues) {
+      console.error(`- ${issue}`);
+    }
+    process.exit(2);
+  }
+
+  console.log('Dry-run clean. Live upload requires explicit approval: re-run as media-upload with confirm.');
+}
+
+// Live media upload. Refuses without confirmation so it can never fire by accident.
+// Staging-only by design (assertStagingHost). Idempotent: an attachment whose
+// source_url basename matches the manifest file is updated in place, not re-uploaded.
+async function mediaUpload() {
+  const confirmed = isConfirmed();
+  const env = await loadEnv();
+  const baseUrl = requireStagingUrl(env);
+  const auth = authHeader(env);
+  const manifestPath = getArg('--manifest', positionalArgs()[0] ?? 'data/media-manifest.json');
+
+  if (!auth) {
+    throw new Error('WP_REST_USER and WP_REST_APP_PASSWORD are required for media upload.');
+  }
+
+  const entries = await loadMediaManifest(manifestPath);
+  const { plan, issues } = await buildMediaPlan(entries);
+  if (issues.length) {
+    console.error('REFUSED: media manifest failed validation. Fix these and re-run media-dry-run:');
+    for (const issue of issues) {
+      console.error(`- ${issue}`);
+    }
+    process.exit(2);
+  }
+
+  if (!confirmed) {
+    console.log('REFUSED: live media upload needs confirm. Run media-dry-run first for approval, then re-run with confirm.');
+    console.log(JSON.stringify({ wouldUpload: plan }, null, 2));
+    process.exit(2);
+  }
+
+  assertStagingHost(baseUrl);
+
+  const results = [];
+  let failedCount = 0;
+
+  for (const [index, entry] of entries.entries()) {
+    const item = plan[index];
+    try {
+      // Idempotency: reuse an existing attachment whose source_url basename matches.
+      const search = await readJson(
+        `${baseUrl}/wp-json/wp/v2/media?search=${encodeURIComponent(item.fileName)}&per_page=100`,
+        { Authorization: auth }
+      );
+      if (!search.response.ok || !Array.isArray(search.data)) {
+        throw new Error(`media search failed (${search.response.status}): ${JSON.stringify(search.data)}`);
+      }
+      const existing = search.data.find((media) => {
+        try {
+          return decodeURIComponent(path.posix.basename(new URL(media.source_url).pathname)) === item.fileName;
+        } catch {
+          return false;
+        }
+      });
+
+      let mediaId;
+      if (existing) {
+        console.log(`${item.fileName}: exists, updating meta (id ${existing.id})`);
+        mediaId = existing.id;
+      } else {
+        const body = await readFile(path.resolve(root, entry.file));
+        const createResponse = await fetch(`${baseUrl}/wp-json/wp/v2/media`, {
+          method: 'POST',
+          headers: {
+            Authorization: auth,
+            'Content-Type': item.mime,
+            'Content-Disposition': `attachment; filename="${item.fileName}"`
+          },
+          body
+        });
+        const created = await createResponse.json();
+        if (!createResponse.ok) {
+          throw new Error(`media create failed (${createResponse.status}): ${JSON.stringify(created)}`);
+        }
+        mediaId = created.id;
+        console.log(`${item.fileName}: uploaded (id ${mediaId})`);
+      }
+
+      const metaPayload = { alt_text: entry.altText, title: entry.title };
+      if (entry.caption) {
+        metaPayload.caption = entry.caption;
+      }
+      const updateResponse = await fetch(`${baseUrl}/wp-json/wp/v2/media/${mediaId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: auth },
+        body: JSON.stringify(metaPayload)
+      });
+      const updated = await updateResponse.json();
+      if (!updateResponse.ok) {
+        throw new Error(`media meta update failed (${updateResponse.status}): ${JSON.stringify(updated)}`);
+      }
+
+      results.push({
+        file: entry.file,
+        id: mediaId,
+        status: existing ? 'meta-updated' : 'uploaded',
+        sourceUrl: updated.source_url ?? null
+      });
+    } catch (error) {
+      failedCount += 1;
+      results.push({ file: entry.file, status: 'failed', error: error.message });
+    }
+  }
+
+  console.log(JSON.stringify({
+    total: results.length,
+    uploaded: results.filter((result) => result.status === 'uploaded').length,
+    metaUpdated: results.filter((result) => result.status === 'meta-updated').length,
+    failed: failedCount,
+    results
+  }, null, 2));
+
+  if (failedCount > 0) {
+    process.exit(1);
+  }
+}
+
+if (!['check', 'certify', 'pages', 'qa-pages', 'dry-run', 'qa-page-dry-run', 'qa-page-trash-dry-run', 'qa-page-create', 'qa-page-trash', 'media-dry-run', 'media-upload'].includes(command)) {
+  console.error('Usage: node tools/staging-rest.mjs <check|certify|pages|qa-pages|dry-run|qa-page-dry-run|qa-page-trash-dry-run|qa-page-create|qa-page-trash|media-dry-run|media-upload> [theme-version plugin-version] [confirm] [status] [theme/pattern] [page-id] [--theme X.Y.Z] [--plugin X.Y.Z] [--pattern theme/pattern] [--content data/page-json/example.json] [--id page-id] [--confirm] [--status publish] [--method POST] [--route /wp-json/wp/v2/pages] [--payload data/page-json/example.json] [--manifest data/media-manifest.json]');
   process.exit(1);
 }
 
@@ -511,4 +784,12 @@ if (command === 'qa-page-create') {
 
 if (command === 'qa-page-trash') {
   await qaPageTrash();
+}
+
+if (command === 'media-dry-run') {
+  await mediaDryRun();
+}
+
+if (command === 'media-upload') {
+  await mediaUpload();
 }

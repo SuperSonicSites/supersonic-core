@@ -1,0 +1,5 @@
+from,to,status,notes
+/about-us/,/about,301,merged about pages
+/old-services,/services,301,"renamed, now the services hub"
+/spring-sale,,410,campaign retired on purpose
+/temp-landing,/drain-cleaning,302,temporary test traffic

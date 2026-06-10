@@ -30,49 +30,18 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkRedirectRowStructure, parseCsvLine, parseRedirectsCsv } from './lib/redirects.mjs';
+
+// Parsing lives in tools/lib/redirects.mjs and is shared with
+// tools/validate-redirects.mjs so the gate and the export never disagree on
+// what a row means. parseCsvLine is re-exported for backwards compatibility.
+export { parseCsvLine };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const defaultRoot = path.resolve(__dirname, '..');
 
-const INPUT_HEADER = ['from', 'to', 'status', 'notes'];
 const OUTPUT_HEADER = ['source', 'matching', 'destination', 'type', 'category', 'status'];
-const ALLOWED_STATUS = new Set(['301', '302', '410']);
-
-// Minimal RFC-4180-ish line parser: handles quoted fields and "" escapes.
-// Returns null when the line has an unterminated quote.
-export function parseCsvLine(line) {
-  const fields = [];
-  let current = '';
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i];
-    if (inQuotes) {
-      if (char === '"') {
-        if (line[i + 1] === '"') {
-          current += '"';
-          i += 1;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        current += char;
-      }
-    } else if (char === '"' && current === '') {
-      inQuotes = true;
-    } else if (char === ',') {
-      fields.push(current);
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  if (inQuotes) {
-    return null;
-  }
-  fields.push(current);
-  return fields;
-}
 
 function csvField(value) {
   if (/[",\n]/.test(value)) {
@@ -85,77 +54,27 @@ function csvField(value) {
 // Math importer rows. Returns { issues, outputLines, count }. Any issue means
 // the export must not be written (fail closed).
 export function convertRedirects(text) {
-  const issues = [];
   const outputLines = [OUTPUT_HEADER.join(',')];
-  const lines = text.replace(/^﻿/, '').split(/\r\n|\r|\n/);
-
-  const nonEmpty = [];
-  lines.forEach((line, index) => {
-    if (line.trim() !== '') {
-      nonEmpty.push({ line, lineNumber: index + 1 });
-    }
-  });
-
-  if (nonEmpty.length === 0) {
-    issues.push('input is empty: expected header "from,to,status,notes"');
-    return { issues, outputLines, count: 0 };
-  }
-
-  const header = parseCsvLine(nonEmpty[0].line);
-  if (!header || header.map((field) => field.trim()).join(',') !== INPUT_HEADER.join(',')) {
-    issues.push(
-      `line ${nonEmpty[0].lineNumber}: header must be exactly "from,to,status,notes" (got "${nonEmpty[0].line.trim()}")`
-    );
+  const { issues, rows } = parseRedirectsCsv(text);
+  if (issues.length > 0 && rows.length === 0) {
+    // Empty input or a wrong header: nothing further to convert.
     return { issues, outputLines, count: 0 };
   }
 
   const seenFrom = new Map();
   let count = 0;
 
-  for (const { line, lineNumber } of nonEmpty.slice(1)) {
-    const fields = parseCsvLine(line);
-    if (!fields) {
-      issues.push(`line ${lineNumber}: unterminated quoted field`);
-      continue;
-    }
-    if (fields.length !== INPUT_HEADER.length) {
-      issues.push(
-        `line ${lineNumber}: expected ${INPUT_HEADER.length} columns (from,to,status,notes), got ${fields.length}`
-      );
-      continue;
-    }
+  for (const row of rows) {
+    const { from, to, status, lineNumber } = row;
+    const structureIssues = checkRedirectRowStructure(row);
+    issues.push(...structureIssues);
+    let rowValid = structureIssues.length === 0;
 
-    const [fromRaw, toRaw, statusRaw] = fields;
-    const from = fromRaw.trim();
-    const to = toRaw.trim();
-    const status = statusRaw.trim();
-    let rowValid = true;
-
-    if (from === '') {
-      issues.push(`line ${lineNumber}: "from" must not be empty`);
-      rowValid = false;
-    } else if (!from.startsWith('/')) {
-      issues.push(`line ${lineNumber}: "from" must be a path starting with "/" (got "${from}")`);
-      rowValid = false;
-    } else if (from.replace(/^\/+/, '') === '') {
+    // Rank Math-specific: its importer cannot take an empty source path.
+    if (from.startsWith('/') && from.replace(/^\/+/, '') === '') {
       issues.push(
         `line ${lineNumber}: "from" is the site root ("${from}"); Rank Math cannot import an empty source path — handle root changes in Rank Math settings instead`
       );
-      rowValid = false;
-    }
-
-    if (!ALLOWED_STATUS.has(status)) {
-      issues.push(`line ${lineNumber}: status must be 301, 302, or 410 (got "${status}")`);
-      rowValid = false;
-    }
-
-    if (status === '410') {
-      if (to !== '') {
-        issues.push(`line ${lineNumber}: 410 rows must have an empty "to" (got "${to}")`);
-        rowValid = false;
-      }
-    } else if (to === '') {
-      issues.push(`line ${lineNumber}: "to" must not be empty for a ${status || 'redirect'} row`);
       rowValid = false;
     }
 

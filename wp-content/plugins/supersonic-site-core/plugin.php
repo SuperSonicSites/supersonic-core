@@ -20,6 +20,7 @@ define('SUPERSONIC_SITE_CORE_DIR', plugin_dir_path(__FILE__));
 
 require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-theme-updater.php';
 require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-deploy-role.php';
+require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-content-role.php';
 require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-deploy-controller.php';
 
 /**
@@ -36,19 +37,23 @@ function supersonic_site_core_boot() {
 add_action('init', 'supersonic_site_core_boot');
 
 /**
- * On activation, create the least-privilege deploy role.
+ * On activation, create the least-privilege deploy and content-editor roles.
  */
 function supersonic_site_core_activate() {
 	require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-deploy-role.php';
+	require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-content-role.php';
 	Supersonic_Deploy_Role::add_role();
+	Supersonic_Content_Role::add_role();
 }
 register_activation_hook(__FILE__, 'supersonic_site_core_activate');
 
 /**
- * On deactivation, remove the deploy role.
+ * On deactivation, remove the deploy and content-editor roles.
  */
 function supersonic_site_core_deactivate() {
 	require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-deploy-role.php';
+	require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-content-role.php';
 	Supersonic_Deploy_Role::remove_role();
+	Supersonic_Content_Role::remove_role();
 }
 register_deactivation_hook(__FILE__, 'supersonic_site_core_deactivate');

@@ -1,0 +1,2 @@
+from,to,status,notes
+/about/,/about,301,points at itself after normalization

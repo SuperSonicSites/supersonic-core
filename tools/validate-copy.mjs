@@ -387,6 +387,50 @@ export function checkBriefCoverage(doc, briefsById, { floor = COVERAGE_FLOOR } =
   return issues;
 }
 
+// MEDIA-ALT-1: every media-manifest entry must carry real, descriptive alt text.
+// Empty alt, sub-5-char alt, the filename itself (with or without extension), and
+// camera/placeholder names (img_1234, photo2, screenshot ...) are all hard fails.
+// Pure: takes the parsed manifest entries so regression fixtures stay file-free.
+const GENERIC_ALT_RE = /^(img|image|photo|picture|dsc|screenshot)[-_ ]?\d*$/i;
+
+export function checkMediaManifestAlt(entries) {
+  const issues = [];
+
+  if (!Array.isArray(entries)) {
+    issues.push('MEDIA-ALT-1 media manifest must be a JSON array of entries');
+    return issues;
+  }
+
+  entries.forEach((entry, index) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      issues.push(`MEDIA-ALT-1 entry #${index} must be an object`);
+      return;
+    }
+    const file = typeof entry.file === 'string' ? entry.file : '';
+    const label = file || `#${index}`;
+    const alt = typeof entry.altText === 'string' ? entry.altText.trim() : '';
+
+    if (!alt) {
+      issues.push(`MEDIA-ALT-1 entry ${label} has empty altText; every image needs descriptive alt text`);
+      return;
+    }
+    if ([...alt].length < 5) {
+      issues.push(`MEDIA-ALT-1 entry ${label} altText "${alt}" is under 5 characters; describe what the image shows`);
+    }
+    const fileName = file ? path.basename(file) : '';
+    const fileNameNoExt = fileName.replace(/\.[^.]+$/, '');
+    const altLower = alt.toLowerCase();
+    if (fileName && (altLower === fileName.toLowerCase() || altLower === fileNameNoExt.toLowerCase())) {
+      issues.push(`MEDIA-ALT-1 entry ${label} altText repeats the filename; describe what the image shows instead`);
+    }
+    if (GENERIC_ALT_RE.test(alt)) {
+      issues.push(`MEDIA-ALT-1 entry ${label} altText "${alt}" is a generic placeholder name; describe what the image shows`);
+    }
+  });
+
+  return issues;
+}
+
 async function exists(absolutePath) {
   try {
     await stat(absolutePath);
@@ -481,6 +525,34 @@ async function validatePageCompositions(rootDir, results) {
   }
 }
 
+// MEDIA-ALT-1 only gates the REAL manifest: a cloned site without a media pipeline
+// has no data/media-manifest.json yet, so the check skips cleanly instead of failing.
+async function validateMediaManifest(rootDir, results) {
+  const relativePath = 'data/media-manifest.json';
+  if (!(await exists(path.join(rootDir, relativePath)))) {
+    results.push({ status: 'pass', message: `MEDIA-ALT-1 skipped: ${relativePath} not present` });
+    return;
+  }
+
+  let entries;
+  try {
+    entries = await readJson(rootDir, relativePath);
+  } catch (error) {
+    results.push({ status: 'fail', message: `${relativePath} is invalid JSON: ${error.message}` });
+    return;
+  }
+
+  const issues = checkMediaManifestAlt(entries);
+  if (issues.length === 0) {
+    const count = Array.isArray(entries) ? entries.length : 0;
+    results.push({ status: 'pass', message: `${relativePath} passes MEDIA-ALT-1 alt-text rules (${count} entries)` });
+  } else {
+    for (const issue of issues) {
+      results.push({ status: 'fail', message: `${relativePath}: ${issue}` });
+    }
+  }
+}
+
 export async function validateCopy({ rootDir = defaultRoot } = {}) {
   const results = [];
   const phrasesToAvoid = await loadPhrasesToAvoid(rootDir);
@@ -570,6 +642,7 @@ export async function validateCopy({ rootDir = defaultRoot } = {}) {
   }
 
   await validatePageCompositions(rootDir, results);
+  await validateMediaManifest(rootDir, results);
   runRegressionFixtures(results);
   return results;
 }
@@ -733,6 +806,40 @@ function runRegressionFixtures(results) {
   const fullText = Array.from({ length: 100 }, (_unused, i) => `word${i}`).join(' ');
   const fullDeck = { site, source, pages: [{ page_id: 'home', url_slug: '/', slots: [{ id: 'b', role: 'body', text: fullText }] }] };
   assertFixture(results, 'brief-coverage passes a full page', checkBriefCoverage(fullDeck, coverageBriefs).length === 0);
+
+  // media-manifest alt-text fixtures (MEDIA-ALT-1).
+  const mediaEntry = (overrides = {}) => ({
+    file: 'assets/media/hero-plumber-van.webp',
+    title: 'Plumber van outside a home',
+    altText: 'Branded plumbing van parked in a residential driveway',
+    ...overrides
+  });
+  assertFixture(results, 'media-alt clean fixture has no issues', checkMediaManifestAlt([mediaEntry()]).length === 0);
+  assertFixture(
+    results,
+    'media-alt empty-alt detector (MEDIA-ALT-1)',
+    checkMediaManifestAlt([mediaEntry({ altText: '  ' })]).some((issue) => issue.startsWith('MEDIA-ALT-1') && issue.includes('empty altText'))
+  );
+  assertFixture(
+    results,
+    'media-alt short-alt detector (MEDIA-ALT-1)',
+    checkMediaManifestAlt([mediaEntry({ altText: 'van' })]).some((issue) => issue.startsWith('MEDIA-ALT-1') && issue.includes('under 5 characters'))
+  );
+  assertFixture(
+    results,
+    'media-alt filename-as-alt detector (MEDIA-ALT-1)',
+    checkMediaManifestAlt([mediaEntry({ altText: 'hero-plumber-van.webp' })]).some((issue) => issue.includes('repeats the filename'))
+  );
+  assertFixture(
+    results,
+    'media-alt filename-without-extension detector (MEDIA-ALT-1)',
+    checkMediaManifestAlt([mediaEntry({ altText: 'Hero-Plumber-Van' })]).some((issue) => issue.includes('repeats the filename'))
+  );
+  assertFixture(
+    results,
+    'media-alt generic-placeholder detector (MEDIA-ALT-1)',
+    checkMediaManifestAlt([mediaEntry({ altText: 'IMG_4321' })]).some((issue) => issue.includes('generic placeholder'))
+  );
 }
 
 if (process.argv[1] === __filename) {

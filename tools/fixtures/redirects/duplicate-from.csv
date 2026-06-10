@@ -1,0 +1,3 @@
+from,to,status,notes
+/about-us/,/about,301,first mapping
+/about-us,/contact,301,same source without trailing slash

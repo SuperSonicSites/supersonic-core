@@ -781,6 +781,74 @@ async function validatePostContentWrappers() {
   }
 }
 
+// ROLE-1/ROLE-2/ROLE-3: the content-editor role must register exactly the approved
+// content + media capabilities, must never reference an admin-grade capability, and
+// plugin.php must (re)create it on activation and remove it on deactivation. Pure:
+// takes the PHP sources as strings so regression fixtures stay file-free.
+const CONTENT_ROLE_EXPECTED_CAPS = [
+  'read',
+  'upload_files',
+  'edit_pages',
+  'edit_others_pages',
+  'publish_pages',
+  'edit_published_pages',
+  'edit_posts',
+  'edit_others_posts',
+  'publish_posts',
+  'edit_published_posts'
+];
+const CONTENT_ROLE_FORBIDDEN_CAPS = [
+  'manage_options',
+  'install_plugins',
+  'update_plugins',
+  'update_themes',
+  'activate_plugins',
+  'edit_users',
+  'create_users',
+  'delete_users',
+  'unfiltered_html',
+  'edit_files'
+];
+
+function checkContentRolePolicy(roleSource, pluginSource) {
+  const issues = [];
+  const grantedCaps = new Set(
+    [...roleSource.matchAll(/['"]([a-z_]+)['"]\s*=>\s*true/g)].map((match) => match[1])
+  );
+
+  for (const capability of CONTENT_ROLE_EXPECTED_CAPS) {
+    if (!grantedCaps.has(capability)) {
+      issues.push(`ROLE-1 content role must grant ${capability}`);
+    }
+  }
+  for (const capability of grantedCaps) {
+    if (!CONTENT_ROLE_EXPECTED_CAPS.includes(capability)) {
+      issues.push(`ROLE-1 content role grants unapproved capability: ${capability}`);
+    }
+  }
+  for (const capability of CONTENT_ROLE_FORBIDDEN_CAPS) {
+    if (new RegExp(`['"]${capability}['"]`).test(roleSource)) {
+      issues.push(`ROLE-2 content role file must not reference forbidden capability: ${capability}`);
+    }
+  }
+
+  if (!/remove_role\(self::ROLE\);[\s\S]{0,200}?add_role\(\s*self::ROLE/.test(roleSource)) {
+    issues.push('ROLE-1 content role must use the remove-then-add re-sync (remove_role then add_role on self::ROLE)');
+  }
+
+  if (!/require_once\s+SUPERSONIC_SITE_CORE_DIR\s*\.\s*'includes\/class-supersonic-content-role\.php'/.test(pluginSource)) {
+    issues.push('ROLE-3 plugin.php must require includes/class-supersonic-content-role.php');
+  }
+  if (!/Supersonic_Content_Role::add_role\(\)/.test(pluginSource) || !/register_activation_hook/.test(pluginSource)) {
+    issues.push('ROLE-3 plugin.php must create the content role in its activation hook');
+  }
+  if (!/Supersonic_Content_Role::remove_role\(\)/.test(pluginSource) || !/register_deactivation_hook/.test(pluginSource)) {
+    issues.push('ROLE-3 plugin.php must remove the content role in its deactivation hook');
+  }
+
+  return issues;
+}
+
 async function validatePluginSecurityPolicy() {
   const deployRole = await readText('wp-content/plugins/supersonic-site-core/includes/class-supersonic-deploy-role.php');
   const deployController = await readText('wp-content/plugins/supersonic-site-core/includes/class-supersonic-deploy-controller.php');
@@ -819,6 +887,27 @@ async function validatePluginSecurityPolicy() {
     pass('deploy route remains payload-free');
   } else {
     fail('deploy route must remain payload-free');
+  }
+
+  const contentRolePath = 'wp-content/plugins/supersonic-site-core/includes/class-supersonic-content-role.php';
+  if (!(await exists(contentRolePath))) {
+    fail(`ROLE-1 ${contentRolePath} must exist and register the supersonic_content_editor role`);
+  } else {
+    const contentRole = await readText(contentRolePath);
+    const pluginPhp = await readText('wp-content/plugins/supersonic-site-core/plugin.php');
+    const contentRoleIssues = checkContentRolePolicy(contentRole, pluginPhp);
+
+    if (!/const\s+ROLE\s*=\s*'supersonic_content_editor'/.test(contentRole)) {
+      fail('ROLE-1 content role must be named supersonic_content_editor');
+    }
+
+    if (contentRoleIssues.length) {
+      for (const issue of contentRoleIssues) {
+        fail(`${contentRolePath}: ${issue}`);
+      }
+    } else {
+      pass('ROLE-1/ROLE-2/ROLE-3 content role grants exactly the approved content caps, no admin caps, and is wired into plugin activation/deactivation');
+    }
   }
 }
 
@@ -1468,6 +1557,56 @@ function runFrameworkRegressionFixtures() {
 
   const literalFontSize = '<!-- wp:paragraph {"fontSize":"18px"} --><p></p><!-- /wp:paragraph -->';
   assertFixture('literal fontSize detector (TWEAK-2)', checkTokenizedAttributes(literalFontSize).some((issue) => issue.startsWith('TWEAK-2')));
+
+  // ROLE-1/ROLE-2/ROLE-3 fixtures (content-editor role policy).
+  const goodRolePhp = `<?php
+class Supersonic_Content_Role {
+  const ROLE = 'supersonic_content_editor';
+  public static function capabilities() {
+    return array(
+      'read'                 => true,
+      'upload_files'         => true,
+      'edit_pages'           => true,
+      'edit_others_pages'    => true,
+      'publish_pages'        => true,
+      'edit_published_pages' => true,
+      'edit_posts'           => true,
+      'edit_others_posts'    => true,
+      'publish_posts'        => true,
+      'edit_published_posts' => true,
+    );
+  }
+  public static function add_role() {
+    remove_role(self::ROLE);
+    add_role(self::ROLE, 'Supersonic Content Editor', self::capabilities());
+  }
+  public static function remove_role() {
+    remove_role(self::ROLE);
+  }
+}`;
+  const goodPluginPhp = `<?php
+require_once SUPERSONIC_SITE_CORE_DIR . 'includes/class-supersonic-content-role.php';
+function supersonic_site_core_activate() {
+  Supersonic_Content_Role::add_role();
+}
+register_activation_hook(__FILE__, 'supersonic_site_core_activate');
+function supersonic_site_core_deactivate() {
+  Supersonic_Content_Role::remove_role();
+}
+register_deactivation_hook(__FILE__, 'supersonic_site_core_deactivate');`;
+  assertFixture('content-role clean fixture has no issues', checkContentRolePolicy(goodRolePhp, goodPluginPhp).length === 0);
+
+  const adminRolePhp = goodRolePhp.replace("'read'                 => true,", "'read'                 => true,\n      'manage_options'       => true,");
+  assertFixture('content-role forbidden-cap detector (ROLE-1/ROLE-2)', checkContentRolePolicy(adminRolePhp, goodPluginPhp).some((issue) => issue.startsWith('ROLE-2')) && checkContentRolePolicy(adminRolePhp, goodPluginPhp).some((issue) => issue.startsWith('ROLE-1')));
+
+  const missingCapRolePhp = goodRolePhp.replace("'edit_published_pages' => true,\n", '');
+  assertFixture('content-role missing-cap detector (ROLE-1)', checkContentRolePolicy(missingCapRolePhp, goodPluginPhp).some((issue) => issue.startsWith('ROLE-1')));
+
+  const noResyncRolePhp = goodRolePhp.replace('remove_role(self::ROLE);\n    add_role', 'add_role');
+  assertFixture('content-role remove-then-add re-sync detector (ROLE-1)', checkContentRolePolicy(noResyncRolePhp, goodPluginPhp).some((issue) => issue.includes('remove-then-add')));
+
+  const unwiredPluginPhp = goodPluginPhp.replace('Supersonic_Content_Role::add_role();', '').replace('Supersonic_Content_Role::remove_role();', '');
+  assertFixture('content-role plugin wiring detector (ROLE-3)', checkContentRolePolicy(goodRolePhp, unwiredPluginPhp).some((issue) => issue.startsWith('ROLE-3')));
 }
 
 async function validatePackages() {
@@ -1554,6 +1693,8 @@ await validateJsonFile('data/site-intake.example.json');
 await validateJsonFile('data/site-intake.json');
 await validateJsonFile('data/pattern-certifications.json');
 await validateJsonFile('data/review-finding.schema.json');
+await validateJsonFile('data/media-manifest.schema.json');
+await validateJsonFile('data/media-manifest.example.json');
 await validateVersionMetadata();
 await validatePackageScripts();
 await validateHeaders();

@@ -1,0 +1,6 @@
+[
+  { "path": "/", "url": "https://legacy.example.com/", "status": 200, "title": "Legacy Home" },
+  { "path": "/about-us/", "url": "https://legacy.example.com/about-us/", "status": 200, "title": "About Us" },
+  { "path": "/lost-page/", "url": "https://legacy.example.com/lost-page/", "status": 200, "title": "Lost Page" },
+  { "path": "/broken", "url": "https://legacy.example.com/broken", "status": 404, "title": "Already 404" }
+]

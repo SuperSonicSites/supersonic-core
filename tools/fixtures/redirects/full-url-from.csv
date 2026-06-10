@@ -1,0 +1,2 @@
+from,to,status,notes
+https://legacy.example.com/about-us/,/about,301,full URL leaked into from
