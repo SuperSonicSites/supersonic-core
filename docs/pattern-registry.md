@@ -1,96 +1,93 @@
 # Pattern Registry
 
-This registry tracks Supersonic theme patterns.
+<!-- GENERATED FILE — do not edit by hand. -->
+<!-- Source of truth: data/pattern-certifications.json -->
+<!-- Regenerate with: npm run pattern:registry:generate -->
 
-The machine-readable source of truth is `data/pattern-certifications.json`.
-This Markdown file is the human-readable summary.
+This document is generated from `data/pattern-certifications.json`. Edit that file (via the certification workflow) and regenerate; manual edits here will fail CI.
 
-Patterns are added as source first. A pattern is not approved until it has passed staging editor review plus desktop, tablet, and mobile screenshot review for that specific pattern or section.
+## Summary
 
-Run:
+- Total patterns: 28
+- approved: 28
 
-```text
-npm run pattern:registry:check
-```
+## Headers
 
-The registry check confirms every pattern file has a registry entry, every entry
-points to an existing source file, evidence paths exist when recorded, and local
-documentation links resolve.
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/header-mega` ([source](../wp-content/themes/supersonic-site-theme/patterns/header-mega.php)) | Header: Mega | approved | 0.1.29 | 2026-06-02 | 0 |
+| `supersonic-site-theme/header-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/header-simple.php)) | Header: Simple | approved | 0.1.25 | 2026-06-01 | 0 |
 
-## 0.1.5 Source-Ready Pattern Set
+## Footers
 
-| Pattern | Slug | Category | Status | Notes |
-| --- | --- | --- | --- | --- |
-| Header: Simple | `supersonic-site-theme/header-simple` | Supersonic Headers | Source ready, needs staging QA | Default modular header pattern mounted by the header template part. |
-| Header: Mega | `supersonic-site-theme/header-mega` | Supersonic Headers | Approved in theme v0.1.29 | Multi-column link mega menu; native navigation blocks + scoped CSS, collapses to the hamburger overlay at the 1024px tablet boundary. |
-| Footer: Simple | `supersonic-site-theme/footer-simple` | Supersonic Footers | Source ready, needs staging QA | Default modular footer pattern mounted by the footer template part. |
-| Hero: Simple | `supersonic-site-theme/hero-simple` | Supersonic Heroes | Source ready, needs staging QA | Left-aligned page hero with editable H1. |
-| Hero: Centered | `supersonic-site-theme/hero-centered` | Supersonic Heroes | Source ready, needs staging QA | Centered page hero with editable H1. |
-| Hero: Fullscreen Image | `supersonic-site-theme/hero-fullscreen-image` | Supersonic Heroes | Source ready, needs staging QA | Fullscreen image hero with editable H1 and overlay controls. |
-| Section: Page Intro | `supersonic-site-theme/section-page-intro` | Supersonic Intros | Source ready, needs staging QA | Compact page intro with one editable H1. |
-| Section: Text | `supersonic-site-theme/section-text` | Supersonic Intros | Source ready, needs staging QA | Narrow editorial text section. |
-| Section: Text + Image | `supersonic-site-theme/section-text-image` | Supersonic Media | Approved in theme v0.1.31 | Two-column copy, CTA buttons, and visual placeholder; image stacks first on mobile. |
-| Section: Image + Text | `supersonic-site-theme/section-image-text` | Supersonic Media | Approved in theme v0.1.31 | Reverse two-column visual and copy section with CTA buttons; image stacks first on mobile. |
-| Section: Media Feature | `supersonic-site-theme/section-media-feature` | Supersonic Media | Source ready, needs staging QA | Large media placeholder with supporting text. |
-| Section: Feature Grid | `supersonic-site-theme/section-feature-grid` | Supersonic Cards | Source ready, needs staging QA | Three benefit cards with approved shadow preset. |
-| Section: Service Cards | `supersonic-site-theme/section-service-cards` | Supersonic Cards | Source ready, needs staging QA | Three linked service cards. |
-| Section: Card Row | `supersonic-site-theme/section-card-row` | Supersonic Cards | Source ready, needs staging QA | Compact row of short cards. |
-| Section: Icon List | `supersonic-site-theme/section-icon-list` | Supersonic Cards | Source ready, needs staging QA | Numbered benefit list using editable text markers. |
-| Section: Testimonial | `supersonic-site-theme/section-testimonial` | Supersonic Trust | Source ready, needs staging QA | Single prominent quote section. |
-| Section: Testimonial Grid | `supersonic-site-theme/section-testimonial-grid` | Supersonic Trust | Source ready, needs staging QA | Three-card social proof grid. |
-| Section: Logo Row | `supersonic-site-theme/section-logo-row` | Supersonic Trust | Source ready, needs staging QA | Editable logo/partner proof row placeholders. |
-| Section: Stat Band | `supersonic-site-theme/section-stat-band` | Supersonic Trust | Source ready, needs staging QA | Three-number proof band. |
-| CTA: Band | `supersonic-site-theme/cta-band` | Supersonic Conversion | Source ready, needs staging QA | Full-width centered CTA band. |
-| CTA: Split | `supersonic-site-theme/cta-split` | Supersonic Conversion | Source ready, needs staging QA | Split CTA with primary and secondary actions. |
-| Contact: Simple | `supersonic-site-theme/contact-simple` | Supersonic Conversion | Source ready, needs staging QA | Email, phone, and address section. |
-| Contact: Map + Info | `supersonic-site-theme/contact-map-info` | Supersonic Conversion | Source ready, needs staging QA | Map placeholder plus address, phone, email, and directions CTA. |
-| Contact: Form Mount | `supersonic-site-theme/contact-form-simple` | Supersonic Conversion | Source ready, needs staging QA | Native shortcode mount for an approved project form. |
-| Section: Process Steps | `supersonic-site-theme/section-process-steps` | Supersonic Info | Source ready, needs staging QA | Three-step process section. |
-| Section: FAQ by Rank Math | `supersonic-site-theme/section-faq-rankmath` | Supersonic Info | Source ready, needs staging QA | Uses the approved `rank-math/faq-block`; theme does not generate duplicate schema. |
-| Section: Comparison | `supersonic-site-theme/section-comparison` | Supersonic Info | Source ready, needs staging QA | Two-column comparison section. |
-| Section: Pricing Cards | `supersonic-site-theme/section-pricing-cards` | Supersonic Info | Source ready, needs staging QA | Three editable package/pricing cards. |
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/footer-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/footer-simple.php)) | Footer: Simple | approved | 0.1.25 | 2026-06-01 | 0 |
 
-## Category Map
+## Heroes
 
-| Category | Intended Use |
-| --- | --- |
-| Supersonic Headers | Header template-part patterns only. |
-| Supersonic Footers | Footer template-part patterns only. |
-| Supersonic Heroes | Page hero and above-the-fold starter sections. |
-| Supersonic Intros | Page intros, text openings, and editorial sections. |
-| Supersonic Media | Image, media, and visual proof sections. |
-| Supersonic Cards | Reusable cards, feature grids, service summaries, and benefit lists. |
-| Supersonic Trust | Testimonials, proof rows, logos, and stats. |
-| Supersonic Conversion | CTA, contact, and form-mount sections. |
-| Supersonic Info | FAQ, process, comparison, and pricing-style information sections. |
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/hero-centered` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-centered.php)) | Hero: Centered | approved | 0.1.25 | 2026-06-01 | 4 |
+| `supersonic-site-theme/hero-fullscreen-image` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-fullscreen-image.php)) | Hero: Fullscreen Image | approved | 0.1.26 | 2026-06-02 | 3 |
+| `supersonic-site-theme/hero-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/hero-simple.php)) | Hero: Simple | approved | 0.1.25 | 2026-06-01 | 4 |
 
-## Status Definitions
+## Intros
 
-- Source ready: pattern source exists and static validation passes.
-- QA page created: a published `qa-pattern-*` page exists on the staging host for live review.
-- Screenshots captured: desktop, tablet, and mobile screenshots exist and are linked in the registry.
-- Approved: pattern passed editor check and desktop, tablet, mobile screenshots.
-- Needs revision: pattern failed a QA check and needs a focused fix.
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/section-page-intro` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-page-intro.php)) | Section: Page Intro | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/section-text` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-text.php)) | Section: Text | approved | 0.1.25 | 2026-06-01 | 2 |
 
-## Pattern Rules
+## Media
 
-- Use native WordPress blocks first.
-- Use theme design tokens for color, spacing, typography, border radius, and shadows.
-- Avoid Custom HTML blocks.
-- Avoid arbitrary visual values when a token exists.
-- Do not add section-level left/right padding; horizontal rhythm comes from the theme's 5% root gutter and 1440px max width.
-- Card interiors may use tokenized internal padding.
-- Full page layouts must include exactly one editable H1.
-- Component and section patterns should use H2/H3 unless the pattern is explicitly a page intro or page hero.
-- Header and footer template parts should mount canonical patterns.
-- Header navigation CSS must stay scoped to `.supersonic-site-header`.
-- Shadows must use approved theme presets.
-- FAQ schema must be handled by Rank Math, not by theme-side JSON-LD.
-- New visual patterns, template parts, and blocks should be reviewed on a published staging-only QA page.
-- QA pages must live only on `staging.*` hosts and must never be migrated to production.
-- QA pages may be cleaned up after approval or retained on staging as the pattern lab reference.
-- Screenshot review each pattern section before approval.
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/section-image-text` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-image-text.php)) | Section: Image + Text | approved | 0.1.31 | 2026-06-02 | 3 |
+| `supersonic-site-theme/section-media-feature` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-media-feature.php)) | Section: Media Feature | approved | 0.1.25 | 2026-06-01 | 1 |
+| `supersonic-site-theme/section-text-image` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-text-image.php)) | Section: Text + Image | approved | 0.1.31 | 2026-06-02 | 3 |
 
-## Certification Workflow
+## Cards
 
-Use `docs/workflows/theme-pattern-certification.md` before marking a pattern approved.
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/section-card-row` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-card-row.php)) | Section: Card Row | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/section-feature-grid` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-feature-grid.php)) | Section: Feature Grid | approved | 0.1.25 | 2026-06-01 | 3 |
+| `supersonic-site-theme/section-icon-list` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-icon-list.php)) | Section: Icon List | approved | 0.1.25 | 2026-06-01 | 1 |
+| `supersonic-site-theme/section-service-cards` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-service-cards.php)) | Section: Service Cards | approved | 0.1.25 | 2026-06-01 | 3 |
+
+## Trust
+
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/section-logo-row` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-logo-row.php)) | Section: Logo Row | approved | 0.1.25 | 2026-06-01 | 0 |
+| `supersonic-site-theme/section-stat-band` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-stat-band.php)) | Section: Stat Band | approved | 0.1.25 | 2026-06-01 | 0 |
+| `supersonic-site-theme/section-testimonial` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-testimonial.php)) | Section: Testimonial | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/section-testimonial-grid` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-testimonial-grid.php)) | Section: Testimonial Grid | approved | 0.1.25 | 2026-06-01 | 2 |
+
+## Conversion
+
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/contact-form-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/contact-form-simple.php)) | Contact: Form Mount | approved | 0.1.25 | 2026-06-01 | 1 |
+| `supersonic-site-theme/contact-map-info` ([source](../wp-content/themes/supersonic-site-theme/patterns/contact-map-info.php)) | Contact: Map + Info | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/contact-simple` ([source](../wp-content/themes/supersonic-site-theme/patterns/contact-simple.php)) | Contact: Simple | approved | 0.1.25 | 2026-06-01 | 1 |
+| `supersonic-site-theme/cta-band` ([source](../wp-content/themes/supersonic-site-theme/patterns/cta-band.php)) | CTA: Band | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/cta-split` ([source](../wp-content/themes/supersonic-site-theme/patterns/cta-split.php)) | CTA: Split | approved | 0.1.25 | 2026-06-01 | 3 |
+
+## Info
+
+| Pattern | Title | Status | Theme version | Last reviewed | Copy slots |
+| --- | --- | --- | --- | --- | --- |
+| `supersonic-site-theme/section-comparison` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-comparison.php)) | Section: Comparison | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/section-faq-rankmath` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-faq-rankmath.php)) | Section: FAQ by Rank Math | approved | 0.1.25 | 2026-06-01 | 2 |
+| `supersonic-site-theme/section-pricing-cards` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-pricing-cards.php)) | Section: Pricing Cards | approved | 0.1.25 | 2026-06-01 | 4 |
+| `supersonic-site-theme/section-process-steps` ([source](../wp-content/themes/supersonic-site-theme/patterns/section-process-steps.php)) | Section: Process Steps | approved | 0.1.25 | 2026-06-01 | 3 |
+
+## Lifecycle states
+
+- `source-ready` — pattern file exists in the theme and passes static validation.
+- `qa-page-created` — a temporary staging QA page exists for visual review.
+- `screenshots-captured` — desktop/tablet/mobile screenshots captured for review.
+- `approved` — certified at the listed theme version; safe to compose into layouts.
+- `needs-revision` — review found issues; do not compose until re-certified.

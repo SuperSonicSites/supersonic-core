@@ -52,6 +52,9 @@ jobs:
       - name: Validate pattern registry
         run: npm run pattern:registry:check
 
+      - name: Pattern registry doc freshness
+        run: npm run pattern:registry:doc-check
+
       - name: Validate SEO briefs
         run: npm run seo:briefs:check
 

@@ -56,3 +56,7 @@ _tmp*.json
 # Claude Code local overrides (personal, not shared)
 .claude/settings.local.json
 
+
+# Render/QA artifacts (baselines are committed; renders and diffs are CI artifacts)
+screenshots/render/
+screenshots/diff/
