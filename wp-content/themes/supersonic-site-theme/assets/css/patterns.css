@@ -71,6 +71,50 @@
 	color: currentColor;
 }
 
+/*
+ * Site chrome exception: the header CTA keeps the brand accent even when the
+ * header bar is painted dark. The on-dark inversion above is a content-band
+ * contract; the header is navigation chrome with its own brand-color promise.
+ */
+.supersonic-site-header .wp-block-button:not(.is-style-outline) .wp-block-button__link:not(.has-background) {
+	background-color: var(--wp--preset--color--accent);
+	color: var(--wp--preset--color--accent-contrast);
+}
+
+/* Header utility links (e.g. the phone number) read as labels, not body links. */
+.supersonic-site-header p a {
+	text-decoration: none;
+}
+
+/* Ornamental icon divider: two short centered rules flanking a small glyph. */
+.supersonic-divider-icon .supersonic-divider-rule {
+	width: 120px;
+	margin: 0;
+}
+
+/*
+ * Content-link polish: inline links use a hairline underline with breathing
+ * room instead of the browser default, so card and prose links read as
+ * crafted rather than browser-styled. Buttons are unaffected.
+ */
+.wp-block-group p a:not(.wp-block-button__link) {
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+}
+
+/*
+ * Responsive crop contract: native blocks offer no per-breakpoint aspect
+ * ratio, so pattern images that declare a desktop crop collapse to a uniform
+ * 3/2 crop when columns stack on small screens. Marker class (or cropped
+ * gallery membership) opts an image in; avatars and logos stay untouched.
+ */
+@media (max-width: 599px) {
+	figure.supersonic-pattern-image > img,
+	.wp-block-gallery.is-cropped .wp-block-image img {
+		aspect-ratio: 3 / 2 !important;
+	}
+}
+
 .supersonic-brand-lockup {
 	align-items: center;
 	display: flex;

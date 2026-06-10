@@ -43,6 +43,9 @@ yarn-error.log*
 screenshots/tmp/
 tools/tmp/
 
+# Local scratch workspace (e2e test runs, battery-test site clones)
+tmp/
+
 # Agent/workflow scratch (discovery dumps, temp file lists)
 .claude/discovery.json
 __files_list.txt

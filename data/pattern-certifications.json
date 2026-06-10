@@ -191,7 +191,7 @@
       },
       "copy_slots": [
         { "id": "eyebrow", "role": "label", "max_chars": 32 },
-        { "id": "body", "role": "body", "max_chars": 240 },
+        { "id": "body", "role": "body", "max_chars": 360, "repeatable": true },
         { "id": "cta", "role": "cta", "max_chars": 32 }
       ],
       "knownIssues": [],
@@ -214,7 +214,7 @@
       },
       "copy_slots": [
         { "id": "eyebrow", "role": "label", "max_chars": 32 },
-        { "id": "body", "role": "body", "max_chars": 240 },
+        { "id": "body", "role": "body", "max_chars": 360, "repeatable": true },
         { "id": "cta", "role": "cta", "max_chars": 32 }
       ],
       "knownIssues": [],
@@ -611,6 +611,151 @@
       ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
+    },
+    {
+      "slug": "supersonic-site-theme/topbar-utility",
+      "title": "Top Bar: Utility",
+      "category": "supersonic-headers",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/topbar-utility.php",
+      "qaPageSlug": "qa-pattern-topbar-utility",
+      "status": "source-ready",
+      "contentBearing": false,
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/header-dark-cta",
+      "title": "Header: Dark CTA",
+      "category": "supersonic-headers",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/header-dark-cta.php",
+      "qaPageSlug": "qa-pattern-header-dark-cta",
+      "status": "source-ready",
+      "contentBearing": false,
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/header-light-cta",
+      "title": "Header: Light CTA",
+      "category": "supersonic-headers",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/header-light-cta.php",
+      "qaPageSlug": "qa-pattern-header-light-cta",
+      "status": "source-ready",
+      "contentBearing": false,
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/hero-split-photo",
+      "title": "Hero: Split Photo",
+      "category": "supersonic-heroes",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/hero-split-photo.php",
+      "qaPageSlug": "qa-pattern-hero-split-photo",
+      "status": "source-ready",
+      "copy_slots": [
+        { "id": "eyebrow", "role": "eyebrow", "max_chars": 40 },
+        { "id": "lede", "role": "body", "max_chars": 240 },
+        { "id": "cta-primary", "role": "cta", "max_chars": 24 },
+        { "id": "cta-secondary", "role": "cta", "max_chars": 24 }
+      ],
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/hero-cover-gradient",
+      "title": "Hero: Cover Gradient",
+      "category": "supersonic-heroes",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/hero-cover-gradient.php",
+      "qaPageSlug": "qa-pattern-hero-cover-gradient",
+      "status": "source-ready",
+      "copy_slots": [
+        { "id": "eyebrow", "role": "eyebrow", "max_chars": 40 },
+        { "id": "lede", "role": "body", "max_chars": 240 },
+        { "id": "cta-primary", "role": "cta", "max_chars": 24 },
+        { "id": "cta-secondary", "role": "cta", "max_chars": 24 }
+      ],
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/divider-icon",
+      "title": "Divider: Icon",
+      "category": "supersonic-info",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/divider-icon.php",
+      "qaPageSlug": "qa-pattern-divider-icon",
+      "status": "source-ready",
+      "contentBearing": false,
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/section-prose",
+      "title": "Section: Prose",
+      "category": "supersonic-intros",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-prose.php",
+      "qaPageSlug": "qa-pattern-section-prose",
+      "status": "source-ready",
+      "copy_slots": [
+        { "id": "prose-body", "role": "body", "max_chars": 2600, "repeatable": true }
+      ],
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/section-service-cards-image",
+      "title": "Section: Service Cards (Image Top)",
+      "category": "supersonic-cards",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-service-cards-image.php",
+      "qaPageSlug": "qa-pattern-section-service-cards-image",
+      "status": "source-ready",
+      "copy_slots": [
+        { "id": "card-title", "role": "card-title", "max_chars": 40, "repeatable": true },
+        { "id": "card-body", "role": "card-body", "max_chars": 170, "repeatable": true, "sibling_group": "service-cards" },
+        { "id": "card-link", "role": "cta", "max_chars": 20, "repeatable": true }
+      ],
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/section-gallery-strip",
+      "title": "Section: Gallery Strip",
+      "category": "supersonic-media",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-gallery-strip.php",
+      "qaPageSlug": "qa-pattern-section-gallery-strip",
+      "status": "source-ready",
+      "contentBearing": false,
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/section-reviews-google",
+      "title": "Section: Google Reviews",
+      "category": "supersonic-trust",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-reviews-google.php",
+      "qaPageSlug": "qa-pattern-section-reviews-google",
+      "status": "source-ready",
+      "copy_slots": [
+        { "id": "section-intro", "role": "body", "max_chars": 220 },
+        { "id": "reviews-cta", "role": "cta", "max_chars": 32 }
+      ],
+      "knownIssues": [
+        "Review quotes must hold verbatim customer reviews per site; the copywriter must not author or rewrite them.",
+        "Star paragraphs use the rating color token, which core theme.json does not define yet; adding it is a global design-token change that needs approval before certification."
+      ]
+    },
+    {
+      "slug": "supersonic-site-theme/cta-split-band",
+      "title": "CTA: Split Band",
+      "category": "supersonic-conversion",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/cta-split-band.php",
+      "qaPageSlug": "qa-pattern-cta-split-band",
+      "status": "source-ready",
+      "copy_slots": [
+        { "id": "band-body", "role": "body", "max_chars": 220 },
+        { "id": "band-cta", "role": "cta", "max_chars": 24 }
+      ],
+      "knownIssues": []
+    },
+    {
+      "slug": "supersonic-site-theme/footer-columns-dark",
+      "title": "Footer: Columns Dark",
+      "category": "supersonic-footers",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/footer-columns-dark.php",
+      "qaPageSlug": "qa-pattern-footer-columns-dark",
+      "status": "source-ready",
+      "contentBearing": false,
+      "knownIssues": []
     }
   ]
 }

@@ -95,10 +95,20 @@ async function validateDesignTokens() {
     const requiredShadows = ['soft', 'medium', 'strong'];
     const requiredGradients = ['surface-rise', 'accent-veil', 'muted-soft'];
 
-    if (parsed.settings?.layout?.contentSize === '1440px' && parsed.settings?.layout?.wideSize === '1440px') {
-      pass('theme layout defaults to 1440px content and wide width');
+    // Sites set their own container width (migrations must match the source
+    // site), so validate internal consistency instead of one magic width: the
+    // px-valued contentSize/wideSize must agree with the custom layout token.
+    const contentSize = parsed.settings?.layout?.contentSize;
+    const wideSize = parsed.settings?.layout?.wideSize;
+    const maxWidthToken = parsed.settings?.custom?.layout?.maxWidth;
+    if (
+      /^\d+px$/.test(String(contentSize)) &&
+      contentSize === wideSize &&
+      maxWidthToken === contentSize
+    ) {
+      pass(`theme layout uses one consistent container width (${contentSize}) across contentSize, wideSize, and custom.layout.maxWidth`);
     } else {
-      fail('theme layout should default contentSize and wideSize to 1440px');
+      fail('theme layout contentSize, wideSize, and custom.layout.maxWidth must be one consistent px width');
     }
 
     if (
@@ -154,6 +164,20 @@ async function validateDesignTokens() {
       pass('custom font sizes are disabled');
     } else {
       fail('custom font sizes should be disabled');
+    }
+
+    // Core's default presets share slugs with the theme scale (e.g. core
+    // "Large" = 36px vs a theme "large"); leaving them enabled silently
+    // overrides theme tokens at render time. Both default sets must be off.
+    if (parsed.settings?.typography?.defaultFontSizes === false) {
+      pass('core default font-size presets are disabled (no slug collisions)');
+    } else {
+      fail('settings.typography.defaultFontSizes must be false; core presets collide with theme token slugs');
+    }
+    if (parsed.settings?.spacing?.defaultSpacingSizes === false) {
+      pass('core default spacing presets are disabled (no slug collisions)');
+    } else {
+      fail('settings.spacing.defaultSpacingSizes must be false; core presets collide with theme token slugs');
     }
 
     if (parsed.settings?.spacing?.customSpacingSize === false) {
@@ -944,16 +968,28 @@ function isInsideIgnoredTextContainer(block) {
   ].includes(ancestor.name));
 }
 
+// Accent-painted label text (eyebrows, kickers, footer column headings) is an
+// intentional, token-bound highlight, not a mask over section text controls.
+// Only the accent palette slug qualifies; arbitrary colors stay banned.
 function isDecorativeAccentText(block) {
-  return block.name === 'core/paragraph' &&
+  return ['core/paragraph', 'core/heading'].includes(block.name) &&
     block.attrs.textColor === 'accent' &&
     ['small', 'large', 'heading-2', 'heading-3'].includes(block.attrs.fontSize ?? '');
+}
+
+// A readable block that paints its own token background (chip, badge, highlight
+// strip) owns a self-contained local surface; its paired local text color is
+// part of that surface contract and stays correct when the section recolors.
+function isSelfOwnedTextSurface(block) {
+  return isReadableTextBlock(block) &&
+    Boolean(block.attrs.backgroundColor || block.attrs.style?.color?.background);
 }
 
 function shouldInheritSectionTextColor(block, sectionGroup) {
   return isReadableTextBlock(block) &&
     !isInsideIgnoredTextContainer(block) &&
     !isDecorativeAccentText(block) &&
+    !isSelfOwnedTextSurface(block) &&
     !hasAncestor(block, (ancestor) => isLocalSurfaceGroup(ancestor, sectionGroup));
 }
 
@@ -1003,6 +1039,19 @@ function hasInnerConstrainedContentGroup(blocks) {
   );
 }
 
+// Split heroes (text column + media column, like a migrated text/image hero)
+// position content through the column structure itself: the full-width section
+// group stays constrained to the theme container and a top-level core/columns
+// row carries the content. That column rail is the approved positioning
+// contract for split heroes.
+function hasApprovedSplitHeroLayout(blocks) {
+  const sectionGroup = blocks.find((block) => block.name === 'core/group' && block.attrs.align === 'full');
+  if (!sectionGroup || sectionGroup.attrs.layout?.type !== 'constrained') {
+    return false;
+  }
+  return blocks.some((block) => block.name === 'core/columns');
+}
+
 async function validateEditorControlContracts() {
   const patternFiles = await collectFiles('wp-content/themes/supersonic-site-theme/patterns', ['.php', '.html']);
   let colorContractViolations = 0;
@@ -1025,6 +1074,8 @@ async function validateEditorControlContracts() {
         fail(`${file} must not add a nested 760px content group that masks section justification`);
       } else if (sectionOwnsRail || hasInnerRail) {
         pass(`${file} has an approved hero content rail for visible positioning`);
+      } else if (hasApprovedSplitHeroLayout(blocks)) {
+        pass(`${file} positions hero content through an approved split-hero column rail`);
       } else {
         fail(`${file} must include an approved hero content rail so positioning is visible`);
       }

@@ -50,6 +50,23 @@ documentation links resolve.
 | Section: Comparison | `supersonic-site-theme/section-comparison` | Supersonic Info | Source ready, needs staging QA | Two-column comparison section. |
 | Section: Pricing Cards | `supersonic-site-theme/section-pricing-cards` | Supersonic Info | Source ready, needs staging QA | Three editable package/pricing cards. |
 
+## 0.2.0 Source-Ready Pattern Set
+
+| Pattern | Slug | Category | Status | Notes |
+| --- | --- | --- | --- | --- |
+| Top Bar: Utility | `supersonic-site-theme/topbar-utility` | Supersonic Headers | Source ready, needs staging QA | Slim dark utility bar above the navbar: email, phone, social icons. |
+| Header: Dark CTA | `supersonic-site-theme/header-dark-cta` | Supersonic Headers | Source ready, needs staging QA | Dark sticky header with phone link and solid Contact button. |
+| Header: Light CTA | `supersonic-site-theme/header-light-cta` | Supersonic Headers | Source ready, needs staging QA | White navbar variant pairing with the utility top bar. |
+| Hero: Split Photo | `supersonic-site-theme/hero-split-photo` | Supersonic Heroes | Source ready, needs staging QA | Kicker chip, H1, lead, two buttons left; photo right. Uses the split-hero column rail. |
+| Hero: Cover Gradient | `supersonic-site-theme/hero-cover-gradient` | Supersonic Heroes | Source ready, needs staging QA | Full-bleed photo hero with base-to-transparent gradient overlay (fade-base-right preset). |
+| Divider: Icon | `supersonic-site-theme/divider-icon` | Supersonic Info | Source ready, needs staging QA | Rule-icon-rule ornament under section headings. |
+| Section: Prose | `supersonic-site-theme/section-prose` | Supersonic Intros | Source ready, needs staging QA | Long-form editorial section on the narrow reading rail; keeps full story content. |
+| Section: Service Cards (Image Top) | `supersonic-site-theme/section-service-cards-image` | Supersonic Cards | Source ready, needs staging QA | Six image-top white cards in two rows with Learn more links. |
+| Section: Gallery Strip | `supersonic-site-theme/section-gallery-strip` | Supersonic Media | Source ready, needs staging QA | Full-bleed six-image strip, two rows of three, zero gap. |
+| Section: Google Reviews | `supersonic-site-theme/section-reviews-google` | Supersonic Trust | Source ready, needs staging QA | Two-by-two light review cards with reviewer name and star rating; reviews stay verbatim. |
+| CTA: Split Band | `supersonic-site-theme/cta-split-band` | Supersonic Conversion | Source ready, needs staging QA | Accent band, heading and copy left, button right. |
+| Footer: Columns Dark | `supersonic-site-theme/footer-columns-dark` | Supersonic Footers | Source ready, needs staging QA | Dark four-column footer with accent headings, hours, contact, and legal strip. |
+
 ## Category Map
 
 | Category | Intended Use |

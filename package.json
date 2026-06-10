@@ -1,6 +1,6 @@
 {
   "name": "supersonic-core",
-  "version": "0.1.37",
+  "version": "0.2.0",
   "private": true,
   "description": "AI-driven single-site WordPress framework source of truth.",
   "type": "module",
@@ -20,6 +20,11 @@
     "rest:qa-page:trash": "node tools/staging-rest.mjs qa-page-trash",
     "rest:dry-run": "node tools/staging-rest.mjs dry-run",
     "screenshot": "node tools/capture-screenshots.mjs",
+    "site:extract": "node tools/extract-site.mjs",
+    "site:harvest": "node tools/harvest-site-images.mjs",
+    "pixel:diff": "node tools/pixel-diff.mjs",
+    "pixel:bands": "node tools/band-profile.mjs",
+    "page:capture": "node tools/capture-page.mjs",
     "certify:staging": "node tools/staging-rest.mjs certify",
     "pattern:registry:check": "node tools/validate-pattern-registry.mjs",
     "seo:briefs:check": "node tools/validate-seo-briefs.mjs",
@@ -32,7 +37,9 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "playwright": "^1.52.0"
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.52.0",
+    "pngjs": "^7.0.0"
   },
   "engines": {
     "node": ">=20"

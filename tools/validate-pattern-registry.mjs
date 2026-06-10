@@ -327,8 +327,11 @@ export async function validatePatternRegistry({ rootDir = defaultRoot } = {}) {
       push(results, 'fail', `${entry.slug} is missing from ${registryDocPath}`);
     }
 
-    if (entry.qaPageUrl && !/^https?:\/\/staging\./i.test(entry.qaPageUrl)) {
-      push(results, 'fail', `${entry.slug} qaPageUrl must point at a staging.* host`);
+    // QA pages live on a protected non-production host: Hostinger staging
+    // (staging.*) or an owner-approved local development runtime (*.local,
+    // localhost, 127.0.0.1). Production hosts stay forbidden.
+    if (entry.qaPageUrl && !/^https?:\/\/(staging\.|localhost(:|\/)|127\.0\.0\.1(:|\/)|[a-z0-9-]+(\.[a-z0-9-]+)*\.local(:|\/))/i.test(entry.qaPageUrl)) {
+      push(results, 'fail', `${entry.slug} qaPageUrl must point at a staging.* host or a local dev host (*.local, localhost)`);
     }
 
     if (entry.reportPath && !(await exists(root, entry.reportPath))) {

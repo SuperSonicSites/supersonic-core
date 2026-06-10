@@ -59,6 +59,11 @@
           "color": "#ffffff",
           "name": "Accent Contrast",
           "slug": "accent-contrast"
+        },
+        {
+          "color": "#f4742c",
+          "name": "Rating",
+          "slug": "rating"
         }
       ],
       "gradients": [
@@ -76,6 +81,11 @@
           "name": "Muted Soft",
           "gradient": "linear-gradient(180deg, #ffffff 0%, #f1f3f5 100%)",
           "slug": "muted-soft"
+        },
+        {
+          "name": "Fade Base Right",
+          "gradient": "linear-gradient(90deg, #ffffff 0%, #ffffff 38%, rgba(255,255,255,0) 72%)",
+          "slug": "fade-base-right"
         }
       ]
     },
@@ -124,6 +134,7 @@
     "spacing": {
       "blockGap": true,
       "customSpacingSize": false,
+      "defaultSpacingSizes": false,
       "margin": true,
       "padding": true,
       "spacingScale": {
@@ -216,6 +227,7 @@
     },
     "typography": {
       "customFontSize": false,
+      "defaultFontSizes": false,
       "dropCap": false,
       "fluid": true,
       "fontSizes": [
