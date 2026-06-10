@@ -12,6 +12,7 @@ import { checkAgainstSchema } from './lib/schema-lite.mjs';
 import { curateRow, buildNewPageSlugs, CURATED_NOTE } from './lib/curation.mjs';
 import { parseRedirectsCsv } from '../lib/redirects.mjs';
 import { toCsv } from '../lib/capture.mjs';
+import { AGENT_STAGES, buildClaudeArgs, parseStreamEvent, stageGateResult } from './lib/agent.mjs';
 
 // --- embedded fixtures ---------------------------------------------------------
 
@@ -210,6 +211,60 @@ export async function runSelfTest() {
   check(
     'curation: slug list merges intake + compositions, dedupes, drops TBD, adds allowlist',
     slugs.includes('/') && slugs.includes('/services') && slugs.includes('/contact') && slugs.includes('/blog') && !slugs.some((slug) => /tbd/i.test(slug)) && slugs.filter((slug) => slug === '/services').length === 1
+  );
+
+  // ===== agent-stage lib ==========================================================
+  const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+  const pkg = JSON.parse(await readFile(path.join(repoRoot, 'package.json'), 'utf8'));
+  check(
+    'agent: every stage gateScript exists in package.json scripts',
+    AGENT_STAGES.length === 5 && AGENT_STAGES.every((stage) => typeof pkg.scripts[stage.gateScript] === 'string')
+  );
+  check(
+    'agent: stages are ordered seo-research -> layout -> copy -> reviews',
+    AGENT_STAGES.map((stage) => stage.id).join(',') === 'seo-research,layout,copy,copy-review,layout-review'
+  );
+
+  const argv = buildClaudeArgs(AGENT_STAGES[0], { model: 'opus' });
+  check(
+    'agent: buildClaudeArgs uses print mode + stream-json + acceptEdits (never bypassPermissions)',
+    argv[0] === '-p' &&
+      argv.includes('--output-format') &&
+      argv[argv.indexOf('--output-format') + 1] === 'stream-json' &&
+      argv.includes('--verbose') &&
+      argv[argv.indexOf('--permission-mode') + 1] === 'acceptEdits' &&
+      argv[argv.indexOf('--model') + 1] === 'opus' &&
+      !argv.some((a) => /bypass|dangerously/i.test(a))
+  );
+  check('agent: buildClaudeArgs omits --model when not given', !buildClaudeArgs(AGENT_STAGES[0]).includes('--model'));
+
+  const assistantEvent = parseStreamEvent(
+    JSON.stringify({ type: 'assistant', message: { content: [{ type: 'text', text: 'Drafting briefs' }, { type: 'tool_use', name: 'Write' }] } })
+  );
+  check('agent: parseStreamEvent extracts assistant text + tool names', assistantEvent?.type === 'assistant' && /Drafting briefs/.test(assistantEvent.text) && /\[tool\] Write/.test(assistantEvent.text));
+  const resultEvent = parseStreamEvent(JSON.stringify({ type: 'result', subtype: 'success', result: 'done' }));
+  check('agent: parseStreamEvent maps success result', resultEvent?.type === 'result' && resultEvent.text === 'done');
+  const errorEvent = parseStreamEvent(JSON.stringify({ type: 'result', subtype: 'error_max_turns', is_error: true }));
+  check('agent: parseStreamEvent maps error result', errorEvent?.type === 'error');
+  check(
+    'agent: parseStreamEvent tolerates malformed/non-JSON/blank lines',
+    parseStreamEvent('{not json') === null && parseStreamEvent('npm WARN something') === null && parseStreamEvent('') === null && parseStreamEvent(null) === null
+  );
+
+  const briefStage = AGENT_STAGES[0];
+  check('agent: gate fail -> stage not ok', stageGateResult(briefStage, 1, { 'data/seo-briefs.json': true }).ok === false);
+  check(
+    'agent: gate pass but artifact missing -> stage not ok (fails closed on empty map)',
+    stageGateResult(briefStage, 0, {}).ok === false && /missing/.test(stageGateResult(briefStage, 0, {}).reason)
+  );
+  check('agent: gate pass + artifact present -> ok', stageGateResult(briefStage, 0, { 'data/seo-briefs.json': true }).ok === true);
+  check('agent: review stage with no artifacts passes on gate alone', stageGateResult(AGENT_STAGES[3], 0, {}).ok === true);
+
+  const agentStageModule = await import('./flows/agent-stage.mjs');
+  const renderStatusModule = await import('./flows/render-status.mjs');
+  check(
+    'agent: flow modules export their run functions (menu wiring smoke)',
+    typeof agentStageModule.agentStageFlow === 'function' && typeof renderStatusModule.renderStatusFlow === 'function'
   );
 
   // --- report --------------------------------------------------------------------

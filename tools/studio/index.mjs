@@ -39,12 +39,16 @@ const { captureFlow } = await import('./flows/capture.mjs');
 const { brandFlow } = await import('./flows/brand.mjs');
 const { redirectsFlow } = await import('./flows/redirects.mjs');
 const { validateFlow } = await import('./flows/validate.mjs');
+const { agentStageFlow } = await import('./flows/agent-stage.mjs');
+const { renderStatusFlow } = await import('./flows/render-status.mjs');
 
 const FLOWS = {
   interview: interviewFlow,
   capture: captureFlow,
   brand: brandFlow,
   redirects: redirectsFlow,
+  agent: agentStageFlow,
+  render: renderStatusFlow,
   validate: validateFlow
 };
 
@@ -73,6 +77,8 @@ while (running) {
       { value: 'capture', label: 'Capture legacy site', hint: 'npm run capture:site -> captured/' },
       { value: 'brand', label: 'Brand review', hint: 'adopt captured palette/fonts/logos into the intake' },
       { value: 'redirects', label: 'Curate redirects', hint: 'disposition legacy URLs; gate: redirects:check' },
+      { value: 'agent', label: 'Run agent stage', hint: 'claude headless: SEO research, layout, copy, reviews (gate-proven)' },
+      { value: 'render', label: 'Render / QA status', hint: 'playground renders, baselines, visual diff' },
       { value: 'validate', label: 'Validate / package', hint: 'run all repo gates, then package' },
       { value: 'exit', label: 'Exit' }
     ]

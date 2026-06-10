@@ -50,6 +50,40 @@ export function runNpm(script, args = [], { cwd } = {}) {
   });
 }
 
+// Spawns `node <scriptPath> [...args]` with the same capture semantics as
+// runNpm(). Used for tools that have no npm script yet (playground render,
+// visual diff invoked with custom flags). Resolves (never rejects).
+export function runNode(scriptPath, args = [], { cwd } = {}) {
+  return new Promise((resolve) => {
+    let child;
+    try {
+      child = spawn(process.execPath, [scriptPath, ...(Array.isArray(args) ? args : []).map(String)], {
+        cwd,
+        env: process.env
+      });
+    } catch (error) {
+      resolve({ code: 1, lines: [`FAIL: could not spawn "node ${scriptPath}": ${error.message}`] });
+      return;
+    }
+    let buffer = '';
+    child.stdout.on('data', (chunk) => {
+      buffer += chunk;
+    });
+    child.stderr.on('data', (chunk) => {
+      buffer += chunk;
+    });
+    child.on('error', (error) => {
+      resolve({ code: 1, lines: [`FAIL: could not spawn "node ${scriptPath}": ${error.message}`] });
+    });
+    child.on('close', (code) => {
+      resolve({
+        code: code === null || code === undefined ? 1 : code,
+        lines: buffer.split(/\r?\n/).filter((line) => line.trim() !== '')
+      });
+    });
+  });
+}
+
 // Pure. Extracts PASS/FAIL/SKIP/NOTE counts and keeps every FAIL line verbatim
 // so rule IDs (RED-4, SEO-LEG-1, ...) survive into the Studio display.
 // Returns { counts: {pass, fail, skip, note}, failLines, label }.
