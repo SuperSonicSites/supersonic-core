@@ -84,3 +84,6 @@ jobs:
 
       - name: Visual diff self-test
         run: npm run visual:diff:self-test
+
+      - name: Design-DNA compiler self-test
+        run: npm run design:compile:self-test

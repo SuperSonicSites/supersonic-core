@@ -148,6 +148,9 @@ function parseArgs(argv) {
     if (arg === '--patterns') opts.patterns = argv[++i].split(',').map((s) => s.trim()).filter(Boolean);
     else if (arg === '--out') opts.out = argv[++i];
     else if (arg === '--port') opts.port = Number(argv[++i]);
+    // Render an alternate theme build (e.g. a design-DNA compiled copy)
+    // without touching the working tree's theme.
+    else if (arg === '--theme-dir') opts.themeDir = argv[++i];
     else if (arg === '--skip-screenshots') opts.screenshots = false;
     else if (arg === '--no-blog-smoke') opts.blogSmoke = false;
     else if (arg === '--keep-running') opts.keepRunning = true;
@@ -160,7 +163,7 @@ function parseArgs(argv) {
   return opts;
 }
 
-async function bootPlayground(blueprint, port) {
+async function bootPlayground(blueprint, port, themeDir) {
   const blueprintPath = path.join(os.tmpdir(), `supersonic-blueprint-${Date.now()}.json`);
   await writeFile(blueprintPath, JSON.stringify(blueprint, null, 2));
   // Use the locally installed @wp-playground/cli bin explicitly: `npx
@@ -170,7 +173,7 @@ async function bootPlayground(blueprint, port) {
     'server',
     `--port=${port}`,
     `--blueprint=${blueprintPath}`,
-    `--mount=${path.join(ROOT, THEME_DIR)}:/wordpress/wp-content/themes/supersonic-site-theme`,
+    `--mount=${themeDir}:/wordpress/wp-content/themes/supersonic-site-theme`,
     `--mount=${path.join(ROOT, PLUGIN_DIR)}:/wordpress/wp-content/plugins/supersonic-site-core`
   ];
   const child = spawn(cliBin, cliArgs, { cwd: ROOT, env: process.env });
@@ -277,7 +280,8 @@ async function run(opts) {
   }
 
   console.log(`Booting WordPress Playground with ${slugs.length} pattern page(s)...`);
-  const boot = await bootPlayground(buildBlueprint(slugs), opts.port);
+  const themeDir = opts.themeDir ? path.resolve(opts.themeDir) : path.join(ROOT, THEME_DIR);
+  const boot = await bootPlayground(buildBlueprint(slugs), opts.port, themeDir);
   const checks = [];
 
   if (boot.ok) {

@@ -27,6 +27,7 @@
       "Bash(npm run redirects:export:self-test)",
       "Bash(npm run studio:self-test)",
       "Bash(npm run capture:self-test)",
+      "Bash(npm run visual:diff)",
       "Bash(npm run visual:diff:self-test)",
       "Bash(npm run render:self-test)",
       "Bash(node tools/validate-framework.mjs)",
