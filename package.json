@@ -40,6 +40,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
+    "@clack/prompts": "^1.5.1",
+    "picocolors": "^1.1.1",
     "playwright": "^1.52.0"
   },
   "engines": {
