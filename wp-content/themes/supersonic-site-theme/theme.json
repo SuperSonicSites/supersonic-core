@@ -31,42 +31,42 @@
 					"slug": "contrast"
 				},
 				{
-					"color": "#4b5563",
+					"color": "#4f4f55",
 					"name": "Contrast Subtle",
 					"slug": "contrast-subtle"
 				},
 				{
-					"color": "#f7f8fa",
+					"color": "#f7f7f8",
 					"name": "Surface",
 					"slug": "surface"
 				},
 				{
-					"color": "#f1f3f5",
+					"color": "#f1f1f3",
 					"name": "Muted",
 					"slug": "muted"
 				},
 				{
-					"color": "#d9dde3",
+					"color": "#dcdcdf",
 					"name": "Border",
 					"slug": "border"
 				},
 				{
-					"color": "#1a5fd0",
+					"color": "#1a1a1a",
 					"name": "Accent",
 					"slug": "accent"
 				},
 				{
-					"color": "#1a5fd0",
+					"color": "#1a1a1a",
 					"name": "Accent Ink",
 					"slug": "accent-ink"
 				},
 				{
-					"color": "#174ea6",
+					"color": "#0d0d0d",
 					"name": "Accent Hover",
 					"slug": "accent-hover"
 				},
 				{
-					"color": "#123c85",
+					"color": "#000000",
 					"name": "Accent Strong",
 					"slug": "accent-strong"
 				},
