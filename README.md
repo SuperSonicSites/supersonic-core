@@ -121,6 +121,8 @@ npm run pattern:registry:generate   Regenerate docs/pattern-registry.md from the
 npm run design:compile              Compile brand intake colors/fonts into WCAG-gated theme tokens (dry-run; --write to apply, --personality <slug> for art direction)
 npm run seo:meta:export             Export per-page SEO titles/meta/keywords from the briefs to a Rank Math CSV
 npm run e2e:pipeline                Stress-test the full pipeline A-to-Z on mock engagements (synthetic legacy sites + negative gate suite)
+npm run image:curate                Rank captured legacy images into a scored asset inventory (logo/photo/icon, hero-friendliness)
+npm run image:check                 Fail-closed image-plan gate: every composed image slot needs a real asset + human alt text
 npm run copy:check                  Validate the copy deck (voice rules, length caps, pattern budgets)
 npm run compose:check               Validate page compositions against the layout standard
 ```
