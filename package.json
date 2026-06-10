@@ -29,6 +29,8 @@
     "test:updater-parser": "php tools/test-theme-updater-parser.php",
     "version:check": "node tools/bump-version.mjs --check",
     "version:bump": "node tools/bump-version.mjs",
+    "studio": "node tools/studio/index.mjs",
+    "studio:self-test": "node tools/studio/index.mjs --self-test",
     "capture:site": "node tools/capture-site.mjs",
     "capture:self-test": "node tools/capture-site.mjs --self-test",
     "redirects:check": "node tools/validate-redirects.mjs",
