@@ -3,7 +3,11 @@
   "site": {
     "niche": "Residential plumbing services",
     "geography": "Dallas, Texas, United States",
-    "competitors": ["baker-brothers.com", "rsandrews.com", "benjaminfranklinplumbing.com"],
+    "competitors": [
+      "baker-brothers.com",
+      "rsandrews.com",
+      "benjaminfranklinplumbing.com"
+    ],
     "dataSource": "Ubersuggest MCP",
     "notes": "Worked example only. Replace with real Ubersuggest data per cloned site. Volume/SD values are illustrative."
   },
@@ -19,7 +23,11 @@
       "internal_links",
       "schema"
     ],
-    "writerEditable": ["section body copy", "CTA microcopy", "talking_points prose"],
+    "writerEditable": [
+      "section body copy",
+      "CTA microcopy",
+      "talking_points prose"
+    ],
     "structureBy": "layout-architect",
     "schemaEmittedBy": "plugin / Rank Math"
   },
@@ -37,40 +45,80 @@
         "source": "Ubersuggest MCP keyword_overview"
       },
       "secondary_keywords": [
-        { "term": "plumber dallas tx", "volume": 1900, "seo_difficulty": 38 },
-        { "term": "24 hour plumber dallas", "volume": 720, "seo_difficulty": 29 }
+        {
+          "term": "plumber dallas tx",
+          "volume": 1900,
+          "seo_difficulty": 38
+        },
+        {
+          "term": "24 hour plumber dallas",
+          "volume": 720,
+          "seo_difficulty": 29
+        }
       ],
-      "lsi_terms": ["licensed plumber", "same-day service", "water heater repair", "burst pipe"],
+      "lsi_terms": [
+        "licensed plumber",
+        "same-day service",
+        "water heater repair",
+        "burst pipe"
+      ],
       "seo_title": "Emergency Plumber in Dallas, TX | 24/7 Service",
       "meta_description": "Licensed Dallas plumbers on call 24/7 for burst pipes, leaks, and water heaters. Same-day service and upfront pricing. Call now for fast help.",
-      "target_word_count": 1200,
+      "target_word_count": 160,
       "outline": {
         "h1": "Dallas's 24/7 Emergency Plumbers",
         "sections": [
           {
             "h2": "Plumbing Help When You Need It Most",
-            "talking_points": ["24/7 availability", "average response time"],
-            "lsi_focus": ["same-day service"]
+            "talking_points": [
+              "24/7 availability",
+              "average response time"
+            ],
+            "lsi_focus": [
+              "same-day service"
+            ]
           },
           {
             "h2": "Our Plumbing Services",
-            "h3": ["Drain Cleaning", "Water Heater Repair", "Leak Detection"],
-            "talking_points": ["link each service to its detail page"]
+            "h3": [
+              "Drain Cleaning",
+              "Water Heater Repair",
+              "Leak Detection"
+            ],
+            "talking_points": [
+              "link each service to its detail page"
+            ]
           },
           {
             "h2": "Why Dallas Homeowners Trust Us",
-            "talking_points": ["licensed and insured", "upfront pricing"],
-            "lsi_focus": ["licensed plumber"]
+            "talking_points": [
+              "licensed and insured",
+              "upfront pricing"
+            ],
+            "lsi_focus": [
+              "licensed plumber"
+            ]
           }
         ]
       },
       "internal_links": [
-        { "target_slug": "/drain-cleaning", "anchor_text": "professional drain cleaning", "rationale": "hub -> service spoke" },
-        { "target_slug": "/why-drains-clog", "anchor_text": "why drains clog", "rationale": "hub -> supporting article" }
+        {
+          "target_slug": "/drain-cleaning",
+          "anchor_text": "professional drain cleaning",
+          "rationale": "hub -> service spoke"
+        },
+        {
+          "target_slug": "/why-drains-clog",
+          "anchor_text": "why drains clog",
+          "rationale": "hub -> supporting article"
+        }
       ],
       "schema": {
         "type": "Plumber",
-        "additional_types": ["WebSite", "WebPage"],
+        "additional_types": [
+          "WebSite",
+          "WebPage"
+        ],
         "required_fields": {
           "name": "",
           "areaServed": "Dallas, TX",
@@ -82,7 +130,11 @@
         "notes": "Plumber is the most specific LocalBusiness subtype; keep NAP consistent (SD-2)."
       },
       "competitor_refs": [
-        { "url": "https://www.baker-brothers.com/", "domain": "baker-brothers.com", "gap": "no clear 24/7 emergency CTA above the fold" }
+        {
+          "url": "https://www.baker-brothers.com/",
+          "domain": "baker-brothers.com",
+          "gap": "no clear 24/7 emergency CTA above the fold"
+        }
       ]
     },
     {
@@ -98,40 +150,80 @@
         "source": "Ubersuggest MCP keyword_overview"
       },
       "secondary_keywords": [
-        { "term": "clogged drain repair", "volume": 590, "seo_difficulty": 24 },
-        { "term": "hydro jetting dallas", "volume": 210, "seo_difficulty": 19 }
+        {
+          "term": "clogged drain repair",
+          "volume": 590,
+          "seo_difficulty": 24
+        },
+        {
+          "term": "hydro jetting dallas",
+          "volume": 210,
+          "seo_difficulty": 19
+        }
       ],
-      "lsi_terms": ["hydro jetting", "rooter service", "sewer line", "drain snake"],
+      "lsi_terms": [
+        "hydro jetting",
+        "rooter service",
+        "sewer line",
+        "drain snake"
+      ],
       "seo_title": "Drain Cleaning in Dallas, TX | Clogs Cleared Fast",
       "meta_description": "Slow or clogged drains? Our Dallas plumbers clear blockages with snaking and hydro jetting. Upfront pricing and same-day appointments. Book today.",
-      "target_word_count": 1000,
+      "target_word_count": 180,
       "outline": {
         "h1": "Professional Drain Cleaning in Dallas",
         "sections": [
           {
             "h2": "Signs You Need Drain Cleaning",
-            "talking_points": ["slow drains", "gurgling", "odors"],
-            "lsi_focus": ["sewer line"]
+            "talking_points": [
+              "slow drains",
+              "gurgling",
+              "odors"
+            ],
+            "lsi_focus": [
+              "sewer line"
+            ]
           },
           {
             "h2": "How We Clear Your Drains",
-            "h3": ["Drain Snaking", "Hydro Jetting"],
-            "talking_points": ["when each method is used"],
-            "lsi_focus": ["hydro jetting", "drain snake"]
+            "h3": [
+              "Drain Snaking",
+              "Hydro Jetting"
+            ],
+            "talking_points": [
+              "when each method is used"
+            ],
+            "lsi_focus": [
+              "hydro jetting",
+              "drain snake"
+            ]
           },
           {
             "h2": "Upfront, Honest Pricing",
-            "talking_points": ["no surprise fees"]
+            "talking_points": [
+              "no surprise fees"
+            ]
           }
         ]
       },
       "internal_links": [
-        { "target_slug": "/", "anchor_text": "emergency plumbing services", "rationale": "spoke -> hub" },
-        { "target_slug": "/why-drains-clog", "anchor_text": "what causes recurring clogs", "rationale": "service -> supporting article" }
+        {
+          "target_slug": "/",
+          "anchor_text": "emergency plumbing services",
+          "rationale": "spoke -> hub"
+        },
+        {
+          "target_slug": "/why-drains-clog",
+          "anchor_text": "what causes recurring clogs",
+          "rationale": "service -> supporting article"
+        }
       ],
       "schema": {
         "type": "Service",
-        "additional_types": ["WebPage", "BreadcrumbList"],
+        "additional_types": [
+          "WebPage",
+          "BreadcrumbList"
+        ],
         "required_fields": {
           "serviceType": "Drain cleaning",
           "provider": "",
@@ -141,8 +233,13 @@
         "notes": "Service + provider + areaServed; breadcrumb Home > Drain Cleaning."
       },
       "legacy": {
-        "sourceUrls": ["/services/drain-cleaning.html"],
-        "preservedKeywords": ["drain cleaning dallas", "hydro jetting dallas"],
+        "sourceUrls": [
+          "/services/drain-cleaning.html"
+        ],
+        "preservedKeywords": [
+          "drain cleaning dallas",
+          "hydro jetting dallas"
+        ],
         "rankingsNotes": "Worked example (redesign builds only): legacy page ranked top 10 for drain cleaning dallas per capture + client analytics; 301 it to /drain-cleaning in data/redirects.csv and keep both keywords in the H1/H2 outline."
       }
     },
@@ -159,28 +256,70 @@
         "source": "Ubersuggest MCP keyword_overview"
       },
       "secondary_keywords": [
-        { "term": "common causes of clogged drains", "volume": 480, "seo_difficulty": 15 }
+        {
+          "term": "common causes of clogged drains",
+          "volume": 480,
+          "seo_difficulty": 15
+        }
       ],
-      "lsi_terms": ["grease buildup", "hair clog", "tree roots", "foreign objects"],
+      "lsi_terms": [
+        "grease buildup",
+        "hair clog",
+        "tree roots",
+        "foreign objects"
+      ],
       "seo_title": "Why Do Drains Clog? 6 Common Causes Explained",
       "meta_description": "Grease, hair, and tree roots are top reasons drains clog. Learn the six most common causes and how to prevent them, from Dallas's trusted plumbers.",
       "target_word_count": 1400,
       "outline": {
         "h1": "Why Do Drains Clog? The 6 Most Common Causes",
         "sections": [
-          { "h2": "1. Grease and Fat Buildup", "talking_points": ["kitchen drains"], "lsi_focus": ["grease buildup"] },
-          { "h2": "2. Hair and Soap Scum", "lsi_focus": ["hair clog"] },
-          { "h2": "3. Tree Root Intrusion", "lsi_focus": ["tree roots"] },
-          { "h2": "When to Call a Professional", "talking_points": ["link to the drain cleaning service page"] }
+          {
+            "h2": "1. Grease and Fat Buildup",
+            "talking_points": [
+              "kitchen drains"
+            ],
+            "lsi_focus": [
+              "grease buildup"
+            ]
+          },
+          {
+            "h2": "2. Hair and Soap Scum",
+            "lsi_focus": [
+              "hair clog"
+            ]
+          },
+          {
+            "h2": "3. Tree Root Intrusion",
+            "lsi_focus": [
+              "tree roots"
+            ]
+          },
+          {
+            "h2": "When to Call a Professional",
+            "talking_points": [
+              "link to the drain cleaning service page"
+            ]
+          }
         ]
       },
       "internal_links": [
-        { "target_slug": "/drain-cleaning", "anchor_text": "professional drain cleaning in Dallas", "rationale": "article -> money page" },
-        { "target_slug": "/", "anchor_text": "schedule a plumber", "rationale": "article -> hub conversion" }
+        {
+          "target_slug": "/drain-cleaning",
+          "anchor_text": "professional drain cleaning in Dallas",
+          "rationale": "article -> money page"
+        },
+        {
+          "target_slug": "/",
+          "anchor_text": "schedule a plumber",
+          "rationale": "article -> hub conversion"
+        }
       ],
       "schema": {
         "type": "BlogPosting",
-        "additional_types": ["BreadcrumbList"],
+        "additional_types": [
+          "BreadcrumbList"
+        ],
         "required_fields": {
           "headline": "",
           "author": "",

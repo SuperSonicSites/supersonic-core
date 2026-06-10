@@ -39,6 +39,7 @@
     "rest:media:upload": "node tools/staging-rest.mjs media-upload",
     "pattern:registry:generate": "node tools/generate-pattern-registry.mjs",
     "pattern:registry:doc-check": "node tools/generate-pattern-registry.mjs --check",
+    "e2e:pipeline": "node tools/e2e-pipeline-test.mjs",
     "design:compile": "node tools/compile-design-dna.mjs",
     "design:compile:self-test": "node tools/compile-design-dna.mjs --self-test",
     "render": "node tools/playground-render.mjs",

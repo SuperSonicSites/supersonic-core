@@ -8,9 +8,16 @@
  *
  * Rules (fail closed):
  *   DNA-1  every design.colors entry must be a valid 6-digit hex
- *   DNA-2  accent text color (white or black) must reach >= 4.5:1 on accent
+ *   DNA-2  accent text color (white or black) must reach >= 4.5:1 on accent ramp
  *   DNA-3  body text (contrast slot) must reach >= 4.5:1 on base and surface
  *   DNA-4  no brand color usable as accent (all near-neutral) -> fail with guidance
+ *   DNA-5  accent must clear 4.5:1 as text/link color on base/surface/muted;
+ *          the compiler auto-adjusts accent lightness (reported) and fails
+ *          only when no reasonable adjustment can satisfy WCAG
+ *
+ * The contrast pairs enforced here are exactly the six pairs
+ * tools/validate-framework.mjs checks, so a compiled theme always passes
+ * the framework gate.
  *
  * Usage:
  *   node tools/compile-design-dna.mjs                 plan (dry-run, prints slot diff + contrast report)
@@ -157,40 +164,68 @@ export function compileDna(design) {
     return { ok: false, failures };
   }
 
-  const palette = {
-    base: base ?? '#ffffff',
-    contrast: text ?? '#111111',
-    'contrast-subtle': '#4b5563',
-    surface: '#f7f8fa',
-    muted: '#f1f3f5',
-    border: '#d9dde3',
-    accent: accent ?? '#1a5fd0',
-    'accent-hover': null,
-    'accent-strong': null,
-    'accent-contrast': null
+  const brandAccent = accent ?? '#1a5fd0';
+  const baseHex = base ?? '#ffffff';
+
+  // Build the full ramp for a candidate accent. Hover/strong step darker when
+  // white text owns the accent, lighter when black text does (so button text
+  // keeps clearing 4.5:1 across the whole ramp).
+  const buildRamp = (candidate) => {
+    const white = contrastRatio('#ffffff', candidate);
+    const black = contrastRatio('#111111', candidate);
+    const textOnAccent = white >= black ? '#ffffff' : '#111111';
+    const direction = textOnAccent === '#ffffff' ? -1 : 1;
+    const palette = {
+      base: baseHex,
+      contrast: text ?? '#111111',
+      'contrast-subtle': mix('#4b5563', candidate, 0.12),
+      surface: mix('#f7f8fa', candidate, 0.03),
+      muted: mix('#f1f3f5', candidate, 0.05),
+      border: mix('#d9dde3', candidate, 0.08),
+      accent: candidate,
+      'accent-hover': adjustLightness(candidate, direction * 0.08),
+      'accent-strong': adjustLightness(candidate, direction * 0.16),
+      'accent-contrast': textOnAccent
+    };
+    // The exact six pairs validate-framework.mjs enforces.
+    const pairs = [
+      ['accent', 'base'],
+      ['accent', 'surface'],
+      ['accent', 'muted'],
+      ['accent-contrast', 'accent'],
+      ['accent-contrast', 'accent-hover'],
+      ['accent-contrast', 'accent-strong']
+    ];
+    const report = pairs.map(([fg, bg]) => ({ pair: `${fg} on ${bg}`, ratio: contrastRatio(palette[fg], palette[bg]) }));
+    return { palette, report, ok: report.every((entry) => entry.ratio >= 4.5) };
   };
-  // Derived neutrals: whisper-tints of the accent keep the neutral system in
-  // the brand's temperature instead of generic gray.
-  palette.surface = mix('#f7f8fa', palette.accent, 0.03);
-  palette.muted = mix('#f1f3f5', palette.accent, 0.05);
-  palette.border = mix('#d9dde3', palette.accent, 0.08);
-  palette['contrast-subtle'] = mix('#4b5563', palette.accent, 0.12);
-  palette['accent-hover'] = adjustLightness(palette.accent, -0.08);
-  palette['accent-strong'] = adjustLightness(palette.accent, -0.16);
 
-  const whiteOnAccent = contrastRatio('#ffffff', palette.accent);
-  const blackOnAccent = contrastRatio('#111111', palette.accent);
-  palette['accent-contrast'] = whiteOnAccent >= blackOnAccent ? '#ffffff' : '#111111';
-
-  const report = [];
-  const accentTextRatio = Math.max(whiteOnAccent, blackOnAccent);
-  report.push({ pair: `accent-contrast on accent`, ratio: accentTextRatio });
-  if (accentTextRatio < 4.5) {
-    failures.push({
-      rule: 'DNA-2',
-      detail: `neither white (${whiteOnAccent.toFixed(2)}) nor black (${blackOnAccent.toFixed(2)}) reaches 4.5:1 on accent ${palette.accent}; darken or lighten the brand color`
-    });
+  // DNA-5 auto-adjustment: nudge accent lightness toward viability (links on
+  // light bands need darker; black-text accents may need lighter for ramp).
+  let candidate = brandAccent;
+  let ramp = buildRamp(candidate);
+  let steps = 0;
+  while (!ramp.ok && steps < 14) {
+    const linksTooLight = ramp.report.find((entry) => entry.pair.startsWith('accent on') && entry.ratio < 4.5);
+    candidate = adjustLightness(candidate, linksTooLight ? -0.02 : 0.02);
+    ramp = buildRamp(candidate);
+    steps += 1;
   }
+  if (!ramp.ok) {
+    const worst = ramp.report.filter((entry) => entry.ratio < 4.5).map((entry) => `${entry.pair} ${entry.ratio.toFixed(2)}:1`).join(', ');
+    failures.push({
+      rule: 'DNA-5',
+      detail: `accent ${brandAccent} cannot satisfy WCAG AA on the theme's surfaces even after lightness adjustment (${worst}); pick a brand color with more contrast range`
+    });
+    return { ok: false, failures };
+  }
+  const palette = ramp.palette;
+  const report = [...ramp.report];
+  const accentAdjusted = candidate.toLowerCase() !== brandAccent.toLowerCase();
+  if (accentAdjusted) {
+    report.push({ pair: `accent auto-adjusted ${brandAccent} -> ${candidate} for WCAG`, ratio: contrastRatio(candidate, palette.muted) });
+  }
+
   for (const bg of ['base', 'surface', 'muted']) {
     const ratio = contrastRatio(palette.contrast, palette[bg]);
     report.push({ pair: `contrast on ${bg}`, ratio });
@@ -396,6 +431,16 @@ function selfTest() {
     assert(next.settings.color.palette[0].slug === 'accent' && next.settings.color.palette[0].name === 'Accent', 'slug/name must not change');
     assert(next.settings.typography.fontFamilies[0].fontFamily.startsWith('Poppins'), 'heading font not applied');
     assert(theme.settings.color.palette[0].color === '#1a5fd0', 'input mutated');
+  });
+
+  checkCase('teal that fails accent-on-muted is auto-adjusted to clear all six framework pairs', () => {
+    // #0e7c6b was 4.31:1 on muted — the exact bug the e2e harness caught.
+    const dna = compileDna({ colors: ['#0e7c6b'] });
+    assert(dna.ok, JSON.stringify(dna.failures));
+    for (const entry of dna.report.filter((r) => / on /.test(r.pair))) {
+      assert(entry.ratio >= 4.5, `${entry.pair} ${entry.ratio}`);
+    }
+    assert(dna.report.some((r) => r.pair.includes('auto-adjusted')), 'adjustment not reported');
   });
 
   checkCase('deterministic compile', () => {
