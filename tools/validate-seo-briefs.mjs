@@ -109,6 +109,110 @@ export function parseRedirectsCsv(text) {
   return rows;
 }
 
+// The freshly cloned intake is a TBD template (client fields literally "TBD").
+// Treat it as not-yet-filled, same convention as tools/capture-site.mjs.
+function isTbdIntake(intake) {
+  const name = intake && intake.client && intake.client.name;
+  return typeof name !== 'string' || !name.trim() || name.trim().toUpperCase() === 'TBD';
+}
+
+// Legacy rankings preservation for redesigns (SEO-LEG-1 / SEO-LEG-2).
+// Cross-checks the briefs against intake legacySite and data/redirects.csv rows.
+// Returns { issues, skips }: issues are hard failures, skips are labeled reasons
+// a rule did not apply (never silent).
+export function checkLegacyRules(doc, intake, redirectRows) {
+  const issues = [];
+  const skips = [];
+
+  const legacySite = intake && typeof intake === 'object' ? intake.legacySite : null;
+  if (!legacySite || typeof legacySite !== 'object' || legacySite.isRedesign !== true) {
+    skips.push('SEO-LEG-1/SEO-LEG-2: intake legacySite.isRedesign is not true (not a redesign build)');
+    return { issues, skips };
+  }
+
+  const briefs = Array.isArray(doc && doc.briefs) ? doc.briefs : [];
+  const briefBySlug = new Map();
+  for (const brief of briefs) {
+    const slug = brief && typeof brief === 'object' ? normalizePath(brief.url_slug) : null;
+    if (slug && !briefBySlug.has(slug)) {
+      briefBySlug.set(slug, brief);
+    }
+  }
+  const briefId = (brief) => brief.page_id || brief.url_slug || '?';
+
+  const rows = Array.isArray(redirectRows) ? redirectRows : [];
+
+  // SEO-LEG-1: every redirect that lands on a briefed page must be claimed by
+  // that page's brief via legacy.sourceUrls, so the strategist provably consumed
+  // the legacy URL map instead of redirecting blind.
+  if (rows.length === 0) {
+    skips.push('SEO-LEG-1: data/redirects.csv has no data rows yet (header-only or absent)');
+  } else {
+    for (const row of rows) {
+      const from = normalizePath(row.from);
+      const to = normalizePath(row.to);
+      if (!from || !to) {
+        continue;
+      }
+      const brief = briefBySlug.get(to);
+      if (!brief) {
+        continue;
+      }
+      const legacy = brief.legacy && typeof brief.legacy === 'object' ? brief.legacy : {};
+      const claimed = (Array.isArray(legacy.sourceUrls) ? legacy.sourceUrls : [])
+        .map(normalizePath)
+        .filter(Boolean);
+      if (!claimed.includes(from)) {
+        issues.push(
+          `SEO-LEG-1: redirect ${row.from} -> ${brief.url_slug} is in data/redirects.csv but brief ${briefId(brief)} legacy.sourceUrls does not list "${row.from}" (seo-strategist must record every legacy URL feeding this page)`
+        );
+      }
+    }
+  }
+
+  // SEO-LEG-2: every known legacy top page that maps to a briefed page needs an
+  // explicit rankings decision: preservedKeywords, or a waiver saying why not.
+  const topPages = Array.isArray(legacySite.knownTopPages) ? legacySite.knownTopPages : [];
+  if (topPages.length === 0) {
+    skips.push('SEO-LEG-2: intake legacySite.knownTopPages is empty (no legacy top pages declared)');
+  } else {
+    const redirectByFrom = new Map();
+    for (const row of rows) {
+      const from = normalizePath(row.from);
+      const to = normalizePath(row.to);
+      if (from && to && !redirectByFrom.has(from)) {
+        redirectByFrom.set(from, to);
+      }
+    }
+    for (const topPage of topPages) {
+      const legacyPath = topPage && typeof topPage === 'object' ? normalizePath(topPage.url) : null;
+      if (!legacyPath) {
+        continue;
+      }
+      const targetSlug = redirectByFrom.get(legacyPath) || legacyPath;
+      const brief = briefBySlug.get(targetSlug);
+      if (!brief) {
+        continue;
+      }
+      const legacy = brief.legacy && typeof brief.legacy === 'object' ? brief.legacy : {};
+      const preserved = (Array.isArray(legacy.preservedKeywords) ? legacy.preservedKeywords : []).filter(
+        (keyword) => typeof keyword === 'string' && keyword.trim()
+      );
+      const waiver = typeof legacy.waiver === 'string' ? legacy.waiver.trim() : '';
+      if (preserved.length === 0 && !waiver) {
+        const keywords = (Array.isArray(topPage.rankingKeywords) ? topPage.rankingKeywords : [])
+          .filter((keyword) => typeof keyword === 'string' && keyword.trim())
+          .join(', ');
+        issues.push(
+          `SEO-LEG-2: legacy top page ${topPage.url} maps to brief ${briefId(brief)} (${brief.url_slug}) which has neither non-empty legacy.preservedKeywords nor a legacy.waiver${keywords ? ` — legacy ranking keywords at stake: ${keywords}` : ''}`
+        );
+      }
+    }
+  }
+
+  return { issues, skips };
+}
+
 function slugWordCount(slug) {
   return slug
     .split('/')
@@ -322,8 +426,71 @@ export async function validateSeoBriefs({ rootDir = defaultRoot } = {}) {
     }
   }
 
+  await runLegacyChecks(rootDir, results);
   runRegressionFixtures(results);
   return results;
+}
+
+// Runs SEO-LEG-1/SEO-LEG-2 against the live briefs only (the worked example is
+// not cross-checked against this repo's intake). Every non-applicable state is a
+// labeled skip, never silent; only real rule violations fail.
+async function runLegacyChecks(rootDir, results) {
+  const briefsPath = path.join(rootDir, 'data/seo-briefs.json');
+  if (!(await exists(briefsPath))) {
+    results.push({
+      status: 'skip',
+      message: 'SEO-LEG-1/SEO-LEG-2: data/seo-briefs.json absent (no live briefs to cross-check yet)'
+    });
+    return;
+  }
+
+  let doc;
+  try {
+    doc = JSON.parse(await readFile(briefsPath, 'utf8'));
+  } catch {
+    // Invalid JSON is already reported as a fail by the main loop above.
+    return;
+  }
+
+  let intake;
+  try {
+    intake = JSON.parse(await readFile(path.join(rootDir, 'data/site-intake.json'), 'utf8'));
+  } catch {
+    results.push({
+      status: 'skip',
+      message: 'SEO-LEG-1/SEO-LEG-2: data/site-intake.json missing or invalid JSON (cannot cross-check legacy rankings)'
+    });
+    return;
+  }
+  if (isTbdIntake(intake)) {
+    results.push({
+      status: 'skip',
+      message: 'SEO-LEG-1/SEO-LEG-2: data/site-intake.json is still the TBD template (Init interview not captured yet)'
+    });
+    return;
+  }
+
+  let redirectRows = [];
+  try {
+    redirectRows = parseRedirectsCsv(await readFile(path.join(rootDir, 'data/redirects.csv'), 'utf8'));
+  } catch {
+    redirectRows = [];
+  }
+
+  const { issues, skips } = checkLegacyRules(doc, intake, redirectRows);
+  for (const skip of skips) {
+    results.push({ status: 'skip', message: skip });
+  }
+  for (const issue of issues) {
+    results.push({ status: 'fail', message: `data/seo-briefs.json: ${issue}` });
+  }
+  for (const rule of ['SEO-LEG-1', 'SEO-LEG-2']) {
+    const skipped = skips.some((skip) => skip.startsWith(rule) || skip.startsWith('SEO-LEG-1/SEO-LEG-2'));
+    const failed = issues.some((issue) => issue.startsWith(rule));
+    if (!skipped && !failed) {
+      results.push({ status: 'pass', message: `data/seo-briefs.json passes ${rule} (legacy rankings preservation)` });
+    }
+  }
 }
 
 function assertFixture(results, name, condition) {
@@ -385,12 +552,105 @@ function runRegressionFixtures(results) {
     briefs: [{ ...goodBrief, schema: { type: 'Service', emitted_by: 'rest' } }]
   });
   assertFixture(results, 'schema-emitter detector', restSchema.some((issue) => issue.includes('schema.emitted_by must be')));
+
+  // SEO-LEG fixtures: legacy rankings preservation on redesign builds.
+  const redesignIntake = {
+    client: { name: 'Acme Plumbing', businessType: 'b', locationOrServiceArea: 'l', primaryOffer: 'o' },
+    legacySite: {
+      isRedesign: true,
+      url: 'https://legacy.example.com',
+      knownTopPages: [
+        {
+          url: 'https://legacy.example.com/old-drains/',
+          monthlySessions: 900,
+          rankingKeywords: ['drain cleaning dallas']
+        }
+      ]
+    }
+  };
+  const legacyRows = parseRedirectsCsv('from,to,status,notes\n/old-drains/,/a-page,301,top legacy page\n');
+
+  const legacyClean = checkLegacyRules(
+    {
+      site,
+      handoff,
+      briefs: [{ ...goodBrief, legacy: { sourceUrls: ['/old-drains/'], preservedKeywords: ['drain cleaning dallas'] } }]
+    },
+    redesignIntake,
+    legacyRows
+  );
+  assertFixture(
+    results,
+    'SEO-LEG clean redesign fixture has no issues',
+    legacyClean.issues.length === 0 && legacyClean.skips.length === 0
+  );
+
+  const missingSourceUrls = checkLegacyRules(
+    {
+      site,
+      handoff,
+      briefs: [{ ...goodBrief, legacy: { preservedKeywords: ['drain cleaning dallas'] } }]
+    },
+    redesignIntake,
+    legacyRows
+  );
+  assertFixture(
+    results,
+    'SEO-LEG-1 missing sourceUrls detector',
+    missingSourceUrls.issues.some((issue) => issue.startsWith('SEO-LEG-1'))
+  );
+
+  const missingPreserved = checkLegacyRules(
+    {
+      site,
+      handoff,
+      briefs: [{ ...goodBrief, legacy: { sourceUrls: ['/old-drains/'] } }]
+    },
+    redesignIntake,
+    legacyRows
+  );
+  assertFixture(
+    results,
+    'SEO-LEG-2 missing preservedKeywords detector',
+    missingPreserved.issues.some((issue) => issue.startsWith('SEO-LEG-2'))
+  );
+
+  const waived = checkLegacyRules(
+    {
+      site,
+      handoff,
+      briefs: [
+        {
+          ...goodBrief,
+          legacy: {
+            sourceUrls: ['/old-drains/'],
+            waiver: 'Client is retiring this service line; rankings intentionally not preserved.'
+          }
+        }
+      ]
+    },
+    redesignIntake,
+    legacyRows
+  );
+  assertFixture(results, 'SEO-LEG-2 waiver acceptance', waived.issues.length === 0);
+
+  const notRedesign = checkLegacyRules(
+    { site, handoff, briefs: [goodBrief] },
+    { ...redesignIntake, legacySite: { isRedesign: false } },
+    legacyRows
+  );
+  assertFixture(
+    results,
+    'SEO-LEG non-redesign skip',
+    notRedesign.issues.length === 0 && notRedesign.skips.some((skip) => skip.includes('isRedesign'))
+  );
 }
 
 if (process.argv[1] === __filename) {
   const results = await validateSeoBriefs();
   for (const result of results) {
-    console.log(`${result.status === 'pass' ? 'PASS' : 'FAIL'}: ${result.message}`);
+    const label = result.status === 'pass' ? 'PASS' : result.status === 'skip' ? 'SKIP' : 'FAIL';
+    console.log(`${label}: ${result.message}`);
   }
   if (results.some((result) => result.status === 'fail')) {
     process.exit(1);
