@@ -860,6 +860,21 @@
       ],
       "knownIssues": [],
       "lastReviewedAt": "2026-06-01"
+    },
+    {
+      "slug": "supersonic-site-theme/section-team-grid",
+      "title": "Section: Team Grid",
+      "category": "supersonic-trust",
+      "sourceFile": "wp-content/themes/supersonic-site-theme/patterns/section-team-grid.php",
+      "qaPageSlug": "qa-pattern-section-team-grid",
+      "qaPageUrl": "",
+      "status": "source-ready",
+      "certifiedThemeVersion": "",
+      "reportPath": "",
+      "screenshots": {},
+      "contentBearing": true,
+      "knownIssues": [],
+      "lastReviewedAt": "2026-06-10"
     }
   ]
 }
