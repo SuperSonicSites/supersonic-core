@@ -62,6 +62,7 @@ Then route by task. **Invoke the matching skill first** — each skill is the op
 | Review / grade / QA the website copy deck | `copy-review` | `BRAND.md`, `data/copy-deck.json`, `data/seo-briefs.json`, `data/site-intake.json` |
 | Review / grade / QA a composed page layout | `layout-review` | `docs/layout-standard.md`, `QA_CHECKLIST.md` |
 | Visual / responsive screenshot review | `visual-qa` | `QA_CHECKLIST.md` |
+| Aesthetic / taste critique of a rendered page or pattern | `design-critic` | `docs/design-references/`, `DESIGN_SYSTEM.md`, `docs/layout-standard.md` |
 | Accessibility review | `accessibility-review` | `QA_CHECKLIST.md` |
 | On-page SEO audit | `seo-auditor` | `SEO_STRATEGY.md`, `CONTENT_MODEL.md`, `PAGE_MAP.md`, `BRAND.md` |
 | Plugin, REST, or security review | `security-review` | `SECURITY.md`, `docs/wordpress-compatibility.md`, plugin `CLAUDE.md` |
