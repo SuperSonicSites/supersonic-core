@@ -98,8 +98,13 @@ export function buildBlueprint(patternSlugs) {
     steps: [
       { step: 'activateTheme', themeFolderName: 'supersonic-site-theme' },
       { step: 'activatePlugin', pluginPath: 'supersonic-site-core/plugin.php' },
-      // Rank Math is the framework's approved SEO plugin; the FAQ pattern
-      // embeds rank-math/faq-block, which renders nothing without it.
+      // Rank Math is the framework's approved SEO plugin; with it absent the
+      // FAQ pattern's whole <main> renders empty. Installing it makes the
+      // section render deterministically — but the plugin cannot ACTIVATE
+      // under Playground (WASM/SQLite, no real MySQL for its tables), so
+      // rank-math/faq-block items stay editor-only here; the full FAQ visual
+      // is proven by staging certification (see knownIssues in
+      // data/pattern-certifications.json).
       {
         step: 'installPlugin',
         pluginData: { resource: 'wordpress.org/plugins', slug: 'seo-by-rank-math' },
