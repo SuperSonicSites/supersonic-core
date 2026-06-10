@@ -57,10 +57,12 @@ const BUSINESSES = [
     ],
     sitemapExtras: ['/services/drain-cleaning/?utm_source=feed', '/About-Us/'],
     deadLinks: ['/this-page-died/'],
+    // Root never gets a redirect row (Rank Math cannot import "/", and the
+    // new root replaces it in place) — the gates proved this on the first
+    // harness run. Blog post maps to a real new-site slug.
     curation: {
-      '/': '/',
       '/services/drain-cleaning': '/drain-cleaning',
-      '/blog/why-do-drains-clog': '/why-drains-clog',
+      '/blog/why-do-drains-clog': '/drain-cleaning',
       '/old-coupons': '410',
       '/about-us': '/'
     },
@@ -94,12 +96,12 @@ const BUSINESSES = [
     ],
     sitemapExtras: ['/ghost-page-in-sitemap/'],
     deadLinks: [],
+    // Keys match the crawler's normalized paths (lowercased percent-encoding,
+    // collapsed double slashes) — the encoding-mismatch residue on the first
+    // harness run was caught by RED-1.
     curation: {
-      '/': '/',
-      '/servicios/dise%C3%B1o-de-jardines': '/drain-cleaning',
-      '/servicios/diseño-de-jardines': '/drain-cleaning',
+      '/servicios/dise%c3%b1o-de-jardines': '/drain-cleaning',
       '/gallery/spring/2021': '410',
-      '/gallery/spring//2021': '410',
       '/quote': '/',
       '/ghost-page-in-sitemap': '410'
     },
